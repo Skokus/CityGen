@@ -1,3 +1,5 @@
+import WorldEventPanel from "../worldevent/components/WorldEventPanel";
+import WorldEvent from "../worldevent/models/WorldEvent";
 import "./HomePage.css"
 
 function HomePage() {
@@ -6,7 +8,9 @@ function HomePage() {
       <div className="title">Medieval City Generator</div>
       <div className="container">
         <div className="mainpanel">Main</div>
-        <div className="sidebar">Sidebar</div>
+        <div className="sidepanel">
+          <WorldEventPanel  worldevents={WorldEvent.getExampleWorldEvents()}/>
+        </div>
       </div>
     </div>
   );
