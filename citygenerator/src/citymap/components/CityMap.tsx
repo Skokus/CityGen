@@ -7,6 +7,7 @@ function CityMap({city} : {city: City} ) {
 
     useEffect(() => {
         const canvas = canvasRef.current;
+        // @ts-ignore
         const ctx = canvas.getContext('2d');
 
         for (const r of city.roads) {
@@ -16,7 +17,7 @@ function CityMap({city} : {city: City} ) {
             ctx.stroke();
             ctx.closePath();
         }
-    }, []);
+    }, [city.roads]);
 
     return (
         <div>
