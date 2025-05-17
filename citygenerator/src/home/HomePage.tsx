@@ -3,6 +3,7 @@ import WorldEvent from "../worldevent/models/WorldEvent";
 import "./HomePage.css"
 import CityMap from "../citymap/components/CityMap";
 import City from "../citymap/models/City";
+import CityPanel from "../citymap/components/CityPanel";
 
 
 function HomePage() {
@@ -12,7 +13,7 @@ function HomePage() {
       <div className="title">Medieval City Generator</div>
       <div className="container">
         <div className="mainpanel">
-          <CityMap city={City.getExampleCity()}/>
+          <CityPanel/>
         </div>
         <div className="sidepanel">
           <WorldEventPanel worldevents={WorldEvent.getExampleWorldEvents()}/>

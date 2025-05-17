@@ -1,23 +1,29 @@
 import {useEffect, useRef} from "react";
 import City from "../models/City";
+import PointRenderer from "../renderers/PointRenderer";
+import RoadRenderer from "../renderers/RoadRenderer";
 
-function CityMap({city} : {city: City} ) {
+function CityMap({city} : {city: City}) {
 
     const canvasRef = useRef(null);
 
     useEffect(() => {
+        redrawMap();
+    });
+
+    function redrawMap() {
         const canvas = canvasRef.current;
         // @ts-ignore
         const ctx = canvas.getContext('2d');
-
+        const rr = new RoadRenderer();
+        const pr = new PointRenderer();
         for (const r of city.roads) {
-            ctx.beginPath();
-            ctx.moveTo(r.p1.x, r.p1.y);
-            ctx.lineTo(r.p2.x, r.p2.y);
-            ctx.stroke();
-            ctx.closePath();
+            rr.setRoad(r)
+            rr.draw(ctx, 1, 0, 0);
+            pr.setPoint(r.p1);
+            pr.draw(ctx, 1, 0, 0);
         }
-    }, [city.roads]);
+    }
 
     return (
         <div>
