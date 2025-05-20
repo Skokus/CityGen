@@ -20,6 +20,18 @@ class RoadRenderer implements Renderer{
         ctx.closePath();
     }
 
+    drawArea(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number){
+        const parroads = this.road.getParallelRoad(30);
+        ctx.beginPath();
+        ctx.fillStyle = "green";
+        ctx.moveTo(parroads[0].p1.x + xOffSet, parroads[0].p1.y + yOffSet);
+        ctx.lineTo(parroads[0].p2.x + xOffSet, parroads[0].p2.y + yOffSet);
+        ctx.lineTo(parroads[1].p2.x + xOffSet, parroads[1].p2.y + yOffSet);
+        ctx.lineTo(parroads[1].p1.x + xOffSet, parroads[1].p1.y + yOffSet);
+        ctx.lineTo(parroads[0].p1.x + xOffSet, parroads[0].p1.y + yOffSet);
+        ctx.fill();
+        ctx.closePath();
+    }
 }
 
 export default RoadRenderer;

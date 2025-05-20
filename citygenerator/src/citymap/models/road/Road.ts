@@ -35,6 +35,16 @@ class Road {
         else
             return this.p2;
     }
+
+    public getParallelRoad(distance: number): Road[]{
+        const dx = this.p1.x - this.p2.x;
+        const dy = this.p1.y - this.p2.y;
+        const nx = -dy / this.length;
+        const ny = dx / this.length;
+        const r1 = new Road(new Point(this.p1.x + nx * distance, this.p1.y + ny * distance), new Point(this.p2.x + nx * distance, this.p2.y + ny * distance));
+        const r2 = new Road(new Point(this.p1.x - nx * distance, this.p1.y - ny * distance), new Point(this.p2.x - nx * distance, this.p2.y - ny * distance));
+        return [r1, r2];
+    }
 }
 
 export default Road;

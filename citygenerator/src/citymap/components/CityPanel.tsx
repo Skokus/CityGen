@@ -15,7 +15,7 @@ function CityPanel() {
     });
 
     function addNewRoad(){
-        city.addNewRoad(50);
+        city.addNewRoad(100);
         setCity(city);
         setCounter(counter + 1);
     }

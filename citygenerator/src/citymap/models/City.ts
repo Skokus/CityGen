@@ -18,8 +18,6 @@ class City {
 
   public static getExampleCity(): City{
     let city =  new City([new Road(new Point(400, 400), new Point(500, 400))]);
-    city.addNewRoad(50);
-    city.addNewRoad(50);
     return city;
   }
 
