@@ -14,6 +14,8 @@ class City {
     const pointFromRoad = randomRoad.getRandomPoint();
     const newPoint = pointFromRoad.getRandomPointFromDistance(distance);
     this.roads.push(new Road(pointFromRoad, newPoint));
+    pointFromRoad.increaseRoadCounter();
+    newPoint.increaseRoadCounter();
   }
 
   public static getExampleCity(): City{

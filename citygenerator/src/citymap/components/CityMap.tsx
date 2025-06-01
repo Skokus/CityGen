@@ -17,10 +17,10 @@ function CityMap({city} : {city: City}) {
         const ctx = canvas.getContext('2d');
         const rr = new RoadRenderer();
         const pr = new PointRenderer();
-        for (const r of city.roads){
+        /*for (const r of city.roads){
             rr.setRoad(r);
             rr.drawArea(ctx, 1, 0, 0);
-        }
+        }*/
         for (const r of city.roads) {
             rr.setRoad(r);
             rr.draw(ctx, 1, 0, 0);

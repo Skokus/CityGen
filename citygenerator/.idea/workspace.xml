@@ -7,10 +7,8 @@
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Point.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Point.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +67,9 @@
       <workItem from="1747418788231" duration="1935000" />
       <workItem from="1747496930462" duration="6491000" />
       <workItem from="1747504668755" duration="174000" />
-      <workItem from="1747745411078" duration="3894000" />
+      <workItem from="1747745411078" duration="4013000" />
+      <workItem from="1748451207979" duration="598000" />
+      <workItem from="1748547306088" duration="2657000" />
     </task>
     <servers />
   </component>
