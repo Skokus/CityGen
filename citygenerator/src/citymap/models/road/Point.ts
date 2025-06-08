@@ -1,11 +1,13 @@
 class Point {
     x: number;
     y: number;
-    private roadCounter: number;
-    constructor(x: number, y: number) {
+    private roadCounter: number[];
+    distanceFromCrossroad: number;
+    constructor(x: number, y: number, distanceFromCrossroad?: number) {
         this.x = x;
         this.y = y;
-        this.roadCounter = 0;
+        this.roadCounter = [0,0,0,0]; //right top left bottom
+        this.distanceFromCrossroad = distanceFromCrossroad ? distanceFromCrossroad : 0;
     }
 
     getRandomPointFromDistance(distance: number): Point{
@@ -14,16 +16,12 @@ class Point {
         return new Point(x, y);
     }
 
-    increaseRoadCounter(): void{
-        this.roadCounter++;
-    }
-
-    getRoadCounter(): number{
-        return this.roadCounter;
-    }
-
     getHashCode(): string{
         return "X" + this.x + "Y" + this.y;
+    }
+
+    getDistancedPoint(distance: number, angle: number): Point {
+        return new Point(this.x + distance * Math.cos(angle), this.y + distance * Math.sin(angle));
     }
 }
 
