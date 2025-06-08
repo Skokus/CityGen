@@ -1,7 +1,7 @@
 class Point {
     x: number;
     y: number;
-    private roadCounter: number[];
+    roadCounter: number[];
     distanceFromCrossroad: number;
     constructor(x: number, y: number, distanceFromCrossroad?: number) {
         this.x = x;
@@ -22,6 +22,19 @@ class Point {
 
     getDistancedPoint(distance: number, angle: number): Point {
         return new Point(this.x + distance * Math.cos(angle), this.y + distance * Math.sin(angle));
+    }
+
+    getRandomDirection(): number{
+        var possibleDirections: number[] = [];
+        for(var i = 0; i < this.roadCounter.length; i++){
+            if(this.roadCounter[i] <= 0){
+                possibleDirections.push(i);
+            }
+        }
+        if(possibleDirections.length > 0){
+            return possibleDirections[Math.floor(Math.random()*possibleDirections.length)];
+        }
+        return -1;
     }
 }
 

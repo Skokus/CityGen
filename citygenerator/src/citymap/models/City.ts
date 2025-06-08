@@ -10,11 +10,18 @@ class City {
   }
 
   public addNewRoad(distance: number): void {
-    const direction = Math.floor(Math.random() * 4);
     const points = this.getAllPoints();
-    const randomAngle = (Math.PI/2) * direction;
-    const randomPoint = points[Math.floor(Math.random() * points.length)];
+    var direction = -1;
+    var randomPoint = new Point(0, 0);
+    while(direction < 0) {
+      randomPoint = points[Math.floor(Math.random() * points.length)];
+      direction = randomPoint.getRandomDirection();
+      console.log(direction);
+    }
+    const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/3) - Math.PI/6;
     const newPoint = randomPoint.getDistancedPoint(distance, randomAngle);
+    randomPoint.roadCounter[direction]++;
+    newPoint.roadCounter[(direction+2)%4]++;
     this.roads.push(new Road(randomPoint, newPoint));
   }
 
