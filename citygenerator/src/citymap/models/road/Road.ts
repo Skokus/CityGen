@@ -45,6 +45,45 @@ class Road {
         const r2 = new Road(new Point(this.p1.x - nx * distance, this.p1.y - ny * distance), new Point(this.p2.x - nx * distance, this.p2.y - ny * distance));
         return [r1, r2];
     }
+
+    //https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
+    public distanceFromPoint(p: Point){
+
+        const x = p.x;
+        const x1 = this.p1.x;
+        const x2 = this.p2.x;
+        const y = p.y;
+        const y1 = this.p1.y;
+        const y2 = this.p2.y;
+
+        let A = x - x1;
+        let B = y - y1;
+        let C = x2 - x1;
+        let D = y2 - y1;
+
+        let dot = A * C + B * D;
+        let len_sq = C * C + D * D;
+        let param = -1;
+        if (len_sq !== 0) //in case of 0 length line
+            param = dot / len_sq;
+
+        let xx, yy;
+        if (param < 0) {
+            xx = x1;
+            yy = y1;
+        }
+        else if (param > 1) {
+            xx = x2;
+            yy = y2;
+        }
+        else {
+            xx = x1 + param * C;
+            yy = y1 + param * D;
+        }
+        let dx = x - xx;
+        let dy = y - yy;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 }
 
 export default Road;
