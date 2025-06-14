@@ -28,14 +28,15 @@ class Road {
     public getPerpendicularB(p: Point): number{ //after splitting road get the perpendicular line equation
         return p.y - this.perpendicularSlope * p.x;
     }
-
-    public getRandomPoint(){
+    public getRandomPoint(): Point{
         if(Math.random() > 0.5)
             return this.p1;
         else
             return this.p2;
     }
-
+    public doesContainPoint(p: Point): boolean{
+        return this.p1 === p || this.p2 === p;
+    }
     public getParallelRoad(distance: number): Road[]{
         const dx = this.p1.x - this.p2.x;
         const dy = this.p1.y - this.p2.y;
@@ -45,16 +46,14 @@ class Road {
         const r2 = new Road(new Point(this.p1.x - nx * distance, this.p1.y - ny * distance), new Point(this.p2.x - nx * distance, this.p2.y - ny * distance));
         return [r1, r2];
     }
-
-    //https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
-    public distanceFromPoint(p: Point){
-
+    public static distanceFromPoint(p: Point, p1: Point, p2: Point): number{
+        //https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
         const x = p.x;
-        const x1 = this.p1.x;
-        const x2 = this.p2.x;
+        const x1 = p1.x;
+        const x2 = p2.x;
         const y = p.y;
-        const y1 = this.p1.y;
-        const y2 = this.p2.y;
+        const y1 = p1.y;
+        const y2 = p2.y;
 
         let A = x - x1;
         let B = y - y1;
@@ -83,6 +82,15 @@ class Road {
         let dx = x - xx;
         let dy = y - yy;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+    public static getAllRoadsWithPoint(roads: Road[], p: Point): Road[]{
+        let result: Road[] = [];
+        for(let road of roads) {
+            if(road.doesContainPoint(p)){
+                result.push(road);
+            }
+        }
+        return result;
     }
 }
 
