@@ -20,11 +20,25 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function addForwardRoad(){
+        city.addExtentionRoad(100);
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
+    function addCrossroadRoad(){
+        city.addSideRoad(100);
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     return (
         <div>
             <div>Map of the city</div>
             <CityMap city={city}/>
-            <button onClick={() => {addNewRoad()}}>Add road</button>
+            <button onClick={() => {addNewRoad()}}>Add random road</button>
+            <button onClick={() => {addForwardRoad()}}>Extend road</button>
+            <button onClick={() => {addCrossroadRoad()}}>Side road</button>
         </div>
     );
 }
