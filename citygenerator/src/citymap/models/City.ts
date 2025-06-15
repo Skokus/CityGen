@@ -17,7 +17,7 @@ class City {
       randomPoint = points[Math.floor(Math.random() * points.length)];
       direction = randomPoint.getRandomDirection();
     }
-    const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/3) - Math.PI/6;
+    const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/4) - Math.PI/8;
     const newPoint = randomPoint.getDistancedPoint(distance, randomAngle);
     const roadsFromRandomPoint = Road.getAllRoadsWithPoint(this.roads, randomPoint);
     const excludedPointSet = new Set<Point>();
@@ -28,6 +28,7 @@ class City {
     const excludedPoints = Array.from(excludedPointSet);
     const allPoints = this.getAllPoints().filter(point => !excludedPoints.includes(point));
     let expectedPoint = newPoint;
+
     let min = 200;
     for(let point of allPoints) {
       let dist = Road.distanceFromPoint(point, randomPoint, newPoint);
@@ -40,11 +41,21 @@ class City {
       randomPoint.roadCounter[direction]++;
       expectedPoint.roadCounter[(direction+2)%4]++;
       this.roads.push(new Road(randomPoint, expectedPoint));
-    } else {
-      randomPoint.roadCounter[direction]++;
-      newPoint.roadCounter[(direction+2)%4]++;
-      this.roads.push(new Road(randomPoint, newPoint));
+      return;
     }
+    for(let road of this.roads) {
+      let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
+      if(dist < 30){
+        expectedPoint = road.getRandomPoint();
+        randomPoint.roadCounter[direction]++;
+        expectedPoint.roadCounter[(direction+2)%4]++;
+        this.roads.push(new Road(randomPoint, expectedPoint));
+        return;
+      }
+    }
+    randomPoint.roadCounter[direction]++;
+    newPoint.roadCounter[(direction+2)%4]++;
+    this.roads.push(new Road(randomPoint, newPoint));
   }
   public static getExampleCity(): City{
     const p1 = new Point(400, 400);

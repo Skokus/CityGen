@@ -26,12 +26,14 @@ function CityMap({city} : {city: City}) {
             rr.draw(ctx, 1, 0, 0);
             pr.setPoint(r.p1);
             pr.draw(ctx, 1, 0, 0);
+            pr.setPoint(r.p2);
+            pr.draw(ctx, 1, 0, 0);
         }
     }
 
     return (
         <div>
-            <canvas ref={canvasRef} width={1000} height={1000}/>
+            <canvas ref={canvasRef} width={1500} height={1000}/>
         </div>
     );
 }
