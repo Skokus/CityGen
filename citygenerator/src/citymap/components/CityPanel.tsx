@@ -32,6 +32,12 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function addPolygon(){
+        city.addPolygon(100);
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     return (
         <div>
             <div>Map of the city</div>
@@ -39,6 +45,7 @@ function CityPanel() {
             <button onClick={() => {addNewRoad()}}>Add random road</button>
             <button onClick={() => {addForwardRoad()}}>Extend road</button>
             <button onClick={() => {addCrossroadRoad()}}>Side road</button>
+            <button onClick={() => {addPolygon()}}>Add polygon</button>
         </div>
     );
 }

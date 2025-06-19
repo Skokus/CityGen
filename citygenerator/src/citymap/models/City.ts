@@ -1,12 +1,14 @@
 import Road from "./road/Road";
 import Point from "./road/Point";
+import Polygon from "./area/Polygon";
 
 class City {
 
   roads: Road[] = [];
-
+  polygons: Polygon[] = [];
   constructor(roads: Road[]) {
     this.roads = roads;
+    this.polygons = [];
   }
 
   public addNewRoad(distance: number): void {
@@ -167,6 +169,11 @@ class City {
     newPoint.roadCounter[(direction+2)%4]++;
     this.roads.push(new Road(randomPoint, newPoint));
   }
+  public addPolygon(distance: number): void{
+    const road = this.roads[0];
+    this.polygons.push(road.createPolygon(distance));
+  }
+
   public static getExampleCity(): City{
     const p1 = new Point(700, 400, 0);
     p1.roadCounter[0]++;
@@ -174,6 +181,7 @@ class City {
     p2.roadCounter[2]++;
     return new City([new Road(p1, p2)]);
   }
+
   private getAllPoints(): Point[]{
     const pointSet = new Set<Point>();
     for(const road of this.roads){

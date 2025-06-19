@@ -17,7 +17,6 @@ class Point {
     getDistancedPoint(distance: number, angle: number): Point {
         return new Point(this.x + distance * Math.cos(angle), this.y + distance * Math.sin(angle));
     }
-
     getRandomDirection(): number{
         var possibleDirections: number[] = [];
         for(var i = 0; i < this.roadCounter.length; i++){
@@ -56,6 +55,14 @@ class Point {
             console.log(this);
         }
         return count;
+    }
+    getAngle(p: Point): number{
+        return Math.atan2(this.y - p.y, this.x - p.x);
+    }
+    public isAboveLine(a: number, b: number){
+        if(this.y < (a * this.x + b))
+            return true;
+        return false;
     }
 }
 

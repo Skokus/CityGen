@@ -3,7 +3,7 @@ import Point from "../models/road/Point";
 
 class PointRenderer implements Renderer{
 
-    private point: Point = new Point(0, 0);
+    private point!: Point;
     private colors = [
         '#000000',
         '#ff0000',

@@ -1,4 +1,5 @@
 import Point from "./Point";
+import Polygon from "../area/Polygon";
 
 class Road {
     p1: Point;
@@ -46,6 +47,17 @@ class Road {
         const r2 = new Road(new Point(this.p1.x - nx * distance, this.p1.y - ny * distance), new Point(this.p2.x - nx * distance, this.p2.y - ny * distance));
         return [r1, r2];
     }
+    public createPolygon(distance: number): Polygon{
+        const direction = this.getSideDirection();
+        const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/4) - Math.PI/8;
+        const newPoint1 = this.p1.getDistancedPoint(distance, randomAngle);
+        const newPoint2 = this.p2.getDistancedPoint(distance, randomAngle);
+        const newRoad1 = new Road(this.p1, newPoint1);
+        const newRoad2 = new Road(this.p2, newPoint2);
+        const newRoad3 = new Road(this.p1, this.p2);
+        return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
+    }
+
     public static distanceFromPoint(p: Point, p1: Point, p2: Point): number{
         //https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
         const x = p.x;
@@ -91,6 +103,20 @@ class Road {
             }
         }
         return result;
+    }
+
+
+    private getSideDirection(): number{
+        var posDirs = [];//possible direction
+        for(let i = 0; i < this.p1.roadCounter.length; i++){
+            if(this.p1.roadCounter[i] === 0 && this.p2.roadCounter[i] === 0){
+                posDirs.push(i);
+            }
+        }
+        if(posDirs.length < 0){
+            return -1;
+        }
+        return posDirs[Math.floor(Math.random() * posDirs.length)];
     }
 }
 

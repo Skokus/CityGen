@@ -1,12 +1,9 @@
 import Renderer from "./Renderer";
 import Road from "../models/road/Road";
-import Point from "../models/road/Point";
 
 class RoadRenderer implements Renderer{
 
-    private road: Road = new Road(new Point(0,0), new Point(1,0));
-
-    constructor() {}
+    private road!: Road;
 
     public setRoad(road: Road) {
         this.road = road;
