@@ -104,7 +104,13 @@ class Road {
         }
         return result;
     }
-
+    public static createRoad(point1: Point, point2: Point, direction: number): Road {
+        const dirslen = point1.roadCounter.length
+        const road = new Road(point1, point2);
+        point1.addRoad(road, direction);
+        point2.addRoad(road, (direction+2)%dirslen);
+        return road;
+    }
 
     private getSideDirection(): number{
         var posDirs = [];//possible direction

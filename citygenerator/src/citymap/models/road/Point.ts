@@ -1,23 +1,27 @@
+import Road from "./Road";
+
 class Point {
     x: number;
     y: number;
     roadCounter: number[];
+    connectedRoads: (Road|null)[];
     distanceFromCrossroad: number;
 
     constructor(x: number, y: number, distanceFromCrossroad?: number) {
         this.x = x;
         this.y = y;
         this.roadCounter = [0,0,0,0]; //right top left bottom
+        this.connectedRoads = [null, null, null, null];
         this.distanceFromCrossroad = distanceFromCrossroad ? distanceFromCrossroad : 0;
     }
 
-    getHashCode(): string{
+    public getHashCode(): string{
         return "X" + this.x + "Y" + this.y;
     }
-    getDistancedPoint(distance: number, angle: number): Point {
+    public getDistancedPoint(distance: number, angle: number): Point {
         return new Point(this.x + distance * Math.cos(angle), this.y + distance * Math.sin(angle));
     }
-    getRandomDirection(): number{
+    public getRandomDirection(): number{
         var possibleDirections: number[] = [];
         for(var i = 0; i < this.roadCounter.length; i++){
             if(this.roadCounter[i] <= 0){
@@ -29,7 +33,7 @@ class Point {
         }
         return -1;
     }
-    getForwardDirection(): number{
+    public getForwardDirection(): number{
         for(var i = 0; i < this.roadCounter.length; i++){
             if(this.roadCounter[i] > 0){
                 return (i+2)%this.roadCounter.length;
@@ -37,7 +41,7 @@ class Point {
         }
         return -1;
     }
-    getSideDirection(): number{
+    public getSideDirection(): number{
         for(var i = 0; i < this.roadCounter.length; i++){
             if(this.roadCounter[i] === 0){
                 return i;
@@ -46,7 +50,7 @@ class Point {
         console.log("HERE");
         return -1;
     }
-    getRoadCount(): number{
+    public getRoadCount(): number{
         let count = 0;
         for(let i = 0; i < this.roadCounter.length; i++){
             count += this.roadCounter[i];
@@ -56,13 +60,27 @@ class Point {
         }
         return count;
     }
-    getAngle(p: Point): number{
+    public getAngle(p: Point): number{
         return Math.atan2(this.y - p.y, this.x - p.x);
     }
     public isAboveLine(a: number, b: number){
         if(this.y < (a * this.x + b))
             return true;
+        this.connectedRoads[0] = new Road(new Point(1,1), new Point(2,2));
         return false;
+    }
+    public addRoad(road: Road, direction: number){
+        this.roadCounter[direction]++;
+        this.connectedRoads[direction] = road;
+    }
+    public getAllRoads(): Road[]{
+        let ret: Road[] = [];
+        for(let road of this.connectedRoads){
+            if(road !== null){
+                ret.push(road);
+            }
+        }
+        return ret;
     }
 }
 

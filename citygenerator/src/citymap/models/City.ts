@@ -176,10 +176,8 @@ class City {
 
   public static getExampleCity(): City{
     const p1 = new Point(700, 400, 0);
-    p1.roadCounter[0]++;
     const p2 = new Point(800, 400, 0);
-    p2.roadCounter[2]++;
-    return new City([new Road(p1, p2)]);
+    return new City([Road.createRoad(p1, p2, 0)]);
   }
 
   private getAllPoints(): Point[]{

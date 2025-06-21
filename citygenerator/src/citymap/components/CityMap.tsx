@@ -29,8 +29,10 @@ function CityMap({city} : {city: City}) {
             rr.setRoad(r);
             rr.draw(ctx, 1, 0, 0);
             pr.setPoint(r.p1);
+            console.log(r.p1)
             pr.draw(ctx, 1, 0, 0);
             pr.setPoint(r.p2);
+            console.log(r.p2)
             pr.draw(ctx, 1, 0, 0);
         }
     }
