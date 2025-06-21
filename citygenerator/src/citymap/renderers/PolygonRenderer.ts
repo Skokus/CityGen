@@ -13,6 +13,8 @@ class PolygonRenderer implements Renderer{
     }
 
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
+        if(this.polygon.roads.length === 0)
+            return;
         ctx.beginPath();
         ctx.fillStyle = this.polygon.color;
         var points = this.polygon.clockWisePoints;

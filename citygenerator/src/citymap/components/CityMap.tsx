@@ -15,24 +15,26 @@ function CityMap({city} : {city: City}) {
     function redrawMap() {
         const canvas = canvasRef.current;
         // @ts-ignore
+        const context = canvas!.getContext('2d');
+        // @ts-ignore
+        context.clearRect(0, 0, canvas!.width, canvas!.height);
+        // @ts-ignore
         const ctx = canvas.getContext('2d');
         const rr = new RoadRenderer();
         const pr = new PointRenderer();
         const polr = new PolygonRenderer();
 
-        for (const p of city.polygons){
-            polr.setPolygon(p);
+        //for (const p of city.polygons){
+            polr.setPolygon(city.polygons[city.polygons.length - 1]);
             polr.draw(ctx, 1, 0,0);
-        }
+        //}
 
         for (const r of city.roads) {
             rr.setRoad(r);
             rr.draw(ctx, 1, 0, 0);
             pr.setPoint(r.p1);
-            console.log(r.p1)
             pr.draw(ctx, 1, 0, 0);
             pr.setPoint(r.p2);
-            console.log(r.p2)
             pr.draw(ctx, 1, 0, 0);
         }
     }

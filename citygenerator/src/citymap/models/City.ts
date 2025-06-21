@@ -4,18 +4,23 @@ import Polygon from "./area/Polygon";
 
 class City {
 
-  roads: Road[] = [];
-  polygons: Polygon[] = [];
-  constructor(roads: Road[]) {
-    this.roads = roads;
-    this.polygons = [];
+  polygons: Polygon[];
+  
+  constructor(polygons: Polygon[]) {
+    this.polygons = polygons;
+  }
+
+  get roads(): Road[] {
+    const roadSet = new Set<Road>();
+    for(const p of this.polygons){
+      for(const r of p.roads)
+        roadSet.add(r);
+    }
+    return Array.from(roadSet);
   }
 
   public addNewRoad(distance: number): void {
     const points = this.getAllPoints();
-    for(let point of points){
-      console.log(point.getRoadCount());
-    }
     var direction = -1;
     var randomPoint = new Point(0, 0);
     while(direction < 0) {
@@ -44,9 +49,8 @@ class City {
       }
     }
     if(min < 40){
-      randomPoint.roadCounter[direction]++;
-      expectedPoint.roadCounter[(direction+2)%4]++;
-      this.roads.push(new Road(randomPoint, expectedPoint));
+      const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
+      this.roads.push(newRoad);
       return;
     }
 
@@ -54,16 +58,15 @@ class City {
       let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
       if(dist < 30){
         expectedPoint = road.getRandomPoint();
-        randomPoint.roadCounter[direction]++;
-        expectedPoint.roadCounter[(direction+2)%4]++;
-        this.roads.push(new Road(randomPoint, expectedPoint));
+        const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
+        this.roads.push(newRoad);
         return;
       }
     }
 
-    randomPoint.roadCounter[direction]++;
-    newPoint.roadCounter[(direction+2)%4]++;
-    this.roads.push(new Road(randomPoint, newPoint));
+    const newRoad = Road.createRoad(randomPoint, newPoint, direction);
+    this.roads.push(newRoad);
+    return;
   }
   public addExtentionRoad(distance: number): void {
     const points = this.getAllPoints().filter(point => point.getRoadCount() === 1);
@@ -95,9 +98,8 @@ class City {
       }
     }
     if(min < 40){
-      randomPoint.roadCounter[direction]++;
-      expectedPoint.roadCounter[(direction+2)%4]++;
-      this.roads.push(new Road(randomPoint, expectedPoint));
+      const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
+      this.roads.push(newRoad);
       return;
     }
 
@@ -105,16 +107,15 @@ class City {
       let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
       if(dist < 30){
         expectedPoint = road.getRandomPoint();
-        randomPoint.roadCounter[direction]++;
-        expectedPoint.roadCounter[(direction+2)%4]++;
-        this.roads.push(new Road(randomPoint, expectedPoint));
+        const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
+        this.roads.push(newRoad);
         return;
       }
     }
 
-    randomPoint.roadCounter[direction]++;
-    newPoint.roadCounter[(direction+2)%4]++;
-    this.roads.push(new Road(randomPoint, newPoint));
+    const newRoad = Road.createRoad(randomPoint, newPoint, direction);
+    this.roads.push(newRoad);
+    return;
   }
   public addSideRoad(distance: number): void {
     const points = this.getAllPoints().filter(point => point.getRoadCount() > 1 && point.getRoadCount() < 4);
@@ -148,9 +149,8 @@ class City {
       }
     }
     if(min < 40){
-      randomPoint.roadCounter[direction]++;
-      expectedPoint.roadCounter[(direction+2)%4]++;
-      this.roads.push(new Road(randomPoint, expectedPoint));
+      const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
+      this.roads.push(newRoad);
       return;
     }
 
@@ -158,26 +158,29 @@ class City {
       let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
       if(dist < 30){
         expectedPoint = road.getRandomPoint();
-        randomPoint.roadCounter[direction]++;
-        expectedPoint.roadCounter[(direction+2)%4]++;
-        this.roads.push(new Road(randomPoint, expectedPoint));
+        const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
+        this.roads.push(newRoad);
         return;
       }
     }
 
-    randomPoint.roadCounter[direction]++;
-    newPoint.roadCounter[(direction+2)%4]++;
-    this.roads.push(new Road(randomPoint, newPoint));
+    const newRoad = Road.createRoad(randomPoint, newPoint, direction);
+    this.roads.push(newRoad);
+    return;
   }
+
   public addPolygon(distance: number): void{
-    const road = this.roads[0];
-    this.polygons.push(road.createPolygon(distance));
+    const posRoads = this.roads.filter((r) => !r.hasTwoPolygons());
+    const road = posRoads[Math.floor(Math.random()*posRoads.length)];
+    const pol = road.createPolygon(distance);
+    this.polygons.push(pol);
   }
 
   public static getExampleCity(): City{
     const p1 = new Point(700, 400, 0);
     const p2 = new Point(800, 400, 0);
-    return new City([Road.createRoad(p1, p2, 0)]);
+    const r = Road.createRoad(p1, p2, 0);
+    return new City([r.createPolygon(100)]);
   }
 
   private getAllPoints(): Point[]{

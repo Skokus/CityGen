@@ -47,16 +47,12 @@ class Point {
                 return i;
             }
         }
-        console.log("HERE");
         return -1;
     }
     public getRoadCount(): number{
         let count = 0;
         for(let i = 0; i < this.roadCounter.length; i++){
             count += this.roadCounter[i];
-        }
-        if(isNaN(count)){
-            console.log(this);
         }
         return count;
     }
@@ -81,6 +77,12 @@ class Point {
             }
         }
         return ret;
+    }
+    public hasRoadOnDirection(direction: number): boolean{
+        return this.connectedRoads[direction] !== null;
+    }
+    public getRoadOnDirection(direction: number): Road | null{
+        return this.connectedRoads[direction];
     }
 }
 

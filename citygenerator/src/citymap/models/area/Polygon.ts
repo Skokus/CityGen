@@ -4,9 +4,7 @@ import Point from "../road/Point";
 class Polygon {
     roads: Road[];
     color: string;
-    private colors=  [
-        
-    ];
+
     constructor(roads: Road[], color: string) {
         this.roads = roads;
         this.color = color;

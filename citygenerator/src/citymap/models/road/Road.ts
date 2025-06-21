@@ -35,6 +35,12 @@ class Road {
         else
             return this.p2;
     }
+    public getOtherPoint(p: Point){ //USE ONLY WITH p AS p1 OR p2
+        if(p !== this.p1)
+            return this.p1;
+        else
+            return this.p2;
+    }
     public doesContainPoint(p: Point): boolean{
         return this.p1 === p || this.p2 === p;
     }
@@ -50,12 +56,44 @@ class Road {
     public createPolygon(distance: number): Polygon{
         const direction = this.getSideDirection();
         const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/4) - Math.PI/8;
-        const newPoint1 = this.p1.getDistancedPoint(distance, randomAngle);
-        const newPoint2 = this.p2.getDistancedPoint(distance, randomAngle);
-        const newRoad1 = new Road(this.p1, newPoint1);
-        const newRoad2 = new Road(this.p2, newPoint2);
-        const newRoad3 = new Road(this.p1, this.p2);
-        return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
+        let newPoint1: Point;
+        let newPoint2: Point;
+        let newRoad1, newRoad2, newRoad3: Road;
+        switch (direction) {
+            case 0:
+                newPoint1 = this.p1.hasRoadOnDirection(0) ? this.p1.getRoadOnDirection(0)!.getOtherPoint(this.p1) : this.p1.getDistancedPoint(distance, randomAngle);
+                newPoint2 = this.p2.hasRoadOnDirection(0) ? this.p2.getRoadOnDirection(0)!.getOtherPoint(this.p2) : this.p2.getDistancedPoint(distance, randomAngle);
+                newRoad1 = Road.createRoad(this.p1, newPoint1, 0);
+                newRoad2 = Road.createRoad(this.p2, newPoint2, 0);
+                newRoad3 = Road.createRoad(newPoint1, newPoint2, 1);
+                return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
+            case 1:
+                newPoint1 = this.p1.hasRoadOnDirection(1) ? this.p1.getRoadOnDirection(1)!.getOtherPoint(this.p1) : this.p1.getDistancedPoint(distance, randomAngle);
+                newPoint2 = this.p2.hasRoadOnDirection(1) ? this.p2.getRoadOnDirection(1)!.getOtherPoint(this.p2) : this.p2.getDistancedPoint(distance, randomAngle);
+                newRoad1 = Road.createRoad(this.p1, newPoint1, 1);
+                newRoad2 = Road.createRoad(this.p2, newPoint2, 1);
+                newRoad3 = Road.createRoad(newPoint1, newPoint2, 0);
+                return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
+            case 2:
+                newPoint1 = this.p1.hasRoadOnDirection(2) ? this.p1.getRoadOnDirection(2)!.getOtherPoint(this.p1) : this.p1.getDistancedPoint(distance, randomAngle);
+                newPoint2 = this.p2.hasRoadOnDirection(2) ? this.p2.getRoadOnDirection(2)!.getOtherPoint(this.p2) : this.p2.getDistancedPoint(distance, randomAngle);
+                newRoad1 = Road.createRoad(newPoint1, this.p1,0);
+                newRoad2 = Road.createRoad(newPoint2, this.p2,0);
+                newRoad3 = Road.createRoad(newPoint1, newPoint2, 1);
+                return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
+            case 3:
+                newPoint1 = this.p1.hasRoadOnDirection(3) ? this.p1.getRoadOnDirection(3)!.getOtherPoint(this.p1) : this.p1.getDistancedPoint(distance, randomAngle);
+                newPoint2 = this.p2.hasRoadOnDirection(3) ? this.p2.getRoadOnDirection(3)!.getOtherPoint(this.p2) : this.p2.getDistancedPoint(distance, randomAngle);
+                newRoad1 = Road.createRoad(newPoint1, this.p1,1);
+                newRoad2 = Road.createRoad(newPoint2, this.p2, 1);
+                newRoad3 = Road.createRoad(newPoint1, newPoint2, 0);
+                return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
+        }
+        console.log("coś się zepsuło");
+        return new Polygon([], "green");
+    }
+    public hasTwoPolygons(): boolean {
+        return this.getSideDirection() === -1;
     }
 
     public static distanceFromPoint(p: Point, p1: Point, p2: Point): number{
@@ -113,13 +151,18 @@ class Road {
     }
 
     private getSideDirection(): number{
-        var posDirs = [];//possible direction
-        for(let i = 0; i < this.p1.roadCounter.length; i++){
-            if(this.p1.roadCounter[i] === 0 && this.p2.roadCounter[i] === 0){
-                posDirs.push(i);
+        let i = 0;
+        let posDirs = [];
+        for(i = 0; i < 4; i++){
+            if(this === this.p1.connectedRoads[i]){
+                break;
             }
         }
-        if(posDirs.length < 0){
+        if(this.p1.roadCounter[(i+1)%4] === 0 || this.p2.roadCounter[(i+1)%4] === 0)
+            posDirs.push((i+1)%4);
+        if(this.p1.roadCounter[(i+3)%4] === 0 || this.p2.roadCounter[(i+3)%4] === 0)
+            posDirs.push((i+3)%4);
+        if(posDirs.length <= 0){
             return -1;
         }
         return posDirs[Math.floor(Math.random() * posDirs.length)];

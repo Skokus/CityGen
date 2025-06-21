@@ -8,8 +8,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Point.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Point.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +87,10 @@
       <workItem from="1750060424219" duration="1200000" />
       <workItem from="1750264222698" duration="3495000" />
       <workItem from="1750366857592" duration="2396000" />
-      <workItem from="1750507159065" duration="1666000" />
+      <workItem from="1750507159065" duration="2515000" />
+      <workItem from="1750515362515" duration="4285000" />
+      <workItem from="1750519811692" duration="318000" />
+      <workItem from="1750522740618" duration="3805000" />
     </task>
     <servers />
   </component>
