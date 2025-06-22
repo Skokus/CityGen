@@ -3,6 +3,7 @@ import City from "../models/City";
 import PointRenderer from "../renderers/PointRenderer";
 import RoadRenderer from "../renderers/RoadRenderer";
 import PolygonRenderer from "../renderers/PolygonRenderer";
+import BuildingRenderer from "../renderers/BuildingRenderer";
 
 function CityMap({city} : {city: City}) {
 
@@ -22,7 +23,7 @@ function CityMap({city} : {city: City}) {
         const ctx = canvas.getContext('2d');
         const rr = new RoadRenderer();
         const pr = new PointRenderer();
-
+        const br = new BuildingRenderer();
         for (const r of city.roads) {
             rr.setRoad(r);
             rr.draw(ctx, 1, 0, 0);
@@ -30,6 +31,10 @@ function CityMap({city} : {city: City}) {
             pr.draw(ctx, 1, 0, 0);
             pr.setPoint(r.p2);
             pr.draw(ctx, 1, 0, 0);
+        }
+        for(const b of city.getAllBuildings()){
+            br.setBuilding(b);
+            br.draw(ctx, 1, 0, 0);
         }
     }
 
