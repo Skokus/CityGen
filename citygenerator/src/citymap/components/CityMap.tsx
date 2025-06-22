@@ -22,12 +22,6 @@ function CityMap({city} : {city: City}) {
         const ctx = canvas.getContext('2d');
         const rr = new RoadRenderer();
         const pr = new PointRenderer();
-        const polr = new PolygonRenderer();
-
-        //for (const p of city.polygons){
-            polr.setPolygon(city.polygons[city.polygons.length - 1]);
-            polr.draw(ctx, 1, 0,0);
-        //}
 
         for (const r of city.roads) {
             rr.setRoad(r);
