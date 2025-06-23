@@ -1,29 +1,33 @@
 import Point from "./Point";
 import Polygon from "../area/Polygon";
+import Building from "../building/Building";
+import SquareBuilding from "../building/SquareBuilding";
 
 class Road {
     p1: Point;
     p2: Point;
+    buildings: Building[];
 
     constructor(p1: Point, p2: Point) {
         this.p1 = p1;
         this.p2 = p2;
+        this.buildings = [];
     }
 
     get length(): number{
         return Math.sqrt(Math.pow((this.p1.x - this.p2.x), 2) + Math.pow((this.p1.y - this.p2.y), 2));
     }
-
     get slope(): number{ // a in y=ax+b
         return (this.p2.y - this.p1.y)/(this.p2.x - this.p1.x);
     }
-
     get yInter(): number{ // b in y=ax+b
         return this.p1.y - this.slope * this.p1.x;
     }
-
     get perpendicularSlope(): number{
         return -1/this.slope;
+    }
+    get angle(): number{
+        return Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
     }
 
     public getPerpendicularB(p: Point): number{ //after splitting road get the perpendicular line equation
@@ -94,6 +98,21 @@ class Road {
     }
     public hasTwoPolygons(): boolean {
         return this.getSideDirection() === -1;
+    }
+    public getRandomPointFromRoad(scalar: number): Point{
+        //https://stackoverflow.com/questions/64938264/how-can-i-generate-a-random-point-on-a-line-segment
+        var distX = this.p2.x - this.p1.x;
+        var distY = this.p2.y - this.p1.y;
+        var modX = (distX * scalar) + this.p1.x;
+        var modY = (distY * scalar) + this.p1.y;
+        return new Point(modX, modY);
+    }
+    public addBuilding(distance: number, radius: number){
+        var randomPoint = this.getRandomPointFromRoad(Math.random());
+        var bAngle = this.angle+Math.PI/2
+        var bDistance= Math.random() > 0.5 ? distance : -distance;
+        var bCenter = randomPoint.getDistancedPoint(bDistance, bAngle);
+        this.buildings.push(new SquareBuilding(bCenter.x, bCenter.y,radius, bAngle));
     }
 
     public static distanceFromPoint(p: Point, p1: Point, p2: Point): number{

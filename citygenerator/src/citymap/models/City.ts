@@ -1,22 +1,17 @@
 import Road from "./road/Road";
 import Point from "./road/Point";
 import Polygon from "./area/Polygon";
+import Building from "./building/Building";
+import SquareBuilding from "./building/SquareBuilding";
 
 class City {
 
-  polygons: Polygon[];
-  
-  constructor(polygons: Polygon[]) {
-    this.polygons = polygons;
-  }
+  roads: Road[];
+  popRadius = 50;
+  angle = Math.PI/9;
 
-  get roads(): Road[] {
-    const roadSet = new Set<Road>();
-    for(const p of this.polygons){
-      for(const r of p.roads)
-        roadSet.add(r);
-    }
-    return Array.from(roadSet);
+  constructor(roads: Road[]) {
+    this.roads = roads;
   }
 
   public addNewRoad(distance: number): void {
@@ -27,7 +22,7 @@ class City {
       randomPoint = points[Math.floor(Math.random() * points.length)];
       direction = randomPoint.getRandomDirection();
     }
-    const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/4) - Math.PI/8;
+    const randomAngle = (Math.PI/2) * direction + (Math.random() * this.angle) - this.angle/2;
     const newPoint = randomPoint.getDistancedPoint(distance, randomAngle);
     newPoint.distanceFromCrossroad = randomPoint.distanceFromCrossroad + 1;
     const roadsFromRandomPoint = Road.getAllRoadsWithPoint(this.roads, randomPoint);
@@ -48,7 +43,7 @@ class City {
         expectedPoint = point;
       }
     }
-    if(min < 40){
+    if(min < this.popRadius){
       const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
       this.roads.push(newRoad);
       return;
@@ -56,7 +51,7 @@ class City {
 
     for(let road of this.roads) {
       let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
-      if(dist < 30){
+      if(dist < this.popRadius){
         expectedPoint = road.getRandomPoint();
         const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
         this.roads.push(newRoad);
@@ -76,7 +71,7 @@ class City {
       randomPoint = points[Math.floor(Math.random() * points.length)];
       direction = randomPoint.getForwardDirection();
     }
-    const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/4) - Math.PI/8;
+    const randomAngle = (Math.PI/2) * direction + (Math.random() * this.angle) - this.angle/2;
     const newPoint = randomPoint.getDistancedPoint(distance, randomAngle);
     newPoint.distanceFromCrossroad = randomPoint.distanceFromCrossroad + 1;
     const roadsFromRandomPoint = Road.getAllRoadsWithPoint(this.roads, randomPoint);
@@ -127,7 +122,7 @@ class City {
       randomPoint = points[Math.floor(Math.random() * points.length)];
       direction = randomPoint.getSideDirection();
     }
-    const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/4) - Math.PI/8;
+    const randomAngle = (Math.PI/2) * direction + (Math.random() * this.angle) - this.angle/2;
     const newPoint = randomPoint.getDistancedPoint(distance, randomAngle);
     newPoint.distanceFromCrossroad = randomPoint.distanceFromCrossroad + 1;
     const roadsFromRandomPoint = Road.getAllRoadsWithPoint(this.roads, randomPoint);
@@ -173,14 +168,28 @@ class City {
     const posRoads = this.roads.filter((r) => !r.hasTwoPolygons());
     const road = posRoads[Math.floor(Math.random()*posRoads.length)];
     const pol = road.createPolygon(distance);
-    this.polygons.push(pol);
+  }
+  public addBuilding(distance: number, radius: number): void{
+    const posRoads = this.roads;
+    const road = posRoads[Math.floor(Math.random()*posRoads.length)];
+    road.addBuilding(distance, radius);
+  }
+
+  public getAllBuildings(): Building[] {
+    const buildingSet = new Set<Building>();
+    for(const road of this.roads) {
+      for(const building of road.buildings) {
+        buildingSet.add(building);
+      }
+    }
+    return Array.from(buildingSet);
   }
 
   public static getExampleCity(): City{
     const p1 = new Point(700, 400, 0);
     const p2 = new Point(800, 400, 0);
     const r = Road.createRoad(p1, p2, 0);
-    return new City([r.createPolygon(100)]);
+    return new City([r]);
   }
 
   private getAllPoints(): Point[]{
@@ -191,6 +200,7 @@ class City {
     }
     return Array.from(pointSet);
   }
+
 }
 
 export default City;
