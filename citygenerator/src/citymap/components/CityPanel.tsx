@@ -15,19 +15,19 @@ function CityPanel() {
     });
 
     function addNewRoad(){
-        city.addNewRoad(100);
+        city.addNewRoad(Math.random() * (100 - 50 + 1) + 50);
         setCity(city);
         setCounter(counter + 1);
     }
 
     function addForwardRoad(){
-        city.addExtentionRoad(100);
+        city.addExtentionRoad(Math.random() * (100 - 50 + 1) + 50);
         setCity(city);
         setCounter(counter + 1);
     }
 
     function addCrossroadRoad(){
-        city.addSideRoad(100);
+        city.addSideRoad(Math.random() * (100 - 50 + 1) + 50);
         setCity(city);
         setCounter(counter + 1);
     }

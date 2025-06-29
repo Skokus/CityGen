@@ -16,7 +16,7 @@ function HomePage() {
           <CityPanel/>
         </div>
         <div className="sidepanel">
-          <WorldEventPanel worldevents={WorldEvent.getExampleWorldEvents()}/>
+          <WorldEventPanel/>
         </div>
       </div>
     </div>

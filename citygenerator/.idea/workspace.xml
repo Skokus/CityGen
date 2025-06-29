@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/citymap/models/building/SquareBuilding.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/citymap/renderers/BuildingRenderer.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/worldevent/models/WorldEvent.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/worldevent/models/WorldEventManager.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/home/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/home/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/worldevent/components/WorldEventItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldevent/components/WorldEventItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/worldevent/components/WorldEventPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldevent/components/WorldEventPanel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/worldevent/models/WorldEvent.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +45,7 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;nopolygons&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawel/Documents/GitHub/CityGen/citygenerator&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -96,6 +98,9 @@
       <workItem from="1750609697303" duration="332000" />
       <workItem from="1750610325077" duration="2666000" />
       <workItem from="1750618693882" duration="1498000" />
+      <workItem from="1750669713634" duration="745000" />
+      <workItem from="1751196973895" duration="1634000" />
+      <workItem from="1751226991418" duration="1886000" />
     </task>
     <servers />
   </component>

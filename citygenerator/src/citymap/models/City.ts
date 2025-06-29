@@ -164,11 +164,6 @@ class City {
     return;
   }
 
-  public addPolygon(distance: number): void{
-    const posRoads = this.roads.filter((r) => !r.hasTwoPolygons());
-    const road = posRoads[Math.floor(Math.random()*posRoads.length)];
-    const pol = road.createPolygon(distance);
-  }
   public addBuilding(distance: number, radius: number): void{
     const posRoads = this.roads;
     const road = posRoads[Math.floor(Math.random()*posRoads.length)];
