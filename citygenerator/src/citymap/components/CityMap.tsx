@@ -40,7 +40,7 @@ function CityMap({city} : {city: City}) {
 
     return (
         <div>
-            <canvas ref={canvasRef} width={1500} height={1000}/>
+            <canvas ref={canvasRef} width={900} height={1000}/>
         </div>
     );
 }

@@ -181,8 +181,8 @@ class City {
   }
 
   public static getExampleCity(): City{
-    const p1 = new Point(700, 400, 0);
-    const p2 = new Point(800, 400, 0);
+    const p1 = new Point(400, 400, 0);
+    const p2 = new Point(500, 400, 0);
     const r = Road.createRoad(p1, p2, 0);
     return new City([r]);
   }

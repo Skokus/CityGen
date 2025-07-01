@@ -2,16 +2,20 @@ import Point from "./Point";
 import Polygon from "../area/Polygon";
 import Building from "../building/Building";
 import SquareBuilding from "../building/SquareBuilding";
+import SidePoint from "./SidePoint";
+import sidePoint from "./SidePoint";
 
 class Road {
     p1: Point;
     p2: Point;
     buildings: Building[];
+    sidePoints: SidePoint[];
 
     constructor(p1: Point, p2: Point) {
         this.p1 = p1;
         this.p2 = p2;
         this.buildings = [];
+        this.sidePoints = [];
     }
 
     get length(): number{
@@ -57,49 +61,7 @@ class Road {
         const r2 = new Road(new Point(this.p1.x - nx * distance, this.p1.y - ny * distance), new Point(this.p2.x - nx * distance, this.p2.y - ny * distance));
         return [r1, r2];
     }
-    public createPolygon(distance: number): Polygon{
-        const direction = this.getSideDirection();
-        const randomAngle = (Math.PI/2) * direction + (Math.random() * Math.PI/4) - Math.PI/8;
-        let newPoint1: Point;
-        let newPoint2: Point;
-        let newRoad1, newRoad2, newRoad3: Road;
-        switch (direction) {
-            case 0:
-                newPoint1 = this.p1.hasRoadOnDirection(0) ? this.p1.getRoadOnDirection(0)!.getOtherPoint(this.p1) : this.p1.getDistancedPoint(distance, randomAngle);
-                newPoint2 = this.p2.hasRoadOnDirection(0) ? this.p2.getRoadOnDirection(0)!.getOtherPoint(this.p2) : this.p2.getDistancedPoint(distance, randomAngle);
-                newRoad1 = Road.createRoad(this.p1, newPoint1, 0);
-                newRoad2 = Road.createRoad(this.p2, newPoint2, 0);
-                newRoad3 = Road.createRoad(newPoint1, newPoint2, 1);
-                return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
-            case 1:
-                newPoint1 = this.p1.hasRoadOnDirection(1) ? this.p1.getRoadOnDirection(1)!.getOtherPoint(this.p1) : this.p1.getDistancedPoint(distance, randomAngle);
-                newPoint2 = this.p2.hasRoadOnDirection(1) ? this.p2.getRoadOnDirection(1)!.getOtherPoint(this.p2) : this.p2.getDistancedPoint(distance, randomAngle);
-                newRoad1 = Road.createRoad(this.p1, newPoint1, 1);
-                newRoad2 = Road.createRoad(this.p2, newPoint2, 1);
-                newRoad3 = Road.createRoad(newPoint1, newPoint2, 0);
-                return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
-            case 2:
-                newPoint1 = this.p1.hasRoadOnDirection(2) ? this.p1.getRoadOnDirection(2)!.getOtherPoint(this.p1) : this.p1.getDistancedPoint(distance, randomAngle);
-                newPoint2 = this.p2.hasRoadOnDirection(2) ? this.p2.getRoadOnDirection(2)!.getOtherPoint(this.p2) : this.p2.getDistancedPoint(distance, randomAngle);
-                newRoad1 = Road.createRoad(newPoint1, this.p1,0);
-                newRoad2 = Road.createRoad(newPoint2, this.p2,0);
-                newRoad3 = Road.createRoad(newPoint1, newPoint2, 1);
-                return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
-            case 3:
-                newPoint1 = this.p1.hasRoadOnDirection(3) ? this.p1.getRoadOnDirection(3)!.getOtherPoint(this.p1) : this.p1.getDistancedPoint(distance, randomAngle);
-                newPoint2 = this.p2.hasRoadOnDirection(3) ? this.p2.getRoadOnDirection(3)!.getOtherPoint(this.p2) : this.p2.getDistancedPoint(distance, randomAngle);
-                newRoad1 = Road.createRoad(newPoint1, this.p1,1);
-                newRoad2 = Road.createRoad(newPoint2, this.p2, 1);
-                newRoad3 = Road.createRoad(newPoint1, newPoint2, 0);
-                return new Polygon([this, newRoad1, newRoad2, newRoad3], "green");
-        }
-        console.log("coś się zepsuło");
-        return new Polygon([], "green");
-    }
-    public hasTwoPolygons(): boolean {
-        return this.getSideDirection() === -1;
-    }
-    public getRandomPointFromRoad(scalar: number): Point{
+    public getPointFromRoad(scalar: number): Point{
         //https://stackoverflow.com/questions/64938264/how-can-i-generate-a-random-point-on-a-line-segment
         var distX = this.p2.x - this.p1.x;
         var distY = this.p2.y - this.p1.y;
@@ -108,11 +70,26 @@ class Road {
         return new Point(modX, modY);
     }
     public addBuilding(distance: number, radius: number){
-        var randomPoint = this.getRandomPointFromRoad(Math.random());
-        var bAngle = this.angle+Math.PI/2
-        var bDistance= Math.random() > 0.5 ? distance : -distance;
-        var bCenter = randomPoint.getDistancedPoint(bDistance, bAngle);
+        var availableSidePoints: SidePoint[] = this.sidePoints.filter((s) => s.isFree());
+        var randomPoint = availableSidePoints[Math.floor(Math.random() * availableSidePoints.length)];
+        var bAngle = this.angle+Math.PI/2;
+        var side = randomPoint.getRandomSide();
+        console.log(randomPoint);
+        var bCenter = randomPoint.getDistancedPoint(distance * side, bAngle);
         this.buildings.push(new SquareBuilding(bCenter.x, bCenter.y,radius, bAngle));
+        randomPoint.buildBuilding(side);
+    }
+    public createSidePoints(distance: number): void{
+        if(distance > this.length || this.sidePoints.length > 0){
+            return;
+        }
+        const n = Math.floor(this.length/distance);
+        const ratio = 1/n;
+        for(let i = 0; i < n; i++){
+            let s = this.createSidePointOnRoad(i * ratio + ratio/2);
+            this.sidePoints.push(s);
+        }
+
     }
 
     public static distanceFromPoint(p: Point, p1: Point, p2: Point): number{
@@ -166,25 +143,16 @@ class Road {
         const road = new Road(point1, point2);
         point1.addRoad(road, direction);
         point2.addRoad(road, (direction+2)%dirslen);
+        road.createSidePoints(10);
         return road;
     }
 
-    private getSideDirection(): number{
-        let i = 0;
-        let posDirs = [];
-        for(i = 0; i < 4; i++){
-            if(this === this.p1.connectedRoads[i]){
-                break;
-            }
-        }
-        if(this.p1.roadCounter[(i+1)%4] === 0 || this.p2.roadCounter[(i+1)%4] === 0)
-            posDirs.push((i+1)%4);
-        if(this.p1.roadCounter[(i+3)%4] === 0 || this.p2.roadCounter[(i+3)%4] === 0)
-            posDirs.push((i+3)%4);
-        if(posDirs.length <= 0){
-            return -1;
-        }
-        return posDirs[Math.floor(Math.random() * posDirs.length)];
+    private createSidePointOnRoad(scalar: number): SidePoint {
+        var distX = this.p2.x - this.p1.x;
+        var distY = this.p2.y - this.p1.y;
+        var modX = (distX * scalar) + this.p1.x;
+        var modY = (distY * scalar) + this.p1.y;
+        return new SidePoint(modX, modY);
     }
 }
 

@@ -17,12 +17,13 @@ class BuildingRenderer implements Renderer{
             const y = this.building.y;
             const h = this.building.height;
             const a = this.building.angle;
+            console.log(h);
             ctx.beginPath();
-            ctx.moveTo(this.rotateX(h, h, a) + x + xOffSet, this.rotateY(h, h, a) + y + yOffSet);
-            ctx.lineTo(this.rotateX(-h, h, a) + x + xOffSet, this.rotateY(-h, h, a) + y + yOffSet);
-            ctx.lineTo(this.rotateX(-h, -h, a) + x + xOffSet, this.rotateY(-h, -h, a) + y + yOffSet);
-            ctx.lineTo(this.rotateX(h, -h, a) + x + xOffSet, this.rotateY(h, -h, a) + y + yOffSet);
-            ctx.lineTo(this.rotateX(h, h, a) + x + xOffSet, this.rotateY(h, h, a) + y + yOffSet);
+            ctx.moveTo(this.rotateX(h/2, h/2, a) + x + xOffSet, this.rotateY(h/2, h/2, a) + y + yOffSet);
+            ctx.lineTo(this.rotateX(-h/2, h/2, a) + x + xOffSet, this.rotateY(-h/2, h/2, a) + y + yOffSet);
+            ctx.lineTo(this.rotateX(-h/2, -h/2, a) + x + xOffSet, this.rotateY(-h/2, -h/2, a) + y + yOffSet);
+            ctx.lineTo(this.rotateX(h/2, -h/2, a) + x + xOffSet, this.rotateY(h/2, -h/2, a) + y + yOffSet);
+            ctx.lineTo(this.rotateX(h/2, h/2, a) + x + xOffSet, this.rotateY(h/2, h/2, a) + y + yOffSet);
             ctx.strokeStyle = "black";
             ctx.stroke();
             ctx.fillStyle = this.building.color;
