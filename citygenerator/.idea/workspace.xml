@@ -9,11 +9,7 @@
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/building/Building.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/building/Building.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/BuildingRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/BuildingRenderer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/home/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/home/HomePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/worldevent/components/WorldEventPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldevent/components/WorldEventPanel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,6 +101,8 @@
       <workItem from="1751370717782" duration="1039000" />
       <workItem from="1751379429131" duration="517000" />
       <workItem from="1751380837051" duration="4706000" />
+      <workItem from="1751441760943" duration="2353000" />
+      <workItem from="1751475348858" duration="3194000" />
     </task>
     <servers />
   </component>

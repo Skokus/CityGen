@@ -7,11 +7,13 @@ import SquareBuilding from "./building/SquareBuilding";
 class City {
 
   roads: Road[];
+  polygons: Polygon[];
   popRadius = 50;
   angle = Math.PI/9;
 
   constructor(roads: Road[]) {
     this.roads = roads;
+    this.polygons = [];
   }
 
   public addNewRoad(distance: number): void {
@@ -46,6 +48,7 @@ class City {
     if(min < this.popRadius){
       const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
       this.roads.push(newRoad);
+      this.polygons.push(...this.findCycles(6, [expectedPoint], []));
       return;
     }
 
@@ -55,6 +58,7 @@ class City {
         expectedPoint = road.getRandomPoint();
         const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
         this.roads.push(newRoad);
+        this.polygons.push(...this.findCycles(6, [expectedPoint], []));
         return;
       }
     }
@@ -195,7 +199,26 @@ class City {
     }
     return Array.from(pointSet);
   }
-
+  private findCycles(pointCap: number, currentPoints: Point[], currentRoads: Road[]): Polygon[]{
+    const result: Polygon[] = [];
+    const pathPoints: Point[] = currentPoints;
+    const start = currentPoints[0];
+    const end = currentPoints[currentPoints.length - 1];
+    if(pointCap < pathPoints.length){//no path found under within the
+      return result;
+    }
+    if(currentPoints.length > 1 && start === end){
+      console.log(currentRoads);
+      result.push(new Polygon(currentRoads));
+      return result;
+    }
+    for(const road of end.connectedRoads){
+      if(road !== null && !currentRoads.includes(road)){
+        result.push(...this.findCycles(pointCap, [...currentPoints, road.getOtherPoint(end)], [...currentRoads, road]));
+      }
+    }
+    return result;
+  }
 }
 
 export default City;

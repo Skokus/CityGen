@@ -24,6 +24,13 @@ function CityMap({city} : {city: City}) {
         const rr = new RoadRenderer();
         const pr = new PointRenderer();
         const br = new BuildingRenderer();
+        const polr = new PolygonRenderer();
+        if(city.polygons.length > 0){
+            for (const p of city.polygons){
+                polr.setPolygon(p);
+                polr.draw(ctx, 1, 0, 0);
+            }
+        }
         for (const r of city.roads) {
             rr.setRoad(r);
             rr.draw(ctx, 1, 0, 0);
