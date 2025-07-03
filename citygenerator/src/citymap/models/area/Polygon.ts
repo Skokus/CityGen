@@ -7,7 +7,7 @@ class Polygon {
 
     constructor(roads: Road[]) {
         this.roads = roads;
-        this.color = "green";
+        this.color = "#ffee8c";
     }
 
     get centroid(): Point{

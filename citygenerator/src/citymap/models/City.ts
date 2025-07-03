@@ -204,11 +204,10 @@ class City {
     const pathPoints: Point[] = currentPoints;
     const start = currentPoints[0];
     const end = currentPoints[currentPoints.length - 1];
-    if(pointCap < pathPoints.length){//no path found under within the
+    if(pathPoints.length > pointCap){//no path found under within the
       return result;
     }
     if(currentPoints.length > 1 && start === end){
-      console.log(currentRoads);
       result.push(new Polygon(currentRoads));
       return result;
     }

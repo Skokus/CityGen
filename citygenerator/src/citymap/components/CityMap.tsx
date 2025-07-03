@@ -29,6 +29,7 @@ function CityMap({city} : {city: City}) {
             for (const p of city.polygons){
                 polr.setPolygon(p);
                 polr.draw(ctx, 1, 0, 0);
+                console.log(p);
             }
         }
         for (const r of city.roads) {
