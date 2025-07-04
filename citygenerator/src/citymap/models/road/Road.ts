@@ -74,8 +74,7 @@ class Road {
         var randomPoint = availableSidePoints[Math.floor(Math.random() * availableSidePoints.length)];
         var bAngle = this.angle+Math.PI/2;
         var side = randomPoint.getRandomSide();
-        console.log(randomPoint);
-        var bCenter = randomPoint.getDistancedPoint(distance * side, bAngle);
+        var bCenter = randomPoint.getOffsetDistancedPoint(distance * side, bAngle, radius);
         this.buildings.push(new SquareBuilding(bCenter.x, bCenter.y,radius, bAngle));
         randomPoint.buildBuilding(side);
     }
@@ -86,7 +85,7 @@ class Road {
         const n = Math.floor(this.length/distance);
         const ratio = 1/n;
         for(let i = 0; i < n; i++){
-            let s = this.createSidePointOnRoad(i * ratio + ratio/2);
+            let s = this.createSidePointOnRoad(i * ratio + ratio/2, this.length/distance);
             this.sidePoints.push(s);
         }
 
@@ -147,12 +146,12 @@ class Road {
         return road;
     }
 
-    private createSidePointOnRoad(scalar: number): SidePoint {
+    private createSidePointOnRoad(scalar: number, width: number): SidePoint {
         var distX = this.p2.x - this.p1.x;
         var distY = this.p2.y - this.p1.y;
         var modX = (distX * scalar) + this.p1.x;
         var modY = (distY * scalar) + this.p1.y;
-        return new SidePoint(modX, modY);
+        return new SidePoint(modX, modY, width);
     }
 }
 
