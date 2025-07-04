@@ -11,22 +11,9 @@ class RoadRenderer implements Renderer{
 
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
         ctx.beginPath();
-        ctx.moveTo(this.road.p1.x + xOffSet, this.road.p1.y + yOffSet);
-        ctx.lineTo(this.road.p2.x + xOffSet, this.road.p2.y + yOffSet);
+        ctx.moveTo(scale*(this.road.p1.x + xOffSet), scale*(this.road.p1.y + yOffSet));
+        ctx.lineTo(scale*(this.road.p2.x + xOffSet), scale*(this.road.p2.y + yOffSet));
         ctx.stroke();
-        ctx.closePath();
-    }
-
-    drawArea(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number){
-        const parroads = this.road.getParallelRoad(30);
-        ctx.beginPath();
-        ctx.fillStyle = "green";
-        ctx.moveTo(parroads[0].p1.x + xOffSet, parroads[0].p1.y + yOffSet);
-        ctx.lineTo(parroads[0].p2.x + xOffSet, parroads[0].p2.y + yOffSet);
-        ctx.lineTo(parroads[1].p2.x + xOffSet, parroads[1].p2.y + yOffSet);
-        ctx.lineTo(parroads[1].p1.x + xOffSet, parroads[1].p1.y + yOffSet);
-        ctx.lineTo(parroads[0].p1.x + xOffSet, parroads[0].p1.y + yOffSet);
-        ctx.fill();
         ctx.closePath();
     }
 }

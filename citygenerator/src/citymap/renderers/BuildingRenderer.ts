@@ -13,17 +13,17 @@ class BuildingRenderer implements Renderer{
 
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
         if(this.building instanceof SquareBuilding){
-            const x = this.building.x;
-            const y = this.building.y;
-            const h = this.building.height;
+            const x = scale*(this.building.x + xOffSet);
+            const y = scale*(this.building.y + yOffSet);
+            const h = this.building.height * scale;
             const a = this.building.angle;
             console.log(h);
             ctx.beginPath();
-            ctx.moveTo(this.rotateX(h/2, h/2, a) + x + xOffSet, this.rotateY(h/2, h/2, a) + y + yOffSet);
-            ctx.lineTo(this.rotateX(-h/2, h/2, a) + x + xOffSet, this.rotateY(-h/2, h/2, a) + y + yOffSet);
-            ctx.lineTo(this.rotateX(-h/2, -h/2, a) + x + xOffSet, this.rotateY(-h/2, -h/2, a) + y + yOffSet);
-            ctx.lineTo(this.rotateX(h/2, -h/2, a) + x + xOffSet, this.rotateY(h/2, -h/2, a) + y + yOffSet);
-            ctx.lineTo(this.rotateX(h/2, h/2, a) + x + xOffSet, this.rotateY(h/2, h/2, a) + y + yOffSet);
+            ctx.moveTo(this.rotateX(h/2, h/2, a) + x, this.rotateY(h/2, h/2, a) + y);
+            ctx.lineTo(this.rotateX(-h/2, h/2, a) + x, this.rotateY(-h/2, h/2, a) + y);
+            ctx.lineTo(this.rotateX(-h/2, -h/2, a) + x, this.rotateY(-h/2, -h/2, a) + y);
+            ctx.lineTo(this.rotateX(h/2, -h/2, a) + x, this.rotateY(h/2, -h/2, a) + y);
+            ctx.lineTo(this.rotateX(h/2, h/2, a) + x, this.rotateY(h/2, h/2, a) + y);
             ctx.strokeStyle = "black";
             ctx.stroke();
             ctx.fillStyle = this.building.color;

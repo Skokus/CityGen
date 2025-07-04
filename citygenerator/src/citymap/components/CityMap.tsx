@@ -5,7 +5,12 @@ import RoadRenderer from "../renderers/RoadRenderer";
 import PolygonRenderer from "../renderers/PolygonRenderer";
 import BuildingRenderer from "../renderers/BuildingRenderer";
 
-function CityMap({city} : {city: City}) {
+interface CityMapProps {
+    zoomScale: number;
+    city: City;
+}
+
+function CityMap(props: CityMapProps) {
 
     const canvasRef = useRef(null);
 
@@ -25,24 +30,23 @@ function CityMap({city} : {city: City}) {
         const pr = new PointRenderer();
         const br = new BuildingRenderer();
         const polr = new PolygonRenderer();
-        if(city.polygons.length > 0){
-            for (const p of city.polygons){
+        if(props.city.polygons.length > 0){
+            for (const p of props.city.polygons){
                 polr.setPolygon(p);
-                polr.draw(ctx, 1, 0, 0);
-                console.log(p);
+                polr.draw(ctx, props.zoomScale, 0, 0);
             }
         }
-        for (const r of city.roads) {
+        for (const r of props.city.roads) {
             rr.setRoad(r);
-            rr.draw(ctx, 1, 0, 0);
+            rr.draw(ctx, props.zoomScale, 0, 0);
             pr.setPoint(r.p1);
-            pr.draw(ctx, 1, 0, 0);
+            pr.draw(ctx, props.zoomScale, 0, 0);
             pr.setPoint(r.p2);
-            pr.draw(ctx, 1, 0, 0);
+            pr.draw(ctx, props.zoomScale, 0, 0);
         }
-        for(const b of city.getAllBuildings()){
+        for(const b of props.city.getAllBuildings()){
             br.setBuilding(b);
-            br.draw(ctx, 1, 0, 0);
+            br.draw(ctx, props.zoomScale, 0, 0);
         }
     }
 

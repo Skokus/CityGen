@@ -7,6 +7,10 @@ import CityMap from "./CityMap";
 
 function CityPanel() {
 
+
+    let xOffset = 0.0;
+    let yOffset = 0.0;
+
     const maxRoadLength = 100;
     const minRoadLength = 80;
     const maxBuildingSize = 10;
@@ -16,7 +20,7 @@ function CityPanel() {
 
     const [city, setCity] = useState(City.getExampleCity());
     const [counter, setCounter] = useState(0);
-
+    const [zoomScale, setZoomScale] = useState(1.0);
     useEffect(() => {
 
     });
@@ -48,21 +52,30 @@ function CityPanel() {
     function getRandomMainRoadDistance(){
         return Math.random() * (maxRoadLength - minRoadLength) + minRoadLength;
     }
-
     function getRandomBuildingSize(){
         return Math.random() * (maxBuildingSize - minBuildingSize) + minBuildingSize;
     }
     function getRandomBuildingDistance(){
         return Math.random() * (maxBuildingDistanceFromRoad - minBuildingDistanceFromRoad) + minBuildingDistanceFromRoad;
     }
+
+    function zoomInMap(){
+        setZoomScale(zoomScale + 0.2);
+    }
+    function zoomOutMap(){
+        setZoomScale(zoomScale - 0.2);
+    }
+
     return (
         <div>
             <div>Map of the city</div>
-            <CityMap city={city}/>
+            <CityMap zoomScale={zoomScale} city={city}/>
             <button onClick={() => {addNewRoad()}}>Add random road</button>
             <button onClick={() => {addForwardRoad()}}>Extend road</button>
             <button onClick={() => {addCrossroadRoad()}}>Side road</button>
             <button onClick={() => {addBuilding()}}>Add building</button>
+            <button onClick={() => {zoomInMap()}}>+</button>
+            <button onClick={() => {zoomOutMap()}}>-</button>
         </div>
     );
 }

@@ -19,7 +19,7 @@ class PointRenderer implements Renderer{
 
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
         ctx.beginPath();
-        ctx.arc(this.point.x + xOffSet, this.point.y + yOffSet, scale * 3, 0, 2 * Math.PI);
+        ctx.arc(scale*(this.point.x + xOffSet), scale*(this.point.y + yOffSet), scale * 2, 0, 2 * Math.PI);
         ctx.fillStyle = this.colors[this.point.distanceFromCrossroad < this.colors.length-1 ? this.point.distanceFromCrossroad : this.colors.length-1];
         ctx.fill();
         ctx.stroke();
