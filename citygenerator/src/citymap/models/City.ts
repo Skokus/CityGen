@@ -96,18 +96,20 @@ class City {
         expectedPoint = point;
       }
     }
-    if(min < 40){
+    if(min < this.popRadius){
       const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
       this.roads.push(newRoad);
+      this.polygons.push(...this.findCycles(6, [expectedPoint], []));
       return;
     }
 
     for(let road of this.roads) {
       let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
-      if(dist < 30){
+      if(dist < this.popRadius){
         expectedPoint = road.getRandomPoint();
         const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
         this.roads.push(newRoad);
+        this.polygons.push(...this.findCycles(6, [expectedPoint], []));
         return;
       }
     }
@@ -147,18 +149,20 @@ class City {
         expectedPoint = point;
       }
     }
-    if(min < 40){
+    if(min < this.popRadius){
       const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
       this.roads.push(newRoad);
+      this.polygons.push(...this.findCycles(6, [expectedPoint], []));
       return;
     }
 
     for(let road of this.roads) {
       let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
-      if(dist < 30){
+      if(dist < this.popRadius){
         expectedPoint = road.getRandomPoint();
         const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
         this.roads.push(newRoad);
+        this.polygons.push(...this.findCycles(6, [expectedPoint], []));
         return;
       }
     }
@@ -204,7 +208,7 @@ class City {
     const pathPoints: Point[] = currentPoints;
     const start = currentPoints[0];
     const end = currentPoints[currentPoints.length - 1];
-    if(pathPoints.length > pointCap){//no path found under within the
+    if(pathPoints.length > pointCap){//no path found under within the limit
       return result;
     }
     if(currentPoints.length > 1 && start === end){

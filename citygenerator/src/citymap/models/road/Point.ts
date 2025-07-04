@@ -15,9 +15,6 @@ class Point {
         this.distanceFromCrossroad = distanceFromCrossroad ? distanceFromCrossroad : 0;
     }
 
-    public getHashCode(): string{
-        return "X" + this.x + "Y" + this.y;
-    }
     public getDistancedPoint(distance: number, angle: number): Point {
         return new Point(this.x + distance * Math.cos(angle), this.y + distance * Math.sin(angle));
     }

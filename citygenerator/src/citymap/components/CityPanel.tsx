@@ -7,6 +7,13 @@ import CityMap from "./CityMap";
 
 function CityPanel() {
 
+    const maxRoadLength = 100;
+    const minRoadLength = 80;
+    const maxBuildingSize = 10;
+    const minBuildingSize = 7;
+    const maxBuildingDistanceFromRoad = 10;
+    const minBuildingDistanceFromRoad = 10;
+
     const [city, setCity] = useState(City.getExampleCity());
     const [counter, setCounter] = useState(0);
 
@@ -15,29 +22,39 @@ function CityPanel() {
     });
 
     function addNewRoad(){
-        city.addNewRoad(Math.random() * (100 - 50 + 1) + 50);
+        city.addNewRoad(getRandomMainRoadDistance());
         setCity(city);
         setCounter(counter + 1);
     }
 
     function addForwardRoad(){
-        city.addExtentionRoad(Math.random() * (100 - 50 + 1) + 50);
+        city.addExtentionRoad(getRandomMainRoadDistance());
         setCity(city);
         setCounter(counter + 1);
     }
 
     function addCrossroadRoad(){
-        city.addSideRoad(Math.random() * (100 - 50 + 1) + 50);
+        city.addSideRoad(getRandomMainRoadDistance());
         setCity(city);
         setCounter(counter + 1);
     }
 
     function addBuilding(){
-        city.addBuilding(10, 10);
+        city.addBuilding(getRandomBuildingDistance(), getRandomBuildingSize());
         setCity(city);
         setCounter(counter + 1);
     }
 
+    function getRandomMainRoadDistance(){
+        return Math.random() * (maxRoadLength - minRoadLength) + minRoadLength;
+    }
+
+    function getRandomBuildingSize(){
+        return Math.random() * (maxBuildingSize - minBuildingSize) + minBuildingSize;
+    }
+    function getRandomBuildingDistance(){
+        return Math.random() * (maxBuildingDistanceFromRoad - minBuildingDistanceFromRoad) + minBuildingDistanceFromRoad;
+    }
     return (
         <div>
             <div>Map of the city</div>
