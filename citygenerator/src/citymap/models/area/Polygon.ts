@@ -46,6 +46,32 @@ class Polygon {
         }
         return Array.from(points);
     }
+
+    public equals(p: Polygon): boolean{
+        if(this.roads.length !== p.roads.length){
+            return false;
+        } else {
+            for(let road of p.roads){
+                if(!this.roads.includes(road)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public hasSmallerCycle(): boolean{
+        if(this.roads.length <= 3){
+            return false;
+        }
+        for(let point of this.points){
+            for(let road of point.getAllRoads()){
+                if(!this.roads.includes(road) && this.points.includes(road.getOtherPoint(point))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
 
 export default Polygon;

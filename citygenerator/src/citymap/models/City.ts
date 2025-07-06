@@ -48,7 +48,7 @@ class City {
     if(min < this.popRadius){
       const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
       this.roads.push(newRoad);
-      this.polygons.push(...this.findCycles(6, [expectedPoint], []));
+      this.addPolygons(this.findCycles(6, [expectedPoint], []));
       return;
     }
 
@@ -58,7 +58,7 @@ class City {
         expectedPoint = road.getRandomPoint();
         const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
         this.roads.push(newRoad);
-        this.polygons.push(...this.findCycles(6, [expectedPoint], []));
+        this.addPolygons(this.findCycles(6, [expectedPoint], []));
         return;
       }
     }
@@ -99,7 +99,7 @@ class City {
     if(min < this.popRadius){
       const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
       this.roads.push(newRoad);
-      this.polygons.push(...this.findCycles(6, [expectedPoint], []));
+      this.addPolygons(this.findCycles(6, [expectedPoint], []));
       return;
     }
 
@@ -109,7 +109,7 @@ class City {
         expectedPoint = road.getRandomPoint();
         const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
         this.roads.push(newRoad);
-        this.polygons.push(...this.findCycles(6, [expectedPoint], []));
+        this.addPolygons(this.findCycles(6, [expectedPoint], []));
         return;
       }
     }
@@ -152,7 +152,7 @@ class City {
     if(min < this.popRadius){
       const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
       this.roads.push(newRoad);
-      this.polygons.push(...this.findCycles(6, [expectedPoint], []));
+      this.addPolygons(this.findCycles(6, [expectedPoint], []));
       return;
     }
 
@@ -162,7 +162,7 @@ class City {
         expectedPoint = road.getRandomPoint();
         const newRoad = Road.createRoad(randomPoint, expectedPoint, direction);
         this.roads.push(newRoad);
-        this.polygons.push(...this.findCycles(6, [expectedPoint], []));
+        this.addPolygons(this.findCycles(6, [expectedPoint], []));
         return;
       }
     }
@@ -171,7 +171,6 @@ class City {
     this.roads.push(newRoad);
     return;
   }
-
   public addBuilding(distance: number, radius: number): void{
     const posRoads = this.roads;
     const road = posRoads[Math.floor(Math.random()*posRoads.length)];
@@ -208,7 +207,7 @@ class City {
     const pathPoints: Point[] = currentPoints;
     const start = currentPoints[0];
     const end = currentPoints[currentPoints.length - 1];
-    if(pathPoints.length > pointCap){//no path found under within the limit
+    if(pathPoints.length > (pointCap+1)){//no path found under within the limit
       return result;
     }
     if(currentPoints.length > 1 && start === end){
@@ -221,6 +220,22 @@ class City {
       }
     }
     return result;
+  }
+  private addPolygons(polygons: Polygon[]): void{
+    const potentialPolygons: Polygon[] = polygons.filter((p)=> !p.hasSmallerCycle());
+    for(const newp of potentialPolygons) {
+      let flag = true;
+      for(const p of this.polygons){
+        if(newp.equals(p)){
+          flag = false;
+          break;
+        }
+      }
+      if(flag){
+        this.polygons.push(newp);
+      }
+    }
+    console.log(this.polygons);
   }
 }
 
