@@ -7,6 +7,8 @@ import BuildingRenderer from "../renderers/BuildingRenderer";
 
 interface CityMapProps {
     zoomScale: number;
+    xOffSet: number;
+    yOffSet: number;
     city: City;
 }
 
@@ -33,20 +35,20 @@ function CityMap(props: CityMapProps) {
         if(props.city.polygons.length > 0){
             for (const p of props.city.polygons){
                 polr.setPolygon(p);
-                polr.draw(ctx, props.zoomScale, 0, 0);
+                polr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
             }
         }
         for (const r of props.city.roads) {
             rr.setRoad(r);
-            rr.draw(ctx, props.zoomScale, 0, 0);
+            rr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
             pr.setPoint(r.p1);
-            pr.draw(ctx, props.zoomScale, 0, 0);
+            pr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
             pr.setPoint(r.p2);
-            pr.draw(ctx, props.zoomScale, 0, 0);
+            pr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
         }
         for(const b of props.city.getAllBuildings()){
             br.setBuilding(b);
-            br.draw(ctx, props.zoomScale, 0, 0);
+            br.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
         }
     }
 

@@ -17,10 +17,10 @@ class PolygonRenderer implements Renderer{
             return;
         ctx.beginPath();
         ctx.fillStyle = this.polygon.color;
-        var points = this.polygon.clockWisePoints;
-        ctx.moveTo(points[0].x + xOffSet, points[0].y + yOffSet);
+        let points = this.polygon.clockWisePoints;
+        ctx.moveTo(scale*(points[0].x + xOffSet), scale*(points[0].y + yOffSet));
         for(let i = 1; i < points.length; i++){
-            ctx.lineTo(points[i].x + xOffSet, points[i].y + yOffSet);
+            ctx.lineTo(scale*(points[i].x + xOffSet), scale*(points[i].y + yOffSet));
         }
         ctx.fill();
         ctx.closePath();

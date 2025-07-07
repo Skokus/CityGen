@@ -7,10 +7,6 @@ import CityMap from "./CityMap";
 
 function CityPanel() {
 
-
-    let xOffset = 0.0;
-    let yOffset = 0.0;
-
     const maxRoadLength = 100;
     const minRoadLength = 80;
     const maxBuildingSize = 10;
@@ -21,6 +17,8 @@ function CityPanel() {
     const [city, setCity] = useState(City.getExampleCity());
     const [counter, setCounter] = useState(0);
     const [zoomScale, setZoomScale] = useState(1.0);
+    const [xOffset, setXOffset] = useState(0);
+    const [yOffset, setYOffset] = useState(0);
     useEffect(() => {
 
     });
@@ -65,17 +63,27 @@ function CityPanel() {
     function zoomOutMap(){
         setZoomScale(zoomScale - 0.2);
     }
-
+    function moveX(d: number){
+        setXOffset(xOffset + d);
+    }
+    function moveY(d: number){
+        setYOffset(yOffset + d);
+    }
     return (
         <div>
             <div>Map of the city</div>
-            <CityMap zoomScale={zoomScale} city={city}/>
+            <CityMap zoomScale={zoomScale} city={city} xOffSet={xOffset} yOffSet={yOffset}/>
             <button onClick={() => {addNewRoad()}}>Add random road</button>
             <button onClick={() => {addForwardRoad()}}>Extend road</button>
             <button onClick={() => {addCrossroadRoad()}}>Side road</button>
             <button onClick={() => {addBuilding()}}>Add building</button>
+            <br/>
             <button onClick={() => {zoomInMap()}}>+</button>
             <button onClick={() => {zoomOutMap()}}>-</button>
+            <button onClick={() => {moveX(-10*zoomScale)}}>Move right</button>
+            <button onClick={() => {moveX(10*zoomScale)}}>Move left</button>
+            <button onClick={() => {moveY(10*zoomScale)}}>Move up</button>
+            <button onClick={() => {moveY(-10*zoomScale)}}>Move down</button>
         </div>
     );
 }

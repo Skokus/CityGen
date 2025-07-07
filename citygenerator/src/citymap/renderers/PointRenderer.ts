@@ -5,12 +5,7 @@ class PointRenderer implements Renderer{
 
     private point!: Point;
     private colors = [
-        '#000000',
-        '#ff0000',
-        '#ff9900',
-        '#fff100',
-        '#2fff00',
-        '#02faf2'
+        '#000000'
     ];
 
     public setPoint(point: Point) {
