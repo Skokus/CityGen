@@ -4,6 +4,7 @@ import PointRenderer from "../renderers/PointRenderer";
 import Point from "../models/road/Point";
 import RoadRenderer from "../renderers/RoadRenderer";
 import CityMap from "./CityMap";
+import GridCity from "../models/squaregridcity/GridCity";
 
 function CityPanel() {
 
@@ -15,10 +16,12 @@ function CityPanel() {
     const minBuildingDistanceFromRoad = 10;
 
     const [city, setCity] = useState(City.getExampleCity());
+    const [gridCity, setGridCity] = useState(GridCity.initiateCity(20, 40, 1554466132));
     const [counter, setCounter] = useState(0);
-    const [zoomScale, setZoomScale] = useState(1.0);
-    const [xOffset, setXOffset] = useState(0);
-    const [yOffset, setYOffset] = useState(0);
+    const [zoomScale, setZoomScale] = useState(1.4);
+    const [xOffset, setXOffset] = useState(10);
+    const [yOffset, setYOffset] = useState(10);
+
     useEffect(() => {
 
     });
@@ -72,7 +75,7 @@ function CityPanel() {
     return (
         <div>
             <div>Map of the city</div>
-            <CityMap zoomScale={zoomScale} city={city} xOffSet={xOffset} yOffSet={yOffset}/>
+            <CityMap zoomScale={zoomScale} city={gridCity} xOffSet={xOffset} yOffSet={yOffset}/>
             <button onClick={() => {addNewRoad()}}>Add random road</button>
             <button onClick={() => {addForwardRoad()}}>Extend road</button>
             <button onClick={() => {addCrossroadRoad()}}>Side road</button>
