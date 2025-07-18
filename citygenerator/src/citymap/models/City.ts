@@ -31,8 +31,8 @@ class City {
       const roadsFromRandomPoint = randomPoint.getAllRoads();
       const excludedPointSet = new Set<MainPoint>();
       for(const road of roadsFromRandomPoint) {
-        excludedPointSet.add(road.p1 as MainPoint);
-        excludedPointSet.add(road.p2 as MainPoint);
+        excludedPointSet.add(road.getPoint1());
+        excludedPointSet.add(road.getPoint2());
       }
       const excludedPoints = Array.from(excludedPointSet);
       const allPoints = this.getAllPoints().filter(point => !excludedPoints.includes(point));
@@ -56,7 +56,7 @@ class City {
       for(let road of this.roads) {
         let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
         if(dist < this.popRadius){
-          expectedPoint = road.getRandomPoint() as MainPoint;
+          expectedPoint = road.getRandomPoint();
           const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction);
           this.roads.push(newRoad);
           this.addPolygons(this.findCycles(6, [expectedPoint], []));
@@ -81,8 +81,8 @@ class City {
       const roadsFromRandomPoint = randomPoint.getAllRoads();
       const excludedPointSet = new Set<MainPoint>();
       for(const road of roadsFromRandomPoint) {
-        excludedPointSet.add(road.p1 as MainPoint);
-        excludedPointSet.add(road.p2 as MainPoint);
+        excludedPointSet.add(road.getPoint1());
+        excludedPointSet.add(road.getPoint2());
       }
       const excludedPoints = Array.from(excludedPointSet);
       const allPoints = this.getAllPoints().filter(point => !excludedPoints.includes(point));
@@ -106,7 +106,7 @@ class City {
       for(let road of this.roads) {
         let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
         if(dist < this.popRadius){
-          expectedPoint = road.getRandomPoint() as MainPoint;
+          expectedPoint = road.getRandomPoint();
           const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction);
           this.roads.push(newRoad);
           this.addPolygons(this.findCycles(6, [expectedPoint], []));
@@ -133,8 +133,8 @@ class City {
       const roadsFromRandomPoint = randomPoint.getAllRoads();
       const excludedPointSet = new Set<MainPoint>();
       for(const road of roadsFromRandomPoint) {
-        excludedPointSet.add(road.p1 as MainPoint);
-        excludedPointSet.add(road.p2 as MainPoint);
+        excludedPointSet.add(road.getPoint1());
+        excludedPointSet.add(road.getPoint2());
       }
       const excludedPoints = Array.from(excludedPointSet);
       const allPoints = this.getAllPoints().filter(point => !excludedPoints.includes(point));
@@ -158,7 +158,7 @@ class City {
       for(let road of this.roads) {
         let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
         if(dist < this.popRadius){
-          expectedPoint = road.getRandomPoint() as MainPoint;
+          expectedPoint = road.getRandomPoint();
           const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction);
           this.roads.push(newRoad);
           this.addPolygons(this.findCycles(6, [expectedPoint], []));
@@ -196,8 +196,8 @@ class City {
     private getAllPoints(): MainPoint[]{
       const pointSet = new Set<MainPoint>();
       for(const road of this.roads){
-        pointSet.add(road.p1 as MainPoint);
-        pointSet.add(road.p2 as MainPoint);
+        pointSet.add(road.getPoint1());
+        pointSet.add(road.getPoint2());
       }
       return Array.from(pointSet);
     }
@@ -215,7 +215,7 @@ class City {
       }
       for(const road of end.getAllRoads()){
         if(road !== null && !currentRoads.includes(road)){
-          result.push(...this.findCycles(pointCap, [...currentPoints, road.getOtherPoint(end) as MainPoint], [...currentRoads, road]));
+          result.push(...this.findCycles(pointCap, [...currentPoints, road.getOtherPoint(end)], [...currentRoads, road]));
         }
       }
       return result;

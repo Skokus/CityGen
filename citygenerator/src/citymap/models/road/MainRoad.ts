@@ -3,6 +3,7 @@ import Road from "./Road";
 import SidePoint from "../point/SidePoint";
 import MainPoint from "../point/MainPoint";
 import Building from "../building/Building";
+import Point from "../point/Point";
 
 class MainRoad extends Road{
 
@@ -30,6 +31,7 @@ class MainRoad extends Road{
         }
         return allBuildings;
     }
+
     public createSidePoints(distance: number): void{
         if(distance > this.length || this.sidePoints.length > 0){
             return;
@@ -42,6 +44,7 @@ class MainRoad extends Road{
         }
         console.log("HERE");
     }
+
     public static createMainRoad(point1: MainPoint, point2: MainPoint, direction: number): MainRoad {
         const l = point1.connectedRoads.length;
         const road = new MainRoad(point1, point2);
@@ -50,6 +53,26 @@ class MainRoad extends Road{
         road.createSidePoints(10);
         return road;
     }
+
+    public getPoint1(): MainPoint{
+        return this.p1 as MainPoint;
+    }
+    public getPoint2(): MainPoint{
+        return this.p2 as MainPoint;
+    }
+    public getRandomPoint(): MainPoint{
+        if(Math.random() > 0.5)
+            return this.p1 as MainPoint;
+        else
+            return this.p2 as MainPoint;
+    }
+    public getOtherPoint(p: Point): MainPoint{ //USE ONLY WITH p AS p1 OR p2
+        if(p !== this.p1)
+            return this.p1 as MainPoint;
+        else
+            return this.p2 as MainPoint;
+    }
+
     private createSidePointOnRoad(scalar: number, width: number): SidePoint {
         const distX = this.p2.x - this.p1.x;
         const distY = this.p2.y - this.p1.y;
