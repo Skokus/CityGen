@@ -11,7 +11,7 @@ interface CityMapProps {
     zoomScale: number;
     xOffSet: number;
     yOffSet: number;
-    city: GridCity;
+    city: City;
 }
 
 function CityMap(props: CityMapProps) {
@@ -36,16 +36,7 @@ function CityMap(props: CityMapProps) {
         const polr = new PolygonRenderer();
         const br = new BuildingRenderer();
 
-        for (const r of props.city.roads) {
-            rr.setRoad(r);
-            rr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
-            pr.setPoint(r.p1);
-            pr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
-            pr.setPoint(r.p2);
-            pr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
-        }
-
-        {/*if(props.city.polygons.length > 0){
+        if(props.city.polygons.length > 0){
             for (const p of props.city.polygons){
                 polr.setPolygon(p);
                 polr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
@@ -62,7 +53,7 @@ function CityMap(props: CityMapProps) {
         for(const b of props.city.getAllBuildings()){
             br.setBuilding(b);
             br.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
-        }*/}
+        }
     }
 
     return (

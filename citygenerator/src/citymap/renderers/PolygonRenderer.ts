@@ -1,8 +1,5 @@
 import Renderer from "./Renderer";
-import Road from "../models/road/Road";
-import Point from "../models/road/Point";
 import Polygon from "../models/area/Polygon";
-import polygon from "../models/area/Polygon";
 
 class PolygonRenderer implements Renderer{
 
@@ -17,7 +14,7 @@ class PolygonRenderer implements Renderer{
             return;
         ctx.beginPath();
         ctx.fillStyle = this.polygon.color;
-        let points = this.polygon.clockWisePoints;
+        let points = this.polygon.getClockWiseBorderPoints();
         ctx.moveTo(scale*(points[0].x + xOffSet), scale*(points[0].y + yOffSet));
         for(let i = 1; i < points.length; i++){
             ctx.lineTo(scale*(points[i].x + xOffSet), scale*(points[i].y + yOffSet));

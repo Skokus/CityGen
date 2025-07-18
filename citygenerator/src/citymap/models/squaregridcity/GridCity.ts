@@ -1,13 +1,13 @@
-import Point from "../road/Point";
 import Road from "../road/Road";
-import GridHashCalculator from "./GridHashCalculator";
 import GridClassCalculator from "./GridHashCalculator";
+import MainPoint from "../point/MainPoint";
+import MainRoad from "../road/MainRoad";
 
 class GridCity {
     seed: number;
     gridSize: number;
-    points: Point[][] = [];
-    roads: Road[] = [];
+    points: MainPoint[][] = [];
+    roads: MainRoad[] = [];
     vc = 1; //vertical cutoff
     hc = 0.7; //horizontal cutoff
     s = 0.1; //offset
@@ -24,7 +24,7 @@ class GridCity {
             for(let j = 0; j < gridSize; j++) {
                 const angle = GridClassCalculator.getAngleHash(i, j, seed) * Math.PI/2;
                 const offset = GridClassCalculator.getOffsetHash(i, j, seed);
-                newGridCity.points[i][j] = new Point((i + Math.cos(angle) * offset*newGridCity.s) * roadLength, (j + Math.sin(angle) * offset*newGridCity.s) * roadLength);
+                newGridCity.points[i][j] = new MainPoint((i + Math.cos(angle) * offset*newGridCity.s) * roadLength, (j + Math.sin(angle) * offset*newGridCity.s) * roadLength);
             }
         }
         for(let i = 0; i < gridSize; i++) {
@@ -33,13 +33,13 @@ class GridCity {
                 if(newGridCity.points[i+1] !== undefined) {
                     const p2 = newGridCity.points[i+1][j];
                     if(GridClassCalculator.getNodeConnectionTest(i, j, i+1, j, seed) < newGridCity.vc){
-                        newGridCity.roads.push(new Road(p1, p2));
+                        newGridCity.roads.push(new MainRoad(p1, p2));
                     }
                 }
                 if(newGridCity.points[j+1] !== undefined) {
                     const p2 = newGridCity.points[i][j+1];
                     if(GridClassCalculator.getNodeConnectionTest(i, j, i, j+1, seed) < newGridCity.hc){
-                        newGridCity.roads.push(new Road(p1, p2));
+                        newGridCity.roads.push(new MainRoad(p1, p2));
                     }
                 }
             }

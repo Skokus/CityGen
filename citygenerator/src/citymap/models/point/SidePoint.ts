@@ -28,7 +28,7 @@ class SidePoint extends Point{
     }
 
     public isFree(): boolean{
-        return this.bottomBuilding !== undefined || this.topBuilding !== undefined;
+        return this.bottomBuilding === undefined || this.topBuilding === undefined;
     }
 
     public getOffsetDistancedPoint(distance: number, angle: number, radius: number): Point {
@@ -39,13 +39,22 @@ class SidePoint extends Point{
         const newY = this.y + distance * Math.sin(angle) + offset * Math.sin(angle + Math.PI/2 * side);
         return new Point(newX, newY);
     }
-
     public buildBuilding(side: number, building: Building): void {
         if(side === 1){
             this.topBuilding = building;
         } else if(side === -1){
             this.bottomBuilding = building;
         }
+    }
+    public getAllBuildings(){
+        let allBuildings: Building[] = [];
+        if(this.topBuilding !== undefined){
+            allBuildings.push(this.topBuilding);
+        }
+        if(this.bottomBuilding !== undefined){
+            allBuildings.push(this.bottomBuilding);
+        }
+        return allBuildings;
     }
 }
 

@@ -3,7 +3,7 @@ import Building from "./Building";
 class SquareBuilding extends Building{
 
     protected getRandomColor(): string {
-        return "#834e00";
+        return "#a86503";
     }
 
     get height():number {

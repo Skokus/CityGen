@@ -1,21 +1,14 @@
-import Point from "./Point";
-import Polygon from "../area/Polygon";
 import Building from "../building/Building";
 import SquareBuilding from "../building/SquareBuilding";
-import SidePoint from "./SidePoint";
-import sidePoint from "./SidePoint";
+import Point from "../point/Point";
 
 class Road {
     p1: Point;
     p2: Point;
-    buildings: Building[];
-    sidePoints: SidePoint[];
 
     constructor(p1: Point, p2: Point) {
         this.p1 = p1;
         this.p2 = p2;
-        this.buildings = [];
-        this.sidePoints = [];
     }
 
     get length(): number{
@@ -52,43 +45,13 @@ class Road {
     public doesContainPoint(p: Point): boolean{
         return this.p1 === p || this.p2 === p;
     }
-    public getParallelRoad(distance: number): Road[]{
-        const dx = this.p1.x - this.p2.x;
-        const dy = this.p1.y - this.p2.y;
-        const nx = -dy / this.length;
-        const ny = dx / this.length;
-        const r1 = new Road(new Point(this.p1.x + nx * distance, this.p1.y + ny * distance), new Point(this.p2.x + nx * distance, this.p2.y + ny * distance));
-        const r2 = new Road(new Point(this.p1.x - nx * distance, this.p1.y - ny * distance), new Point(this.p2.x - nx * distance, this.p2.y - ny * distance));
-        return [r1, r2];
-    }
-    public getPointFromRoad(scalar: number): Point{
+    public getPointFromRoadScalar(scalar: number): Point{
         //https://stackoverflow.com/questions/64938264/how-can-i-generate-a-random-point-on-a-line-segment
         var distX = this.p2.x - this.p1.x;
         var distY = this.p2.y - this.p1.y;
         var modX = (distX * scalar) + this.p1.x;
         var modY = (distY * scalar) + this.p1.y;
         return new Point(modX, modY);
-    }
-    public addBuilding(distance: number, radius: number){
-        var availableSidePoints: SidePoint[] = this.sidePoints.filter((s) => s.isFree());
-        var randomPoint = availableSidePoints[Math.floor(Math.random() * availableSidePoints.length)];
-        var bAngle = this.angle+Math.PI/2;
-        var side = randomPoint.getRandomSide();
-        var bCenter = randomPoint.getOffsetDistancedPoint(distance * side, bAngle, radius);
-        this.buildings.push(new SquareBuilding(bCenter.x, bCenter.y,radius, bAngle));
-        randomPoint.buildBuilding(side);
-    }
-    public createSidePoints(distance: number): void{
-        if(distance > this.length || this.sidePoints.length > 0){
-            return;
-        }
-        const n = Math.floor(this.length/distance);
-        const ratio = 1/n;
-        for(let i = 0; i < n; i++){
-            let s = this.createSidePointOnRoad(i * ratio + ratio/2, this.length/distance);
-            this.sidePoints.push(s);
-        }
-
     }
 
     public static distanceFromPoint(p: Point, p1: Point, p2: Point): number{
@@ -127,31 +90,6 @@ class Road {
         let dx = x - xx;
         let dy = y - yy;
         return Math.sqrt(dx * dx + dy * dy);
-    }
-    public static getAllRoadsWithPoint(roads: Road[], p: Point): Road[]{
-        let result: Road[] = [];
-        for(let road of roads) {
-            if(road.doesContainPoint(p)){
-                result.push(road);
-            }
-        }
-        return result;
-    }
-    public static createRoad(point1: Point, point2: Point, direction: number): Road {
-        const dirslen = point1.roadCounter.length
-        const road = new Road(point1, point2);
-        point1.addRoad(road, direction);
-        point2.addRoad(road, (direction+2)%dirslen);
-        road.createSidePoints(10);
-        return road;
-    }
-
-    private createSidePointOnRoad(scalar: number, width: number): SidePoint {
-        var distX = this.p2.x - this.p1.x;
-        var distY = this.p2.y - this.p1.y;
-        var modX = (distX * scalar) + this.p1.x;
-        var modY = (distY * scalar) + this.p1.y;
-        return new SidePoint(modX, modY, width);
     }
 }
 

@@ -1,9 +1,10 @@
 import Point from "./Point";
 import Road from "../road/Road";
+import MainRoad from "../road/MainRoad";
 
 class MainPoint extends Point {
 
-    connectedRoads: Road[][];
+    connectedRoads: MainRoad[][];
     distanceFromCenter: number;
 
     constructor(x: number, y: number, distanceFromCenter?: number) {
@@ -55,11 +56,11 @@ class MainPoint extends Point {
         return count;
     }
 
-    public addRoad(road: Road, direction: number) {
+    public addRoad(road: MainRoad, direction: number) {
         this.connectedRoads[direction].push(road);
     }
 
-    public getAllRoads(): Road[] {
+    public getAllRoads(): MainRoad[] {
         return this.connectedRoads.flat();
     }
 }

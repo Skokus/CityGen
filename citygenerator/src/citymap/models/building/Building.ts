@@ -1,4 +1,4 @@
-import Point from "../road/Point";
+import Point from "../point/Point";
 
 class Building {
 

@@ -1,7 +1,6 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import City from "../models/City";
 import PointRenderer from "../renderers/PointRenderer";
-import Point from "../models/road/Point";
 import RoadRenderer from "../renderers/RoadRenderer";
 import CityMap from "./CityMap";
 import GridCity from "../models/squaregridcity/GridCity";
@@ -75,7 +74,7 @@ function CityPanel() {
     return (
         <div>
             <div>Map of the city</div>
-            <CityMap zoomScale={zoomScale} city={gridCity} xOffSet={xOffset} yOffSet={yOffset}/>
+            <CityMap zoomScale={zoomScale} city={city} xOffSet={xOffset} yOffSet={yOffset}/>
             <button onClick={() => {addNewRoad()}}>Add random road</button>
             <button onClick={() => {addForwardRoad()}}>Extend road</button>
             <button onClick={() => {addCrossroadRoad()}}>Side road</button>

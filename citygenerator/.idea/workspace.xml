@@ -5,9 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/citymap/models/point/SidePoint.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/building/Building.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/building/Building.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/building/SquareBuilding.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/building/SquareBuilding.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/MainPoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/MainPoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/SidePoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/SidePoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Point.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/SidePoint.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/squaregridcity/GridCity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/squaregridcity/GridCity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PointRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PointRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +43,9 @@
   &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="2xBkJn1vLFsKl4oxJjutA0eIu1i" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -113,7 +129,7 @@
       <workItem from="1752419436576" duration="4833000" />
       <workItem from="1752745926801" duration="53000" />
       <workItem from="1752745984687" duration="614000" />
-      <workItem from="1752836153301" duration="1061000" />
+      <workItem from="1752836153301" duration="7156000" />
     </task>
     <servers />
   </component>
