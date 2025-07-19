@@ -185,7 +185,11 @@ class City {
       }
       return Array.from(buildingSet);
     }
-
+    public splitFirstPolygon(): void {
+        if(this.polygons.length > 0){
+            this.polygons[0].splitPolygon();
+        }
+    }
     public static getExampleCity(): City{
       const p1 = new MainPoint(400, 400, 0);
       const p2 = new MainPoint(500, 400, 0);

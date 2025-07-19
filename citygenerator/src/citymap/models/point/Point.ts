@@ -14,6 +14,13 @@ class Point {
     public getAngle(p: Point): number {
         return Math.atan2(this.y - p.y, this.x - p.x);
     }
+
+    public isNan(): boolean {
+        return Number.isNaN(this.x) || Number.isNaN(this.y);
+    }
+    public isAboveLine(a: number, b: number){
+        return this.y < (a * this.x + b);
+    }
 }
 
 export default Point;

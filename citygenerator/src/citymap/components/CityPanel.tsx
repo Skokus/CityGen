@@ -49,6 +49,12 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function splitPolygon(){
+        city.splitFirstPolygon();
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     function getRandomMainRoadDistance(){
         return Math.random() * (maxRoadLength - minRoadLength) + minRoadLength;
     }
@@ -71,6 +77,7 @@ function CityPanel() {
     function moveY(d: number){
         setYOffset(yOffset + d);
     }
+
     return (
         <div>
             <div>Map of the city</div>
@@ -79,6 +86,7 @@ function CityPanel() {
             <button onClick={() => {addForwardRoad()}}>Extend road</button>
             <button onClick={() => {addCrossroadRoad()}}>Side road</button>
             <button onClick={() => {addBuilding()}}>Add building</button>
+            <button onClick={() => {splitPolygon()}}>Split</button>
             <br/>
             <button onClick={() => {zoomInMap()}}>+</button>
             <button onClick={() => {zoomOutMap()}}>-</button>

@@ -42,7 +42,6 @@ class MainRoad extends Road{
             let s = this.createSidePointOnRoad(i * ratio + ratio/2, this.length/distance);
             this.sidePoints.push(s);
         }
-        console.log("HERE");
     }
 
     public static createMainRoad(point1: MainPoint, point2: MainPoint, direction: number): MainRoad {
@@ -72,7 +71,9 @@ class MainRoad extends Road{
         else
             return this.p2 as MainPoint;
     }
-
+    public splitRoad(p: Point): Road[]{
+        return [new MainRoad(this.p1 as MainPoint, p as MainPoint), new MainRoad(p as MainPoint, this.p2 as MainPoint)];
+    }
     private createSidePointOnRoad(scalar: number, width: number): SidePoint {
         const distX = this.p2.x - this.p1.x;
         const distY = this.p2.y - this.p1.y;

@@ -61,6 +61,9 @@ class Polygon {
         }
         return true;
     }
+    public splitPolygon(): Polygon[]{
+        return [this];
+    }
 }
 
 export default Polygon;

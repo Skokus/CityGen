@@ -27,6 +27,16 @@ class Road {
         return Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
     }
 
+    public getPoint1(): Point{
+        return this.p1;
+    }
+    public getPoint2(): Point{
+        return this.p2;
+    }
+    public splitRoad(p: Point): Road[]{
+        return [new Road(this.p1, p), new Road(p, this.p2)];
+    }
+
     public getPerpendicularB(p: Point): number{ //after splitting road get the perpendicular line equation
         return p.y - this.perpendicularSlope * p.x;
     }
@@ -35,6 +45,15 @@ class Road {
             return this.p1;
         else
             return this.p2;
+    }
+    public getRandomPointInsideRoad(): Point{
+        var scalar = Math.random()*0.1+0.45;
+        var distX = this.p2.x - this.p1.x;
+        var distY = this.p2.y - this.p1.y;
+
+        var modX = (distX * scalar) + this.p1.x;
+        var modY = (distY * scalar) + this.p1.y;
+        return new Point(modX, modY);
     }
     public getOtherPoint(p: Point){ //USE ONLY WITH p AS p1 OR p2
         if(p !== this.p1)
@@ -53,7 +72,18 @@ class Road {
         var modY = (distY * scalar) + this.p1.y;
         return new Point(modX, modY);
     }
-
+    public getIntersectionPoint(a: number, b: number): Point{
+        var x = (this.yInter - b)/(a - this.slope);
+        var range = [this.p1.x, this.p2.x].sort((a, b) => a - b);
+        if(x < range[0] || x > range[1]){
+            return new Point(Number.NaN, Number.NaN);
+        }
+        var y = this.slope * x + this.yInter;
+        return new Point(x, y);
+    }
+    public isAboveLine(a: number, b: number){
+        return this.p1.isAboveLine(a, b) && this.p2.isAboveLine(a, b);
+    }
     public static distanceFromPoint(p: Point, p1: Point, p2: Point): number{
         //https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
         const x = p.x;
