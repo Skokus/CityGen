@@ -1,7 +1,5 @@
 import {useEffect, useState} from "react";
 import City from "../models/City";
-import PointRenderer from "../renderers/PointRenderer";
-import RoadRenderer from "../renderers/RoadRenderer";
 import CityMap from "./CityMap";
 import GridCity from "../models/squaregridcity/GridCity";
 
@@ -20,10 +18,13 @@ function CityPanel() {
     const [zoomScale, setZoomScale] = useState(1.4);
     const [xOffset, setXOffset] = useState(10);
     const [yOffset, setYOffset] = useState(10);
-
+    const [ticking, setTicking] = useState(true);
+    const [timePeriod, setTimePeriod] = useState(1000);
     useEffect(() => {
-
-    });
+        const timer = setTimeout(() => ticking && addNewRoad(), timePeriod)
+        console.log(timePeriod)
+        return () => clearTimeout(timer)
+    }, [counter, ticking]);
 
     function addNewRoad(){
         city.addNewRoad(getRandomMainRoadDistance());
@@ -94,6 +95,7 @@ function CityPanel() {
             <button onClick={() => {moveX(10*zoomScale)}}>Move left</button>
             <button onClick={() => {moveY(10*zoomScale)}}>Move up</button>
             <button onClick={() => {moveY(-10*zoomScale)}}>Move down</button>
+            <input id={"timePeriod"} name="timePeriod" type="number" defaultValue={timePeriod} onChange={e => {setTimePeriod(e.target.valueAsNumber)}}/>
         </div>
     );
 }
