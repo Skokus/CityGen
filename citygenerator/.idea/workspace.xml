@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/squaregridcity/GridCity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/squaregridcity/GridCity.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,24 +38,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Paweł/Documents/GitHub/CityGen/citygenerator&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Paweł\\Documents\\GitHub\\CityGen\\citygenerator\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "gridcity",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Paweł/Documents/GitHub/CityGen/citygenerator",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "ts.external.directory.path": "C:\\Users\\Paweł\\Documents\\GitHub\\CityGen\\citygenerator\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -127,7 +125,7 @@
       <workItem from="1753031919940" duration="2287000" />
       <workItem from="1753042430098" duration="498000" />
       <workItem from="1753117095266" duration="1995000" />
-      <workItem from="1753172209444" duration="267000" />
+      <workItem from="1753172209444" duration="1372000" />
     </task>
     <servers />
   </component>

@@ -9,8 +9,8 @@ class GridCity {
     points: MainPoint[][] = [];
     roads: MainRoad[] = [];
     vc = 1; //vertical cutoff
-    hc = 0.7; //horizontal cutoff
-    s = 0.1; //offset
+    hc = 0.65; //horizontal cutoff
+    s = 0.2; //offset
 
     constructor(gridSize: number, seed: number) {
         this.gridSize = gridSize;
