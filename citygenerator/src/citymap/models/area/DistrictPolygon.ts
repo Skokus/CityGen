@@ -29,7 +29,7 @@ class DistrictPolygon extends Polygon{
         }
         for(let point of this.getPoints()){
             for(let road of point.getAllRoads()){
-                if(!this.roads.includes(road) && this.getPoints().includes(road.getOtherPoint(point) as MainPoint)){
+                if(!this.roads.includes(road) && this.getPoints().includes(road.getOtherPoint(point))){
                     return true;
                 }
             }
@@ -38,9 +38,18 @@ class DistrictPolygon extends Polygon{
     }
     public splitPolygon(): Polygon[] {
         this.subAreas.push(...this.subAreas[0].splitPolygon());
-        console.log(this.subAreas);
         this.subAreas.shift();
         return [this];
+    }
+    public splitPolygonMultipleTimes(n: number): void {
+        let newPolygons: SubareaPolygon[] = [];
+        for(let i = 0; i < n; i++){
+            newPolygons = [];
+            for(let a of this.subAreas){
+                newPolygons.push(...a.splitPolygon());
+            }
+            this.subAreas = newPolygons;
+        }
     }
     private createInitialSubArea(roads: Road[]): SubareaPolygon{
         let subRoads = [];

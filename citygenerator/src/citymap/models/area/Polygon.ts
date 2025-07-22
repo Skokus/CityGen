@@ -22,6 +22,17 @@ class Polygon {
         });
         return new Point(x/l, y/l);
     }
+    public getLongestRoadId(): number{
+        let max = this.roads[0].length;
+        let maxId = 0;
+        for(let i = 1; i < this.roads.length; i++){
+            if(this.roads[i].length > max){
+                max = this.roads[i].length;
+                maxId = i;
+            }
+        }
+        return maxId;
+    }
     public getClockWiseBorderPoints(): Point[]{
         var ret: Point[] = [];
         var ps = this.getPoints();
@@ -48,7 +59,6 @@ class Polygon {
         }
         return Array.from(points);
     }
-
     public equals(p: Polygon): boolean{
         if(this.roads.length !== p.roads.length){
             return false;

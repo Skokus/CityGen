@@ -20,6 +20,7 @@ function CityPanel() {
     const [yOffset, setYOffset] = useState(10);
     const [ticking, setTicking] = useState(true);
     const [timePeriod, setTimePeriod] = useState(1000);
+
     useEffect(() => {
         const timer = setTimeout(() => ticking && addNewRoad(), timePeriod)
         console.log(timePeriod)
@@ -51,7 +52,7 @@ function CityPanel() {
     }
 
     function splitPolygon(){
-        city.splitFirstPolygon();
+        city.splitRandomPolygon();
         setCity(city);
         setCounter(counter + 1);
     }
@@ -96,6 +97,7 @@ function CityPanel() {
             <button onClick={() => {moveY(10*zoomScale)}}>Move up</button>
             <button onClick={() => {moveY(-10*zoomScale)}}>Move down</button>
             <input id={"timePeriod"} name="timePeriod" type="number" defaultValue={timePeriod} onChange={e => {setTimePeriod(e.target.valueAsNumber)}}/>
+            <button onClick={() => {setTicking(!ticking)}}>Ticking</button>
         </div>
     );
 }

@@ -1,5 +1,4 @@
 import Polygon from "./Polygon";
-import MainPoint from "../point/MainPoint";
 import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
 import Point from "../point/Point";
@@ -8,14 +7,14 @@ class SubareaPolygon extends Polygon{
 
     constructor(roads: SideRoad[]) {
         super(roads);
-        this.color = "#00ffb9";
+        this.color = "#fff000";
     }
     public getRoads(): Road[]{
         return this.roads as SideRoad[];
     }
     public splitPolygon(): SubareaPolygon[] {
         let roads = this.getRoads();
-        var i = 1; var i2 = 0;
+        var i = this.getLongestRoadId(); var i2 = 0;
         var p1 = roads[i].getRandomPointInsideRoad();
         var a = roads[i].perpendicularSlope;
         var b = roads[i].getPerpendicularB(p1);

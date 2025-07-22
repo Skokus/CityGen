@@ -185,14 +185,15 @@ class City {
       }
       return Array.from(buildingSet);
     }
-    public splitFirstPolygon(): void {
-        if(this.polygons.length > 0){
-            this.polygons[0].splitPolygon();
+    public splitRandomPolygon(): void {
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
+        if(possiblePolygons.length > 0){
+            possiblePolygons[0].splitPolygonMultipleTimes(3);
         }
     }
     public static getExampleCity(): City{
       const p1 = new MainPoint(400, 400, 0);
-      const p2 = new MainPoint(500, 400, 0);
+      const p2 = new MainPoint(500, 410, 0);
       const r = MainRoad.createMainRoad(p1, p2, 0);
       return new City([r]);
     }
