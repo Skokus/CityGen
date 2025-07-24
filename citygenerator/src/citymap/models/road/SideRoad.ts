@@ -7,12 +7,15 @@ import Point from "../point/Point";
 
 class SideRoad extends Road{
 
-    constructor(p1: Point, p2: Point) {
+    isMainRoad: boolean;
+
+    constructor(p1: Point, p2: Point, isMainRoad: boolean) {
         super(p1, p2);
+        this.isMainRoad = isMainRoad;
     }
 
-    public splitRoad(p: Point): Road[]{
-        return [new SideRoad(this.p1, p), new SideRoad(p, this.p2)];
+    public splitRoad(p: Point): SideRoad[]{
+        return [new SideRoad(this.p1, p, this.isMainRoad), new SideRoad(p, this.p2, this.isMainRoad)];
     }
 }
 

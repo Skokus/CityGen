@@ -9,12 +9,14 @@ class SubareaPolygon extends Polygon{
         super(roads);
         this.color = "#fff000";
     }
-    public getRoads(): Road[]{
+
+    public getRoads(): SideRoad[]{
         return this.roads as SideRoad[];
     }
+
     public splitPolygon(): SubareaPolygon[] {
         let roads = this.getRoads();
-        var i = this.getLongestRoadId(); var i2 = 0;
+        var i = this.getLongestMainRoadId(); var i2 = 0;
         var p1 = roads[i].getRandomPointInsideRoad();
         var a = roads[i].perpendicularSlope;
         var b = roads[i].getPerpendicularB(p1);
@@ -45,10 +47,23 @@ class SubareaPolygon extends Polygon{
                 });
             }
         });
-        var newRoad = new SideRoad(p1, p2);
+        var newRoad = new SideRoad(p1, p2, false);
         bordersAbove.push(newRoad);
         bordersBelow.push(newRoad);
         return [new SubareaPolygon(bordersAbove), new SubareaPolygon(bordersBelow)];
+    }
+
+    public getLongestMainRoadId(): number{
+        const mainroads = this.getRoads().filter(p => p.isMainRoad);
+        let max = mainroads[0].length;
+        let maxId = 0;
+        for(let i = 1; i < mainroads.length; i++){
+            if(mainroads[i].length > max){
+                max = mainroads[i].length;
+                maxId = i;
+            }
+        }
+        return maxId;
     }
 }
 

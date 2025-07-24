@@ -54,7 +54,7 @@ class DistrictPolygon extends Polygon{
     private createInitialSubArea(roads: Road[]): SubareaPolygon{
         let subRoads = [];
         for(let road of roads){
-            subRoads.push(new SideRoad(road.p1, road.p2));
+            subRoads.push(new SideRoad(road.p1, road.p2, true));
         }
         return new SubareaPolygon(subRoads);
     }
