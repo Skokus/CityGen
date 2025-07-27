@@ -1,5 +1,7 @@
 import Renderer from "./Renderer";
 import Road from "../models/road/Road";
+import MainRoad from "../models/road/MainRoad";
+import SideRoad from "../models/road/SideRoad";
 
 class RoadRenderer implements Renderer{
 
@@ -11,10 +13,18 @@ class RoadRenderer implements Renderer{
 
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
         ctx.beginPath();
+        if(this.road instanceof MainRoad){
+            ctx.strokeStyle = "#686868";
+            ctx.lineWidth = scale*1.5;
+        } else if(this.road instanceof SideRoad){
+            ctx.lineWidth = scale;
+        }
         ctx.moveTo(scale*(this.road.p1.x + xOffSet), scale*(this.road.p1.y + yOffSet));
         ctx.lineTo(scale*(this.road.p2.x + xOffSet), scale*(this.road.p2.y + yOffSet));
         ctx.stroke();
         ctx.closePath();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = scale;
     }
 }
 

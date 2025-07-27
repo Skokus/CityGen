@@ -6,7 +6,7 @@ import GridCity from "../models/squaregridcity/GridCity";
 function CityPanel() {
 
     const maxRoadLength = 100;
-    const minRoadLength = 80;
+    const minRoadLength = 50;
     const maxBuildingSize = 10;
     const minBuildingSize = 7;
     const maxBuildingDistanceFromRoad = 10;
@@ -18,7 +18,7 @@ function CityPanel() {
     const [zoomScale, setZoomScale] = useState(1.4);
     const [xOffset, setXOffset] = useState(10);
     const [yOffset, setYOffset] = useState(10);
-    const [ticking, setTicking] = useState(true);
+    const [ticking, setTicking] = useState(false);
     const [timePeriod, setTimePeriod] = useState(1000);
 
     useEffect(() => {

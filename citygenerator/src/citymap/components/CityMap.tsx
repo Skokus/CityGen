@@ -25,12 +25,10 @@ function CityMap(props: CityMapProps) {
     function redrawMap() {
         const canvas = canvasRef.current;
         // @ts-ignore
-        const context = canvas!.getContext('2d');
-        // @ts-ignore
-        context.clearRect(0, 0, canvas!.width, canvas!.height);
-        // @ts-ignore
         const ctx = canvas.getContext('2d');
-
+        ctx.fillStyle = "#E5E5DA";
+        // @ts-ignore
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         const pr = new PointRenderer();
         const rr = new RoadRenderer();
         const polr = new PolygonRenderer();
@@ -39,7 +37,6 @@ function CityMap(props: CityMapProps) {
         if(props.city.polygons.length > 0){
             for (const p of props.city.polygons){
                 for(const c of p.subAreas) {
-                    console.log(c);
                     polr.setPolygon(c);
                     polr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
                 }

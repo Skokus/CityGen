@@ -12,7 +12,7 @@ class DistrictPolygon extends Polygon{
 
     constructor(roads: MainRoad[]) {
         super(roads);
-        this.color = "#ffee8c";
+        this.color = "#fff189";
         this.subAreas = [this.createInitialSubArea(roads)];
     }
 

@@ -14,7 +14,8 @@ class PointRenderer implements Renderer{
 
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
         ctx.beginPath();
-        ctx.arc(scale*(this.point.x + xOffSet), scale*(this.point.y + yOffSet), scale * 2, 0, 2 * Math.PI);
+        ctx.lineWidth = 1;
+        ctx.arc(scale*(this.point.x + xOffSet), scale*(this.point.y + yOffSet), scale * 1.5, 0, 2 * Math.PI);
         ctx.fillStyle = this.colors[0];
         ctx.fill();
         ctx.stroke();
