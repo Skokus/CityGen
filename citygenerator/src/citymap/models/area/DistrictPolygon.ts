@@ -6,57 +6,83 @@ import SubareaPolygon from "./SubareaPolygon";
 import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
 
-class DistrictPolygon extends Polygon{
+class DistrictPolygon extends Polygon {
 
     subAreas: SubareaPolygon[];
+    rank: number;
 
     constructor(roads: MainRoad[]) {
         super(roads);
         this.color = "#fff189";
         this.subAreas = [this.createInitialSubArea(roads)];
+        this.rank = 0;
     }
 
-    public getClockWiseBorderPoints(): MainPoint[]{
+    public getClockWiseBorderPoints(): MainPoint[] {
         return super.getClockWiseBorderPoints() as MainPoint[];
     }
-    public getPoints(): MainPoint[]{
+
+    public getPoints(): MainPoint[] {
         return super.getPoints() as MainPoint[];
     }
 
-    public hasSmallerCycle(): boolean{
-        if(this.roads.length <= 3){
+    public hasSmallerCycle(): boolean {
+        if (this.roads.length <= 3) {
             return false;
         }
-        for(let point of this.getPoints()){
-            for(let road of point.getAllRoads()){
-                if(!this.roads.includes(road) && this.getPoints().includes(road.getOtherPoint(point))){
+        for (let point of this.getPoints()) {
+            for (let road of point.getAllRoads()) {
+                if (!this.roads.includes(road) && this.getPoints().includes(road.getOtherPoint(point))) {
                     return true;
                 }
             }
         }
         return false;
     }
+
     public splitPolygon(): Polygon[] {
         this.subAreas.push(...this.subAreas[0].splitPolygon());
         this.subAreas.shift();
         return [this];
     }
+
     public splitPolygonMultipleTimes(n: number): void {
         let newPolygons: SubareaPolygon[] = [];
-        for(let i = 0; i < n; i++){
+        for (let i = 0; i < n; i++) {
             newPolygons = [];
-            for(let a of this.subAreas){
+            for (let a of this.subAreas) {
                 newPolygons.push(...a.splitPolygon());
             }
             this.subAreas = newPolygons;
         }
     }
-    private createInitialSubArea(roads: Road[]): SubareaPolygon{
+
+    private createInitialSubArea(roads: Road[]): SubareaPolygon {
         let subRoads = [];
-        for(let road of roads){
+        for (let road of roads) {
             subRoads.push(new SideRoad(road.p1, road.p2, true));
         }
         return new SubareaPolygon(subRoads);
+    }
+
+    public generateRank(): void {
+        let minPointTier = Number.MAX_VALUE;
+        for (const point of this.getPoints()) {
+            if (point.rank !== undefined && point.rank < minPointTier) {
+                minPointTier = point.rank;
+            }
+        }
+        if (minPointTier === Number.MAX_VALUE) {
+            for (const point of this.getPoints()) {
+                point.setLowerRank(2);
+            }
+            this.rank = 1;
+        } else {
+            for (const point of this.getPoints()) {
+                point.setLowerRank(minPointTier + 1);
+            }
+            this.rank = minPointTier;
+        }
     }
 }
 

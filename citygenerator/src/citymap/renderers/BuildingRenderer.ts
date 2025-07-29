@@ -17,7 +17,6 @@ class BuildingRenderer implements Renderer{
             const y = scale*(this.building.y + yOffSet);
             const h = this.building.height * scale;
             const a = this.building.angle;
-            console.log(h);
             ctx.beginPath();
             ctx.moveTo(this.rotateX(h/2, h/2, a) + x, this.rotateY(h/2, h/2, a) + y);
             ctx.lineTo(this.rotateX(-h/2, h/2, a) + x, this.rotateY(-h/2, h/2, a) + y);

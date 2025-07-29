@@ -5,7 +5,7 @@ import MainPoint from "../point/MainPoint";
 import Building from "../building/Building";
 import Point from "../point/Point";
 
-class MainRoad extends Road{
+class MainRoad extends Road {
 
     sidePoints: SidePoint[];
 
@@ -14,32 +14,32 @@ class MainRoad extends Road{
         this.sidePoints = [];
     }
 
-    public addBuilding(distance: number, radius: number){
+    public addBuilding(distance: number, radius: number) {
         const availableSidePoints: SidePoint[] = this.sidePoints.filter((s) => s.isFree());
         console.log(availableSidePoints);
         const randomPoint = availableSidePoints[Math.floor(Math.random() * availableSidePoints.length)];
-        const bAngle = this.angle+Math.PI/2;
+        const bAngle = this.angle + Math.PI / 2;
         const side = randomPoint.getRandomSide();
         const bCenter = randomPoint.getOffsetDistancedPoint(distance * side, bAngle, radius);
-        randomPoint.buildBuilding(side, new SquareBuilding(bCenter.x, bCenter.y,radius, bAngle));
+        randomPoint.buildBuilding(side, new SquareBuilding(bCenter.x, bCenter.y, radius, bAngle));
     }
 
     public getAllBuildings(): Building[] {
         let allBuildings: Building[] = [];
-        for(const p of this.sidePoints){
+        for (const p of this.sidePoints) {
             allBuildings.push(...p.getAllBuildings());
         }
         return allBuildings;
     }
 
-    public createSidePoints(distance: number): void{
-        if(distance > this.length || this.sidePoints.length > 0){
+    public createSidePoints(distance: number): void {
+        if (distance > this.length || this.sidePoints.length > 0) {
             return;
         }
-        const n = Math.floor(this.length/distance);
-        const ratio = 1/n;
-        for(let i = 0; i < n; i++){
-            let s = this.createSidePointOnRoad(i * ratio + ratio/2, this.length/distance);
+        const n = Math.floor(this.length / distance);
+        const ratio = 1 / n;
+        for (let i = 0; i < n; i++) {
+            let s = this.createSidePointOnRoad(i * ratio + ratio / 2, this.length / distance);
             this.sidePoints.push(s);
         }
     }
@@ -48,32 +48,37 @@ class MainRoad extends Road{
         const l = point1.connectedRoads.length;
         const road = new MainRoad(point1, point2);
         point1.addRoad(road, direction);
-        point2.addRoad(road, (direction+2)%l);
+        point2.addRoad(road, (direction + 2) % l);
         road.createSidePoints(10);
         return road;
     }
 
-    public getPoint1(): MainPoint{
+    public getPoint1(): MainPoint {
         return this.p1 as MainPoint;
     }
-    public getPoint2(): MainPoint{
+
+    public getPoint2(): MainPoint {
         return this.p2 as MainPoint;
     }
-    public getRandomPoint(): MainPoint{
-        if(Math.random() > 0.5)
+
+    public getRandomPoint(): MainPoint {
+        if (Math.random() > 0.5)
             return this.p1 as MainPoint;
         else
             return this.p2 as MainPoint;
     }
-    public getOtherPoint(p: Point): MainPoint{ //USE ONLY WITH p AS p1 OR p2
-        if(p !== this.p1)
+
+    public getOtherPoint(p: Point): MainPoint { //USE ONLY WITH p AS p1 OR p2
+        if (p !== this.p1)
             return this.p1 as MainPoint;
         else
             return this.p2 as MainPoint;
     }
-    public splitRoad(p: Point): Road[]{
+
+    public splitRoad(p: Point): Road[] {
         return [new MainRoad(this.p1 as MainPoint, p as MainPoint), new MainRoad(p as MainPoint, this.p2 as MainPoint)];
     }
+
     private createSidePointOnRoad(scalar: number, width: number): SidePoint {
         const distX = this.p2.x - this.p1.x;
         const distY = this.p2.y - this.p1.y;

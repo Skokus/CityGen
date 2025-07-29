@@ -6,7 +6,7 @@ import GridCity from "../models/squaregridcity/GridCity";
 function CityPanel() {
 
     const maxRoadLength = 100;
-    const minRoadLength = 50;
+    const minRoadLength = 90;
     const maxBuildingSize = 10;
     const minBuildingSize = 7;
     const maxBuildingDistanceFromRoad = 10;
@@ -23,60 +23,64 @@ function CityPanel() {
 
     useEffect(() => {
         const timer = setTimeout(() => ticking && addNewRoad(), timePeriod)
-        console.log(timePeriod)
         return () => clearTimeout(timer)
     }, [counter, ticking]);
 
-    function addNewRoad(){
+    function addNewRoad() {
         city.addNewRoad(getRandomMainRoadDistance());
         setCity(city);
         setCounter(counter + 1);
     }
 
-    function addForwardRoad(){
+    function addForwardRoad() {
         city.addExtentionRoad(getRandomMainRoadDistance());
         setCity(city);
         setCounter(counter + 1);
     }
 
-    function addCrossroadRoad(){
+    function addCrossroadRoad() {
         city.addSideRoad(getRandomMainRoadDistance());
         setCity(city);
         setCounter(counter + 1);
     }
 
-    function addBuilding(){
+    function addBuilding() {
         city.addBuilding(getRandomBuildingDistance(), getRandomBuildingSize());
         setCity(city);
         setCounter(counter + 1);
     }
 
-    function splitPolygon(){
+    function splitPolygon() {
         city.splitRandomPolygon();
         setCity(city);
         setCounter(counter + 1);
     }
 
-    function getRandomMainRoadDistance(){
+    function getRandomMainRoadDistance() {
         return Math.random() * (maxRoadLength - minRoadLength) + minRoadLength;
     }
-    function getRandomBuildingSize(){
+
+    function getRandomBuildingSize() {
         return Math.random() * (maxBuildingSize - minBuildingSize) + minBuildingSize;
     }
-    function getRandomBuildingDistance(){
+
+    function getRandomBuildingDistance() {
         return Math.random() * (maxBuildingDistanceFromRoad - minBuildingDistanceFromRoad) + minBuildingDistanceFromRoad;
     }
 
-    function zoomInMap(){
+    function zoomInMap() {
         setZoomScale(zoomScale + 0.2);
     }
-    function zoomOutMap(){
+
+    function zoomOutMap() {
         setZoomScale(zoomScale - 0.2);
     }
-    function moveX(d: number){
+
+    function moveX(d: number) {
         setXOffset(xOffset + d);
     }
-    function moveY(d: number){
+
+    function moveY(d: number) {
         setYOffset(yOffset + d);
     }
 
@@ -84,20 +88,58 @@ function CityPanel() {
         <div>
             <div>Map of the city</div>
             <CityMap zoomScale={zoomScale} city={city} xOffSet={xOffset} yOffSet={yOffset}/>
-            <button onClick={() => {addNewRoad()}}>Add random road</button>
-            <button onClick={() => {addForwardRoad()}}>Extend road</button>
-            <button onClick={() => {addCrossroadRoad()}}>Side road</button>
-            <button onClick={() => {addBuilding()}}>Add building</button>
-            <button onClick={() => {splitPolygon()}}>Split</button>
+            <button onClick={() => {
+                addNewRoad()
+            }}>Add random road
+            </button>
+            <button onClick={() => {
+                addForwardRoad()
+            }}>Extend road
+            </button>
+            <button onClick={() => {
+                addCrossroadRoad()
+            }}>Side road
+            </button>
+            <button onClick={() => {
+                addBuilding()
+            }}>Add building
+            </button>
+            <button onClick={() => {
+                splitPolygon()
+            }}>Split
+            </button>
             <br/>
-            <button onClick={() => {zoomInMap()}}>+</button>
-            <button onClick={() => {zoomOutMap()}}>-</button>
-            <button onClick={() => {moveX(-10*zoomScale)}}>Move right</button>
-            <button onClick={() => {moveX(10*zoomScale)}}>Move left</button>
-            <button onClick={() => {moveY(10*zoomScale)}}>Move up</button>
-            <button onClick={() => {moveY(-10*zoomScale)}}>Move down</button>
-            <input id={"timePeriod"} name="timePeriod" type="number" defaultValue={timePeriod} onChange={e => {setTimePeriod(e.target.valueAsNumber)}}/>
-            <button onClick={() => {setTicking(!ticking)}}>Ticking</button>
+            <button onClick={() => {
+                zoomInMap()
+            }}>+
+            </button>
+            <button onClick={() => {
+                zoomOutMap()
+            }}>-
+            </button>
+            <button onClick={() => {
+                moveX(-10 * zoomScale)
+            }}>Move right
+            </button>
+            <button onClick={() => {
+                moveX(10 * zoomScale)
+            }}>Move left
+            </button>
+            <button onClick={() => {
+                moveY(10 * zoomScale)
+            }}>Move up
+            </button>
+            <button onClick={() => {
+                moveY(-10 * zoomScale)
+            }}>Move down
+            </button>
+            <input id={"timePeriod"} name="timePeriod" type="number" defaultValue={timePeriod} onChange={e => {
+                setTimePeriod(e.target.valueAsNumber)
+            }}/>
+            <button onClick={() => {
+                setTicking(!ticking)
+            }}>Ticking
+            </button>
         </div>
     );
 }

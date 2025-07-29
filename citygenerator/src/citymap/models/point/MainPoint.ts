@@ -1,16 +1,17 @@
 import Point from "./Point";
-import Road from "../road/Road";
 import MainRoad from "../road/MainRoad";
 
 class MainPoint extends Point {
 
     connectedRoads: MainRoad[][];
     distanceFromCenter: number;
+    rank: number | undefined;
 
-    constructor(x: number, y: number, distanceFromCenter?: number) {
+    constructor(x: number, y: number, distanceFromCenter?: number, rank?: number) {
         super(x, y);
         this.connectedRoads = [[], [], [], []];
         this.distanceFromCenter = distanceFromCenter ? distanceFromCenter : 0;
+        this.rank = rank ? rank : undefined;
     }
 
     public getDistancedPoint(distance: number, angle: number): Point {
@@ -63,6 +64,12 @@ class MainPoint extends Point {
     public getAllRoads(): MainRoad[] {
         return this.connectedRoads.flat();
     }
+
+    public setLowerRank(lowerRank: number): void {
+        if (this.rank === undefined || lowerRank < this.rank)
+            this.rank = lowerRank;
+    }
+
 }
 
 export default MainPoint;

@@ -1,9 +1,17 @@
 import Renderer from "./Renderer";
 import Polygon from "../models/area/Polygon";
+import DistrictPolygon from "../models/area/DistrictPolygon";
 
 class PolygonRenderer implements Renderer{
 
     private polygon!: Polygon;
+    private colors = [
+        '#fdf002',
+        '#3aff04',
+        '#ff3030',
+        '#001eff',
+        '#be10ef',
+    ];
 
     public setPolygon(polygon: Polygon) {
         this.polygon = polygon;
@@ -14,6 +22,9 @@ class PolygonRenderer implements Renderer{
             return;
         ctx.beginPath();
         ctx.fillStyle = this.polygon.color;
+        if(this.polygon instanceof DistrictPolygon){
+            ctx.fillStyle = this.colors[this.polygon.rank%this.colors.length];
+        }
         let points = this.polygon.getClockWiseBorderPoints();
         ctx.moveTo(scale*(points[0].x + xOffSet), scale*(points[0].y + yOffSet));
         for(let i = 1; i < points.length; i++){
