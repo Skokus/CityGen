@@ -56,6 +56,12 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function addRoadCompletion(){
+        city.addRoadCompletionScalar(0.2);
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     function getRandomMainRoadDistance() {
         return Math.random() * (maxRoadLength - minRoadLength) + minRoadLength;
     }
@@ -139,6 +145,10 @@ function CityPanel() {
             <button onClick={() => {
                 setTicking(!ticking)
             }}>Ticking
+            </button>
+            <button onClick={() => {
+                addRoadCompletion()
+            }}>Add road completion
             </button>
         </div>
     );

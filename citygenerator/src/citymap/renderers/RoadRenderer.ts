@@ -20,7 +20,7 @@ class RoadRenderer implements Renderer{
             ctx.lineWidth = scale;
         }
         ctx.moveTo(scale*(this.road.p1.x + xOffSet), scale*(this.road.p1.y + yOffSet));
-        ctx.lineTo(scale*(this.road.p2.x + xOffSet), scale*(this.road.p2.y + yOffSet));
+        ctx.lineTo(scale*(this.road.completionPoint.x + xOffSet), scale*(this.road.completionPoint.y + yOffSet));
         ctx.stroke();
         ctx.closePath();
         ctx.strokeStyle = "#000000";

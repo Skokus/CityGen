@@ -6,12 +6,14 @@ class MainPoint extends Point {
     connectedRoads: MainRoad[][];
     distanceFromCenter: number;
     rank: number | undefined;
+    isComplete: boolean;
 
-    constructor(x: number, y: number, distanceFromCenter?: number, rank?: number) {
+    constructor(x: number, y: number, distanceFromCenter?: number, rank?: number, isComplete: boolean = false) {
         super(x, y);
         this.connectedRoads = [[], [], [], []];
         this.distanceFromCenter = distanceFromCenter ? distanceFromCenter : 0;
         this.rank = rank ? rank : undefined;
+        this.isComplete = isComplete;
     }
 
     public getDistancedPoint(distance: number, angle: number): Point {
@@ -70,6 +72,9 @@ class MainPoint extends Point {
             this.rank = lowerRank;
     }
 
+    public completePoint(){
+        this.isComplete = true;
+    }
 }
 
 export default MainPoint;

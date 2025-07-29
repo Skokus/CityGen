@@ -9,11 +9,11 @@
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/point/MainPoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/MainPoint.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/BuildingRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/BuildingRenderer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PointRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PointRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,6 +135,9 @@
       <workItem from="1753631449520" duration="2241000" />
       <workItem from="1753720459672" duration="3131000" />
       <workItem from="1753725253293" duration="648000" />
+      <workItem from="1753796008254" duration="1776000" />
+      <workItem from="1753807838735" duration="1938000" />
+      <workItem from="1753812943411" duration="2274000" />
     </task>
     <servers />
   </component>

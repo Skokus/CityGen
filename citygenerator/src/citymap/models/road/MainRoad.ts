@@ -9,8 +9,8 @@ class MainRoad extends Road {
 
     sidePoints: SidePoint[];
 
-    constructor(p1: MainPoint, p2: MainPoint) {
-        super(p1, p2);
+    constructor(p1: MainPoint, p2: MainPoint, completionRate?: number) {
+        super(p1, p2, completionRate);
         this.sidePoints = [];
     }
 
@@ -44,9 +44,9 @@ class MainRoad extends Road {
         }
     }
 
-    public static createMainRoad(point1: MainPoint, point2: MainPoint, direction: number): MainRoad {
+    public static createMainRoad(point1: MainPoint, point2: MainPoint, direction: number, completionRate: number): MainRoad {
         const l = point1.connectedRoads.length;
-        const road = new MainRoad(point1, point2);
+        const road = new MainRoad(point1, point2, completionRate);
         point1.addRoad(road, direction);
         point2.addRoad(road, (direction + 2) % l);
         road.createSidePoints(10);
@@ -85,6 +85,13 @@ class MainRoad extends Road {
         const modX = (distX * scalar) + this.p1.x;
         const modY = (distY * scalar) + this.p1.y;
         return new SidePoint(modX, modY, width);
+    }
+
+    public addCompletionScalar(scalar: number){
+        this.updateCompletionPoint(this.completionRate + scalar);
+        if(this.completionRate >= 1) {
+            this.getPoint2().completePoint();
+        }
     }
 }
 
