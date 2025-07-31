@@ -6,6 +6,8 @@ import PolygonRenderer from "../renderers/PolygonRenderer";
 import BuildingRenderer from "../renderers/BuildingRenderer";
 import GridCity from "../models/squaregridcity/GridCity";
 import gridCity from "../models/squaregridcity/GridCity";
+import PolygonBuildingRenderer from "../renderers/PolygonBuildingRenderer";
+import SubareaPolygon from "../models/area/SubareaPolygon";
 
 interface CityMapProps {
     zoomScale: number;
@@ -33,12 +35,17 @@ function CityMap(props: CityMapProps) {
         const rr = new RoadRenderer();
         const polr = new PolygonRenderer();
         const br = new BuildingRenderer();
+        const pbr = new PolygonBuildingRenderer();
 
         if (props.city.polygons.length > 0) {
             for (const p of props.city.polygons) {
                 for (const c of p.subAreas) {
                     polr.setPolygon(c);
                     polr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
+                    if(c.building !== undefined){
+                        pbr.setPolygonBuilding(c.building);
+                        pbr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
+                    }
                 }
             }
         }

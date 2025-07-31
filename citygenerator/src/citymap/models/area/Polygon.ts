@@ -12,7 +12,7 @@ class Polygon {
         this.color = "#ffee8c";
     }
 
-    get centroid(): Point{
+    get centroid(): Point {
         var x = 0;
         var y = 0;
         var l = this.getPoints().length;
@@ -20,28 +20,30 @@ class Polygon {
             x += p.x;
             y += p.y;
         });
-        return new Point(x/l, y/l);
+        return new Point(x / l, y / l);
     }
-    public getLongestRoadId(): number{
+
+    public getLongestRoadId(): number {
         let max = this.roads[0].length;
         let maxId = 0;
-        for(let i = 1; i < this.roads.length; i++){
-            if(this.roads[i].length > max){
+        for (let i = 1; i < this.roads.length; i++) {
+            if (this.roads[i].length > max) {
                 max = this.roads[i].length;
                 maxId = i;
             }
         }
         return maxId;
     }
-    public getClockWiseBorderPoints(): Point[]{
+
+    public getClockWiseBorderPoints(): Point[] {
         var ret: Point[] = [];
         var ps = this.getPoints();
         var c = this.centroid
-        while(ps.length !== 0){
+        while (ps.length !== 0) {
             var ang = ps[0].getAngle(c);
             var i = 0;
             ps.forEach((p, idx) => {
-                if(p.getAngle(c) > ang){
+                if (p.getAngle(c) > ang) {
                     ang = p.getAngle(c);
                     i = idx;
                 }
@@ -51,27 +53,30 @@ class Polygon {
         }
         return ret;
     }
-    public getPoints(): Point[]{
+
+    public getPoints(): Point[] {
         var points: Set<Point> = new Set();
-        for(let road of this.roads){
+        for (let road of this.roads) {
             points.add(road.p1);
             points.add(road.p2);
         }
         return Array.from(points);
     }
-    public equals(p: Polygon): boolean{
-        if(this.roads.length !== p.roads.length){
+
+    public equals(p: Polygon): boolean {
+        if (this.roads.length !== p.roads.length) {
             return false;
         } else {
-            for(let road of p.roads){
-                if(!this.roads.includes(road)){
+            for (let road of p.roads) {
+                if (!this.roads.includes(road)) {
                     return false;
                 }
             }
         }
         return true;
     }
-    public splitPolygon(): Polygon[]{
+
+    public splitPolygon(): Polygon[] {
         return [this];
     }
 }

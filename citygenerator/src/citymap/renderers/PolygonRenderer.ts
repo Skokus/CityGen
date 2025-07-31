@@ -31,7 +31,7 @@ class PolygonRenderer implements Renderer{
             ctx.lineTo(scale*(points[i].x + xOffSet), scale*(points[i].y + yOffSet));
         }
         ctx.fill();
-        ctx.fillStyle = "black";
+        ctx.strokeStyle = "black";
         ctx.stroke();
         ctx.closePath();
     }

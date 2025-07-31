@@ -5,6 +5,7 @@ import Point from "../point/Point";
 import SubareaPolygon from "./SubareaPolygon";
 import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
+import HousingPBuilding from "../building/polygonbuilding/HousingPBuilding";
 
 class DistrictPolygon extends Polygon {
 
@@ -54,6 +55,9 @@ class DistrictPolygon extends Polygon {
                 newPolygons.push(...a.splitPolygon());
             }
             this.subAreas = newPolygons;
+        }
+        for(let p of newPolygons) {
+            p.building = HousingPBuilding.createHousingPBuilding(p, 0.8);
         }
     }
 

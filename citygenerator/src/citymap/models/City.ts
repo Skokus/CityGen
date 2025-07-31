@@ -256,6 +256,7 @@ class City {
             road.addCompletionScalar(amount);
         }
     }
+
 }
 
 export default City;

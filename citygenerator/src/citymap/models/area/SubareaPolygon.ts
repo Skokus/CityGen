@@ -2,8 +2,11 @@ import Polygon from "./Polygon";
 import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
 import Point from "../point/Point";
+import PolygonBuilding from "../building/polygonbuilding/PolygonBuilding";
 
 class SubareaPolygon extends Polygon{
+
+    building: PolygonBuilding | undefined;
 
     constructor(roads: SideRoad[]) {
         super(roads);
@@ -65,6 +68,7 @@ class SubareaPolygon extends Polygon{
         }
         return maxId;
     }
+
 }
 
 export default SubareaPolygon;
