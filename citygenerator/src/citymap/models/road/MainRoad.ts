@@ -8,10 +8,12 @@ import Point from "../point/Point";
 class MainRoad extends Road {
 
     sidePoints: SidePoint[];
+    connectedPolygonRanks: number[];
 
     constructor(p1: MainPoint, p2: MainPoint, completionRate?: number) {
         super(p1, p2, completionRate);
         this.sidePoints = [];
+        this.connectedPolygonRanks = [];
     }
 
     public addBuilding(distance: number, radius: number) {
@@ -87,11 +89,19 @@ class MainRoad extends Road {
         return new SidePoint(modX, modY, width);
     }
 
-    public addCompletionScalar(scalar: number){
+    public addCompletionScalar(scalar: number) {
         this.updateCompletionPoint(this.completionRate + scalar);
-        if(this.completionRate >= 1) {
+        if (this.completionRate >= 1) {
             this.getPoint2().completePoint();
         }
+    }
+
+    public hasBothRanks(rank1: number, rank2: number): boolean {
+        return this.connectedPolygonRanks.includes(rank1) && this.connectedPolygonRanks.includes(rank2);
+    }
+
+    public addRankOfPolygon(rank: number): void {
+        this.connectedPolygonRanks.push(rank);
     }
 }
 

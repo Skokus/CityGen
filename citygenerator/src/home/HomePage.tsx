@@ -10,7 +10,7 @@ function HomePage() {
   
   return (
     <div>
-      <div className="title">Medieval City Generator</div>
+      <div className="title">Medieval City Simulator</div>
       <div className="container">
         <div className="mainpanel">
           <CityPanel/>

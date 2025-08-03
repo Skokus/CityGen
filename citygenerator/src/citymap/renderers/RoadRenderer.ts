@@ -16,6 +16,9 @@ class RoadRenderer implements Renderer{
         if(this.road instanceof MainRoad){
             ctx.strokeStyle = "#686868";
             ctx.lineWidth = scale*1.5;
+            if(this.road.hasBothRanks(1, 2)){
+                ctx.lineWidth = scale*4;
+            }
         } else if(this.road instanceof SideRoad){
             ctx.lineWidth = scale;
         }

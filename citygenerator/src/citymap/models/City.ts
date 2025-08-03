@@ -247,6 +247,7 @@ class City {
             if (flag) {
                 this.polygons.push(newp);
                 newp.generateRank();
+                newp.addRankToRoads();
             }
         }
     }

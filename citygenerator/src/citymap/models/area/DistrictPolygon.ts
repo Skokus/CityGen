@@ -1,7 +1,6 @@
 import Polygon from "./Polygon";
 import MainRoad from "../road/MainRoad";
 import MainPoint from "../point/MainPoint";
-import Point from "../point/Point";
 import SubareaPolygon from "./SubareaPolygon";
 import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
@@ -25,6 +24,10 @@ class DistrictPolygon extends Polygon {
 
     public getPoints(): MainPoint[] {
         return super.getPoints() as MainPoint[];
+    }
+
+    public getRoads(): MainRoad[] {
+        return this.roads as MainRoad[];
     }
 
     public hasSmallerCycle(): boolean {
@@ -86,6 +89,12 @@ class DistrictPolygon extends Polygon {
                 point.setLowerRank(minPointTier + 1);
             }
             this.rank = minPointTier;
+        }
+    }
+
+    public addRankToRoads(): void {
+        for(let road of this.getRoads()) {
+            road.addRankOfPolygon(this.rank);
         }
     }
 }
