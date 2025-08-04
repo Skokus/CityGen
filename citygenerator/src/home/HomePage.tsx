@@ -15,9 +15,6 @@ function HomePage() {
         <div className="mainpanel">
           <CityPanel/>
         </div>
-          {/*<div className="sidepanel">
-          <WorldEventPanel/>
-        </div>*/}
       </div>
     </div>
   );

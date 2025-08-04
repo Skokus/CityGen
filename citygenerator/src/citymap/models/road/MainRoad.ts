@@ -4,16 +4,19 @@ import SidePoint from "../point/SidePoint";
 import MainPoint from "../point/MainPoint";
 import Building from "../building/Building";
 import Point from "../point/Point";
+import MainRoadType from "./MainRoadType";
 
 class MainRoad extends Road {
 
     sidePoints: SidePoint[];
     connectedPolygonRanks: number[];
+    type: MainRoadType;
 
     constructor(p1: MainPoint, p2: MainPoint, completionRate?: number) {
         super(p1, p2, completionRate);
         this.sidePoints = [];
         this.connectedPolygonRanks = [];
+        this.type = MainRoadType.Road;
     }
 
     public addBuilding(distance: number, radius: number) {
@@ -102,6 +105,10 @@ class MainRoad extends Road {
 
     public addRankOfPolygon(rank: number): void {
         this.connectedPolygonRanks.push(rank);
+    }
+
+    public setToWall(){
+        this.type = MainRoadType.Wall;
     }
 }
 

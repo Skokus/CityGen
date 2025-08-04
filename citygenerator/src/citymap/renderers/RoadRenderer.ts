@@ -2,6 +2,7 @@ import Renderer from "./Renderer";
 import Road from "../models/road/Road";
 import MainRoad from "../models/road/MainRoad";
 import SideRoad from "../models/road/SideRoad";
+import MainRoadType from "../models/road/MainRoadType";
 
 class RoadRenderer implements Renderer{
 
@@ -16,7 +17,8 @@ class RoadRenderer implements Renderer{
         if(this.road instanceof MainRoad){
             ctx.strokeStyle = "#686868";
             ctx.lineWidth = scale*1.5;
-            if(this.road.hasBothRanks(1, 2)){
+            if(this.road.type === MainRoadType.Wall){
+                ctx.strokeStyle = "#e500fd";
                 ctx.lineWidth = scale*4;
             }
         } else if(this.road instanceof SideRoad){

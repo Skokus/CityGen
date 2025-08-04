@@ -13,7 +13,8 @@ class City {
     angle = Math.PI / 9;
 
     districtBorderMaxCount = 4;
-    defaultCompletion = 0.0;
+    defaultCompletion = 1.0;
+    wallRank = 2;
 
     constructor(roads: MainRoad[]) {
         this.roads = roads;
@@ -248,6 +249,33 @@ class City {
                 this.polygons.push(newp);
                 newp.generateRank();
                 newp.addRankToRoads();
+            }
+        }
+        this.checkForCityWalls();
+    }
+
+    private checkForCityWalls(): void {
+        let roadSet: Set<MainPoint> = new Set();
+        for(const road of this.roads) {
+            if(road.hasBothRanks(this.wallRank, this.wallRank+1)){
+                if(!roadSet.has(road.getPoint1())){
+                    roadSet.add(road.getPoint1());
+                } else {
+                    roadSet.delete(road.getPoint1());
+                }
+                if(!roadSet.has(road.getPoint2())){
+                    roadSet.add(road.getPoint2());
+                } else {
+                    roadSet.delete(road.getPoint2());
+                }
+            }
+        }
+        console.log(roadSet);
+        if(roadSet.size === 0) {
+            for(const road of this.roads) {
+                if(road.hasBothRanks(this.wallRank, this.wallRank+1)){
+                    road.setToWall();
+                }
             }
         }
     }
