@@ -63,6 +63,17 @@ class Polygon {
         return Array.from(points);
     }
 
+    public getArea(): number{
+        var v = 0;
+        var points = this.getClockWiseBorderPoints().reverse();
+        var n = points.length;
+        for(let i = 0; i < n; i++){
+            v += points[i].x * points[(i+1)%n].y;
+            v -= points[i].y * points[(i+1)%n].x;
+        }
+        return v/2;
+    }
+
     public equals(p: Polygon): boolean {
         if (this.roads.length !== p.roads.length) {
             return false;

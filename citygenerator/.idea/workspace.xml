@@ -8,9 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/home/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/home/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonBuildingRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonBuildingRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,6 +139,10 @@
       <workItem from="1754239792765" duration="1560000" />
       <workItem from="1754327613051" duration="1732000" />
       <workItem from="1754329411797" duration="7000" />
+      <workItem from="1754329477709" duration="492000" />
+      <workItem from="1754378506336" duration="600000" />
+      <workItem from="1754422020733" duration="749000" />
+      <workItem from="1754842173246" duration="1545000" />
     </task>
     <servers />
   </component>

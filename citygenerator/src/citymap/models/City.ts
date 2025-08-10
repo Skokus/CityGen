@@ -202,7 +202,7 @@ class City {
     public static getExampleCity(): City {
         const p1 = new MainPoint(200, 200, 0);
         const p2 = new MainPoint(300, 210, 0);
-        const r = MainRoad.createMainRoad(p1, p2, 0, 0.01);
+        const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         return new City([r]);
     }
 
@@ -270,7 +270,6 @@ class City {
                 }
             }
         }
-        console.log(roadSet);
         if(roadSet.size === 0) {
             for(const road of this.roads) {
                 if(road.hasBothRanks(this.wallRank, this.wallRank+1)){
