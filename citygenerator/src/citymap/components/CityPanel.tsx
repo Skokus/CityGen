@@ -153,6 +153,54 @@ function CityPanel() {
                     addRoadCompletion()
                 }}>Add road completion
                 </button>
+                <br/>
+                <label className="inputLabel">
+                    Seed:
+                </label>
+                <input className="input" id={"seed"} name="seedInput" type="number" defaultValue={seed} onChange={e => {
+                    setSeed(e.target.valueAsNumber)
+                }}/>
+                <br/>
+                <label className="inputLabel">
+                    Maximum main road length:
+                </label>
+                <input className="input" id={"maxRoadLength"} name="maxRoadLengthInput" type="number" defaultValue={maxRoadLength} onChange={e => {
+                    setMaxRoadLength(e.target.valueAsNumber)
+                }}/>
+                <br/>
+                <label className="inputLabel">
+                    Maximum main road length:
+                </label>
+                <input className="input" id={"minRoadLength"} name="minRoadLengthInput" type="number" defaultValue={minRoadLength} onChange={e => {
+                    setMinRoadLength(e.target.valueAsNumber)
+                }}/>
+                <br/>
+                <label className="inputLabel">
+                    Maximum primitive building size:
+                </label>
+                <input className="input" id={"maxPrimitiveBuildingSize"} name="maxPrimitiveBuildingSizeInput" type="number" defaultValue={maxBuildingSize} onChange={e => {
+                    setMaxBuildingSize(e.target.valueAsNumber)
+                }}/>
+                <br/>
+                <label className="inputLabel">
+                    Minimum primitive building size:
+                </label>
+                <input className="input" id={"minPrimitiveBuildingSize"} name="minPrimitiveBuildingSizeInput" type="number" defaultValue={minBuildingSize} onChange={e => {
+                    setMinBuildingSize(e.target.valueAsNumber)
+                }}/>
+                <br/>
+                <label className="inputLabel">
+                    Maximum building distance from road:
+                </label>
+                <input className="input" id={"maxBuildingDistanceFromRoad"} name="maxBuildingDistanceFromRoadInput" type="number" defaultValue={maxBuildingDistanceFromRoad} onChange={e => {
+                    setMaxBuildingDistanceFromRoad(e.target.valueAsNumber)
+                }}/>
+                <label className="inputLabel">
+                    Minimum building distance from road:
+                </label>
+                <input className="input" id={"minBuildingDistanceFromRoad"} name="minBuildingDistanceFromRoadInput" type="number" defaultValue={minBuildingDistanceFromRoad} onChange={e => {
+                    setMinBuildingDistanceFromRoad(e.target.valueAsNumber)
+                }}/>
             </div>
         </div>
     );
