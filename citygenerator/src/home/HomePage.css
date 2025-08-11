@@ -2,22 +2,3 @@
   font-size: 40px;
   margin: 8px;
 }
-
-.container{
-  display: flex;
-  width: 100%;
-}
-
-.mainpanel{
-  flex: 3;
-  border: 1px solid black;
-  margin: 4px;
-  margin-left: 16px;
-}
-
-.sidepanel{
-  flex: 1;
-  border: 1px solid black;
-  margin: 4px;
-  margin-right: 16px;
-}

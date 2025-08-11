@@ -1,0 +1,33 @@
+.container{
+    display: flex;
+    width: 100%;
+}
+
+.mainpanel{
+    flex: 3;
+}
+
+.sidepanel{
+    flex: 1;
+}
+
+button{
+    background-color: #cc621e;
+    border: none;
+    color: white;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px;
+    cursor: pointer;
+    border-radius: 8px;
+    min-width: 32px;
+    transition-duration: 0.5s;
+}
+
+button:hover{
+    background-color: #913802;
+    transition-duration: 0.5s;
+}

@@ -1,19 +1,19 @@
 import {useEffect, useState} from "react";
 import City from "../models/City";
 import CityMap from "./CityMap";
-import GridCity from "../models/squaregridcity/GridCity";
+import "./CityPanel.css"
 
 function CityPanel() {
 
-    const maxRoadLength = 100;
-    const minRoadLength = 90;
-    const maxBuildingSize = 10;
-    const minBuildingSize = 7;
-    const maxBuildingDistanceFromRoad = 10;
-    const minBuildingDistanceFromRoad = 10;
+    const [maxRoadLength, setMaxRoadLength] = useState(100);
+    const [minRoadLength, setMinRoadLength] = useState(90);
+    const [maxBuildingSize, setMaxBuildingSize] = useState(10);
+    const [minBuildingSize, setMinBuildingSize] = useState(7);
+    const [maxBuildingDistanceFromRoad, setMaxBuildingDistanceFromRoad] = useState(10);
+    const [minBuildingDistanceFromRoad, setMinBuildingDistanceFromRoad] = useState(10);
+    const [seed, setSeed] = useState(0);
 
     const [city, setCity] = useState(City.getExampleCity());
-    const [gridCity, setGridCity] = useState(GridCity.initiateCity(20, 40, 1554466132));
     const [counter, setCounter] = useState(0);
     const [zoomScale, setZoomScale] = useState(1.4);
     const [xOffset, setXOffset] = useState(10);
@@ -91,65 +91,69 @@ function CityPanel() {
     }
 
     return (
-        <div>
-            <div>Map of the city</div>
-            <CityMap zoomScale={zoomScale} city={city} xOffSet={xOffset} yOffSet={yOffset}/>
-            <button onClick={() => {
-                addNewRoad()
-            }}>Add random road
-            </button>
-            <button onClick={() => {
-                addForwardRoad()
-            }}>Extend road
-            </button>
-            <button onClick={() => {
-                addCrossroadRoad()
-            }}>Side road
-            </button>
-            <button onClick={() => {
-                addBuilding()
-            }}>Add building
-            </button>
-            <button onClick={() => {
-                splitPolygon()
-            }}>Split
-            </button>
-            <br/>
-            <button onClick={() => {
-                zoomInMap()
-            }}>+
-            </button>
-            <button onClick={() => {
-                zoomOutMap()
-            }}>-
-            </button>
-            <button onClick={() => {
-                moveX(-10 * zoomScale)
-            }}>Move right
-            </button>
-            <button onClick={() => {
-                moveX(10 * zoomScale)
-            }}>Move left
-            </button>
-            <button onClick={() => {
-                moveY(10 * zoomScale)
-            }}>Move up
-            </button>
-            <button onClick={() => {
-                moveY(-10 * zoomScale)
-            }}>Move down
-            </button>
-            <input id={"timePeriod"} name="timePeriod" type="number" defaultValue={timePeriod} onChange={e => {
-                setTimePeriod(e.target.valueAsNumber)
-            }}/>
-            <button onClick={() => {
-                setTicking(!ticking)
-            }}>Ticking
-            </button>
-            <button onClick={() => {
-                addRoadCompletion()
-            }}>Add road completion
-            </button>
+        <div className="container">
+            <div className="mainpanel">
+                <CityMap zoomScale={zoomScale} city={city} xOffSet={xOffset} yOffSet={yOffset}/>
+            </div>
+            <div className="sidepanel">
+                <button onClick={() => {
+                    addNewRoad()
+                }}>Add random road
+                </button>
+                <button onClick={() => {
+                    addForwardRoad()
+                }}>Extend road
+                </button>
+                <button onClick={() => {
+                    addCrossroadRoad()
+                }}>Side road
+                </button>
+                <br/>
+                <button onClick={() => {
+                    addBuilding()
+                }}>Add building
+                </button>
+                <button onClick={() => {
+                    splitPolygon()
+                }}>Split
+                </button>
+                <br/>
+                <button onClick={() => {
+                    zoomInMap()
+                }}>+
+                </button>
+                <button onClick={() => {
+                    zoomOutMap()
+                }}>-
+                </button>
+                <button onClick={() => {
+                    moveX(-10 * zoomScale)
+                }}>Move right
+                </button>
+                <button onClick={() => {
+                    moveX(10 * zoomScale)
+                }}>Move left
+                </button>
+                <button onClick={() => {
+                    moveY(10 * zoomScale)
+                }}>Move up
+                </button>
+                <button onClick={() => {
+                    moveY(-10 * zoomScale)
+                }}>Move down
+                </button>
+                <input id={"timePeriod"} name="timePeriod" type="number" defaultValue={timePeriod} onChange={e => {
+                    setTimePeriod(e.target.valueAsNumber)
+                }}/>
+                <button onClick={() => {
+                    setTicking(!ticking)
+                }}>Ticking
+                </button>
+                <button onClick={() => {
+                    addRoadCompletion()
+                }}>Add road completion
+                </button>
+            </div>
         </div>
     );
 }
