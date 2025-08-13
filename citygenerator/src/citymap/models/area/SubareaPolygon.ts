@@ -10,7 +10,6 @@ class SubareaPolygon extends Polygon{
 
     constructor(roads: SideRoad[]) {
         super(roads);
-        this.color = "#fff889";
     }
 
     public getRoads(): SideRoad[]{

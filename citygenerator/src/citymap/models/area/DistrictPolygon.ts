@@ -5,17 +5,19 @@ import SubareaPolygon from "./SubareaPolygon";
 import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
 import HousingPBuilding from "../building/polygonbuilding/HousingPBuilding";
+import DistrictPolygonType from "./DistrictPolygonType";
 
 class DistrictPolygon extends Polygon {
 
     subAreas: SubareaPolygon[];
     rank: number;
+    type: DistrictPolygonType;
 
     constructor(roads: MainRoad[]) {
         super(roads);
-        this.color = "#fff189";
         this.subAreas = [this.createInitialSubArea(roads)];
         this.rank = 0;
+        this.type = DistrictPolygonType.Farm;
     }
 
     public getClockWiseBorderPoints(): MainPoint[] {
@@ -64,7 +66,7 @@ class DistrictPolygon extends Polygon {
         }
     }
 
-    private createInitialSubArea(roads: Road[]): SubareaPolygon {
+    protected createInitialSubArea(roads: Road[]): SubareaPolygon {
         let subRoads = [];
         for (let road of roads) {
             subRoads.push(new SideRoad(road.p1, road.p2, true));
@@ -92,6 +94,9 @@ class DistrictPolygon extends Polygon {
         }
     }
 
+    public updatePointsRanks(): void{
+
+    }
     public addRankToRoads(): void {
         for(let road of this.getRoads()) {
             road.addRankOfPolygon(this.rank);

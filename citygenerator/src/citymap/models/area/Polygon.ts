@@ -5,11 +5,9 @@ import Point from "../point/Point";
 class Polygon {
 
     roads: Road[];
-    color: string;
 
     constructor(roads: Road[]) {
         this.roads = roads;
-        this.color = "#ffee8c";
     }
 
     get centroid(): Point {

@@ -1,9 +1,9 @@
 import Road from "./road/Road";
-import Polygon from "./area/Polygon";
 import Building from "./building/Building";
 import MainRoad from "./road/MainRoad";
 import DistrictPolygon from "./area/DistrictPolygon";
 import MainPoint from "./point/MainPoint";
+import DistrictPolygonType from "./area/DistrictPolygonType";
 
 class City {
 
@@ -248,6 +248,9 @@ class City {
             if (flag) {
                 this.polygons.push(newp);
                 newp.generateRank();
+                if(newp.rank === 1){
+                    newp.type = DistrictPolygonType.Market;
+                }
                 newp.addRankToRoads();
             }
         }

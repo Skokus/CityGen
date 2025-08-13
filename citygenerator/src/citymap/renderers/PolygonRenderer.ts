@@ -1,6 +1,7 @@
 import Renderer from "./Renderer";
 import Polygon from "../models/area/Polygon";
 import DistrictPolygon from "../models/area/DistrictPolygon";
+import DistrictPolygonType from "../models/area/DistrictPolygonType";
 
 class PolygonRenderer implements Renderer{
 
@@ -21,9 +22,9 @@ class PolygonRenderer implements Renderer{
         if(this.polygon.roads.length === 0)
             return;
         ctx.beginPath();
-        ctx.fillStyle = this.polygon.color;
+        ctx.fillStyle = "#ffffff";
         if(this.polygon instanceof DistrictPolygon){
-            ctx.fillStyle = this.colors[this.polygon.rank%this.colors.length];
+            ctx.fillStyle = this.getDistrictPolygonColor();
         }
         let points = this.polygon.getClockWiseBorderPoints();
         ctx.moveTo(scale*(points[0].x + xOffSet), scale*(points[0].y + yOffSet));
@@ -36,6 +37,17 @@ class PolygonRenderer implements Renderer{
         ctx.closePath();
     }
 
+    private getDistrictPolygonColor(): string {
+        if(this.polygon instanceof DistrictPolygon){
+            switch(this.polygon.type){
+                case DistrictPolygonType.Farm:
+                    return "#ffe87b";
+                case DistrictPolygonType.Market:
+                    return "#615f5f";
+            }
+        }
+        return "#ffffff";
+    }
 }
 
 export default PolygonRenderer;
