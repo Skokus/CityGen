@@ -199,6 +199,13 @@ class City {
         }
     }
 
+    public splitRandomPolygonWithSmallerPolygon(ratio: number): void {
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
+        if (possiblePolygons.length > 0) {
+            possiblePolygons[0].splitPolygonBySmallerPolygon(ratio);
+        }
+    }
+
     public static getExampleCity(): City {
         const p1 = new MainPoint(200, 200, 0);
         const p2 = new MainPoint(300, 210, 0);

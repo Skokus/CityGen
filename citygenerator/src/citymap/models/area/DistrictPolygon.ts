@@ -46,8 +46,14 @@ class DistrictPolygon extends Polygon {
         return false;
     }
 
-    public splitPolygon(): Polygon[] {
-        this.subAreas.push(...this.subAreas[0].splitPolygon());
+    public splitPolygonByLongestRoad(): Polygon[] {
+        this.subAreas.push(...this.subAreas[0].splitPolygonByLongestRoad());
+        this.subAreas.shift();
+        return [this];
+    }
+
+    public splitPolygonWithSmallerPolygon(ratio: number): Polygon[] {
+        this.subAreas.push(...this.subAreas[0].splitPolygonWithSmallerPolygon(ratio));
         this.subAreas.shift();
         return [this];
     }
@@ -57,12 +63,23 @@ class DistrictPolygon extends Polygon {
         for (let i = 0; i < n; i++) {
             newPolygons = [];
             for (let a of this.subAreas) {
-                newPolygons.push(...a.splitPolygon());
+                newPolygons.push(...a.splitPolygonByLongestRoad());
             }
             this.subAreas = newPolygons;
         }
         for(let p of newPolygons) {
             p.building = HousingPBuilding.createHousingPBuilding(p, 0.8);
+        }
+    }
+
+    public splitPolygonBySmallerPolygon(ratio: number): void {
+        let newPolygons: SubareaPolygon[] = [];
+        for (let a of this.subAreas) {
+            newPolygons.push(...a.splitPolygonWithSmallerPolygon(ratio));
+        }
+        this.subAreas = newPolygons;
+        for(let p of newPolygons) {
+            p.building = HousingPBuilding.createHousingPBuilding(p, 0.90);
         }
     }
 
@@ -94,9 +111,6 @@ class DistrictPolygon extends Polygon {
         }
     }
 
-    public updatePointsRanks(): void{
-
-    }
     public addRankToRoads(): void {
         for(let road of this.getRoads()) {
             road.addRankOfPolygon(this.rank);

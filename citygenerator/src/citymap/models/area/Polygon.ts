@@ -72,6 +72,14 @@ class Polygon {
         return v/2;
     }
 
+    public getRoadWithPoints(point1: Point, point2: Point): Road {
+        for(const road of this.roads) {
+            if(road.doesContainPoint(point1) && road.doesContainPoint(point2))
+                return road;
+        }
+        return this.roads[0];
+    }
+
     public equals(p: Polygon): boolean {
         if (this.roads.length !== p.roads.length) {
             return false;
@@ -85,7 +93,11 @@ class Polygon {
         return true;
     }
 
-    public splitPolygon(): Polygon[] {
+    public splitPolygonByLongestRoad(): Polygon[] {
+        return [this];
+    }
+
+    public splitPolygonWithSmallerPolygon(ratio: number): Polygon[] {
         return [this];
     }
 }

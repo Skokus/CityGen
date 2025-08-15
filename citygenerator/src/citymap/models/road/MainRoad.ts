@@ -41,7 +41,7 @@ class MainRoad extends Road {
         if (distance > this.length || this.sidePoints.length > 0) {
             return;
         }
-        const n = Math.floor(this.length / distance);
+        const n = Math.floor(this.length/distance);
         const ratio = 1 / n;
         for (let i = 0; i < n; i++) {
             let s = this.createSidePointOnRoad(i * ratio + ratio / 2, this.length / distance);

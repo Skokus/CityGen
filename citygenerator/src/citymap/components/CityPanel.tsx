@@ -56,6 +56,12 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function splitPolygonWithSmallerPolygon() {
+        city.splitRandomPolygonWithSmallerPolygon(0.8);
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     function addRoadCompletion(){
         city.addRoadCompletionScalar(0.2);
         setCity(city);
@@ -116,6 +122,10 @@ function CityPanel() {
                 <button onClick={() => {
                     splitPolygon()
                 }}>Split
+                </button>
+                <button onClick={() => {
+                    splitPolygonWithSmallerPolygon()
+                }}>Split with marketplace
                 </button>
                 <br/>
                 <button onClick={() => {
