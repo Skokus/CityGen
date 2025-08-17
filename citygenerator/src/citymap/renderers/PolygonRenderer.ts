@@ -2,6 +2,7 @@ import Renderer from "./Renderer";
 import Polygon from "../models/area/Polygon";
 import DistrictPolygon from "../models/area/DistrictPolygon";
 import DistrictPolygonType from "../models/area/DistrictPolygonType";
+import LakePolygon from "../models/area/LakePolygon";
 
 class PolygonRenderer implements Renderer{
 
@@ -22,10 +23,7 @@ class PolygonRenderer implements Renderer{
         if(this.polygon.roads.length === 0)
             return;
         ctx.beginPath();
-        ctx.fillStyle = "#ffffff";
-        if(this.polygon instanceof DistrictPolygon){
-            ctx.fillStyle = this.getDistrictPolygonColor();
-        }
+        ctx.fillStyle = this.getPolygonColor();
         let points = this.polygon.getClockWiseBorderPoints();
         ctx.moveTo(scale*(points[0].x + xOffSet), scale*(points[0].y + yOffSet));
         for(let i = 1; i < points.length; i++){
@@ -37,14 +35,16 @@ class PolygonRenderer implements Renderer{
         ctx.closePath();
     }
 
-    private getDistrictPolygonColor(): string {
+    private getPolygonColor(): string {
         if(this.polygon instanceof DistrictPolygon){
             switch(this.polygon.type){
                 case DistrictPolygonType.Farm:
                     return "#ffe87b";
                 case DistrictPolygonType.Market:
-                    return "#615f5f";
+                    return "#9f9f9f";
             }
+        } else if(this.polygon instanceof LakePolygon){
+            return "#00b8ff";
         }
         return "#ffffff";
     }

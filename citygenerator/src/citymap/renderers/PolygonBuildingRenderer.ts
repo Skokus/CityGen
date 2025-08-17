@@ -1,5 +1,4 @@
 import Renderer from "./Renderer";
-import DistrictPolygon from "../models/area/DistrictPolygon";
 import PolygonBuilding from "../models/building/polygonbuilding/PolygonBuilding";
 
 class PolygonBuildingRenderer implements Renderer{

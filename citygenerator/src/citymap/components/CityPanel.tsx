@@ -57,7 +57,7 @@ function CityPanel() {
     }
 
     function splitPolygonWithSmallerPolygon() {
-        city.splitRandomPolygonWithSmallerPolygon(0.8);
+        city.splitRandomPolygonWithSmallerPolygon(0.7);
         setCity(city);
         setCounter(counter + 1);
     }

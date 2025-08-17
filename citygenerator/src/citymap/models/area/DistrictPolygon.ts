@@ -6,6 +6,7 @@ import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
 import HousingPBuilding from "../building/polygonbuilding/HousingPBuilding";
 import DistrictPolygonType from "./DistrictPolygonType";
+import MarketBoothPBuilding from "../building/polygonbuilding/MarketBoothPBuilding";
 
 class DistrictPolygon extends Polygon {
 
@@ -78,8 +79,8 @@ class DistrictPolygon extends Polygon {
             newPolygons.push(...a.splitPolygonWithSmallerPolygon(ratio));
         }
         this.subAreas = newPolygons;
-        for(let p of newPolygons) {
-            p.building = HousingPBuilding.createHousingPBuilding(p, 0.90);
+        for(let i = 1; i < newPolygons.length; i++) {
+            this.subAreas[i].building = MarketBoothPBuilding.createMarketBoothPBuilding(this.subAreas[i], 0.80);
         }
     }
 

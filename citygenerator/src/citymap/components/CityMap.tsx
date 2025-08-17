@@ -49,6 +49,12 @@ function CityMap(props: CityMapProps) {
                 }
             }
         }
+        if (props.city.lakes.length > 0) {
+            for (const l of props.city.lakes) {
+                polr.setPolygon(l);
+                polr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
+            }
+        }
         for (const r of props.city.roads) {
             rr.setRoad(r);
             rr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
