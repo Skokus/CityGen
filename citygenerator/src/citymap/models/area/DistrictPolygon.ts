@@ -7,6 +7,7 @@ import Road from "../road/Road";
 import HousingPBuilding from "../building/polygonbuilding/HousingPBuilding";
 import DistrictPolygonType from "./DistrictPolygonType";
 import MarketBoothPBuilding from "../building/polygonbuilding/MarketBoothPBuilding";
+import ChurchPBuilding from "../building/polygonbuilding/ChurchPBuilding";
 
 class DistrictPolygon extends Polygon {
 
@@ -69,7 +70,7 @@ class DistrictPolygon extends Polygon {
             this.subAreas = newPolygons;
         }
         for(let p of newPolygons) {
-            p.building = HousingPBuilding.createHousingPBuilding(p, 0.8);
+            p.building = HousingPBuilding.createHousingPBuilding(p, 0.90);
         }
     }
 
@@ -81,6 +82,25 @@ class DistrictPolygon extends Polygon {
         this.subAreas = newPolygons;
         for(let i = 1; i < newPolygons.length; i++) {
             this.subAreas[i].building = MarketBoothPBuilding.createMarketBoothPBuilding(this.subAreas[i], 0.80);
+        }
+    }
+
+    public splitPolygonNotEvenly(n: number): void {
+        let newPolygons: SubareaPolygon[] = [];
+        for (let a of this.subAreas) {
+            newPolygons.push(...a.splitPolygonByLongestRoad());
+        }
+        this.subAreas = newPolygons;
+        this.subAreas[0].building = ChurchPBuilding.createChurchPBuilding(this.subAreas[0], 0.90);
+        for (let i = 1; i < n; i++) {
+            newPolygons = [];
+            for (let i = 1; i < this.subAreas.length; i++) {
+                newPolygons.push(...this.subAreas[i].splitPolygonByLongestRoad());
+            }
+            this.subAreas.push(...newPolygons);
+        }
+        for(let i = 1; i < this.subAreas.length; i++) {
+            this.subAreas[i].building = HousingPBuilding.createHousingPBuilding(this.subAreas[i], 0.90);
         }
     }
 

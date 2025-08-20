@@ -62,6 +62,12 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function splitPolygonUnevenly() {
+        city.splitRandomPolygonUnevenly();
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     function addRoadCompletion(){
         city.addRoadCompletionScalar(0.2);
         setCity(city);
@@ -126,6 +132,10 @@ function CityPanel() {
                 <button onClick={() => {
                     splitPolygonWithSmallerPolygon()
                 }}>Split with marketplace
+                </button>
+                <button onClick={() => {
+                    splitPolygonUnevenly()
+                }}>Split with church
                 </button>
                 <br/>
                 <button onClick={() => {

@@ -199,7 +199,7 @@ class City {
     public splitRandomPolygon(): void {
         const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
         if (possiblePolygons.length > 0) {
-            possiblePolygons[0].splitPolygonMultipleTimes(3);
+            possiblePolygons[0].splitPolygonMultipleTimes(5);
         }
     }
 
@@ -210,12 +210,19 @@ class City {
         }
     }
 
+    public splitRandomPolygonUnevenly(){
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
+        if (possiblePolygons.length > 0) {
+            possiblePolygons[0].splitPolygonNotEvenly(3);
+        }
+    }
+
     public static getExampleCity(): City {
         const p1 = new MainPoint(200, 200, 0);
         const p2 = new MainPoint(300, 210, 0);
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r]);
-        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(50, 50), 100, 70, 15, Math.PI/10))
+        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(50, 50), 100, 70, 15, Math.PI/10));
         return c;
     }
 

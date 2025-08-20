@@ -14,7 +14,8 @@ class SubareaPolygon extends Polygon{
 
     public splitPolygonByLongestRoad(): SubareaPolygon[] {
         let roads = this.getRoads();
-        var i = this.getLongestMainRoadId(); var i2 = 0;
+        var i = this.containsMainRoads() ? this.getLongestRoadId() : this.getLongestSideRoadId();
+        var i2 = 0;
         var p1 = roads[i].getRandomPointInsideRoad();
         var a = roads[i].perpendicularSlope;
         var b = roads[i].getPerpendicularB(p1);
@@ -110,19 +111,59 @@ class SubareaPolygon extends Polygon{
         return newPolygons;
     }
 
-    public getLongestMainRoadId(): number{
-        const mainroads = this.getRoads().filter(p => p.isMainRoad);
-        let max = mainroads[0].length;
-        let maxId = 0;
-        for(let i = 1; i < mainroads.length; i++){
-            if(mainroads[i].length > max){
-                max = mainroads[i].length;
-                maxId = i;
+    public getLongestMainRoadId(): number {
+        const maxroads = this.getRoads().filter(p => p.isMainRoad);
+        let max = maxroads[0].length;
+        let maxRoad = maxroads[0];
+        for(let i = 1; i < maxroads.length; i++){
+            if(maxroads[i].length > max){
+                max = maxroads[i].length;
+                maxRoad = maxroads[i];
             }
         }
-        return maxId;
+        for(let i = 0; i < this.getRoads().length; i++){
+            if(maxRoad === this.getRoads()[i]){
+                return i;
+            }
+        }
+        return 0;
     }
 
+    public getLongestSideRoadId(): number {
+        const sideroads = this.getRoads().filter(p => !p.isMainRoad);
+        let max = sideroads[0].length;
+        let maxRoad = sideroads[0];
+        for(let i = 1; i < sideroads.length; i++){
+            if(sideroads[i].length > max){
+                max = sideroads[i].length;
+                maxRoad = sideroads[i];
+            }
+        }
+        for(let i = 0; i < this.getRoads().length; i++){
+            if(maxRoad === this.getRoads()[i]){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public containsSideRoads(): boolean {
+        for(let road of this.getRoads()){
+            if(!road.isMainRoad){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public containsMainRoads(): boolean {
+        for(let road of this.getRoads()){
+            if(road.isMainRoad){
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 export default SubareaPolygon;
