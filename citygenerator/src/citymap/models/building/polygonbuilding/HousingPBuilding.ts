@@ -5,10 +5,6 @@ import Road from "../../road/Road";
 
 class HousingPBuilding extends PolygonBuilding {
 
-    constructor(borderPoints: Point[]) {
-        super(borderPoints);
-    }
-
     protected getDefaultColor(): string {
         return "#ff9a02";
     }

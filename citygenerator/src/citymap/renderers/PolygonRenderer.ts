@@ -41,7 +41,7 @@ class PolygonRenderer implements Renderer{
                 case DistrictPolygonType.Farm:
                     return "#ffe87b";
                 case DistrictPolygonType.Market:
-                    return "#9f9f9f";
+                    return "#c1c1c1";
             }
         } else if(this.polygon instanceof LakePolygon){
             return "#00b8ff";

@@ -213,7 +213,7 @@ class City {
     public splitRandomPolygonUnevenly(){
         const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
         if (possiblePolygons.length > 0) {
-            possiblePolygons[0].splitPolygonNotEvenly(3);
+            possiblePolygons[0].splitPolygonUnevenly(5);
         }
     }
 

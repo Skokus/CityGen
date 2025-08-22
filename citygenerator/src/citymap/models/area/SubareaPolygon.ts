@@ -3,10 +3,12 @@ import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
 import Point from "../point/Point";
 import PolygonBuilding from "../building/polygonbuilding/PolygonBuilding";
+import Building from "../building/Building";
 
 class SubareaPolygon extends Polygon{
 
     building: PolygonBuilding | undefined;
+    accessory: Building | undefined;
 
     public getRoads(): SideRoad[]{
         return this.roads as SideRoad[];
@@ -164,6 +166,18 @@ class SubareaPolygon extends Polygon{
         }
         return false;
     }
+
+    public getAccessoryRadius(ratio: number): number { //ratio so that the circle doesn't fill till the edges of the polygon
+        const c = this.centroid;
+        let min = Road.distanceFromPoint(c, this.roads[0].p1, this.roads[0].p2);
+        for (let i = 1; i < this.roads.length; i++){
+            if(Road.distanceFromPoint(c, this.roads[i].p1, this.roads[i].p2) < min){
+                min = Road.distanceFromPoint(c, this.roads[i].p1, this.roads[i].p2);
+            }
+        }
+        return min*ratio;
+    }
+
 }
 
 export default SubareaPolygon;

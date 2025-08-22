@@ -8,9 +8,9 @@ class MarketBoothPBuilding extends PolygonBuilding {
     protected getDefaultColor(): string {
         const c = Math.random();
         if(c < 0.33){
-            return "#ff3e00";
+            return "#d63100";
         } else if(c < 0.66){
-            return "#3af802";
+            return "#27b500";
         } else {
             return "#ffffff";
         }

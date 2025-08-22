@@ -8,6 +8,7 @@ import HousingPBuilding from "../building/polygonbuilding/HousingPBuilding";
 import DistrictPolygonType from "./DistrictPolygonType";
 import MarketBoothPBuilding from "../building/polygonbuilding/MarketBoothPBuilding";
 import ChurchPBuilding from "../building/polygonbuilding/ChurchPBuilding";
+import FountainBuilding from "../building/FountainBuilding";
 
 class DistrictPolygon extends Polygon {
 
@@ -80,25 +81,29 @@ class DistrictPolygon extends Polygon {
             newPolygons.push(...a.splitPolygonWithSmallerPolygon(ratio));
         }
         this.subAreas = newPolygons;
+        const c = this.subAreas[0];
+        this.subAreas[0].accessory = new FountainBuilding(c.centroid.x, c.centroid.y, c.getAccessoryRadius(0.6));
         for(let i = 1; i < newPolygons.length; i++) {
             this.subAreas[i].building = MarketBoothPBuilding.createMarketBoothPBuilding(this.subAreas[i], 0.80);
         }
     }
 
-    public splitPolygonNotEvenly(n: number): void {
+    public splitPolygonUnevenly(n: number): void {
         let newPolygons: SubareaPolygon[] = [];
         for (let a of this.subAreas) {
             newPolygons.push(...a.splitPolygonByLongestRoad());
         }
-        this.subAreas = newPolygons;
+        this.subAreas = [newPolygons[0]];
         this.subAreas[0].building = ChurchPBuilding.createChurchPBuilding(this.subAreas[0], 0.90);
+        newPolygons.shift();
         for (let i = 1; i < n; i++) {
-            newPolygons = [];
-            for (let i = 1; i < this.subAreas.length; i++) {
-                newPolygons.push(...this.subAreas[i].splitPolygonByLongestRoad());
+            let temp = [];
+            for (let i = 0; i < newPolygons.length; i++) {
+                temp.push(...newPolygons[i].splitPolygonByLongestRoad());
             }
-            this.subAreas.push(...newPolygons);
+            newPolygons = temp;
         }
+        this.subAreas.push(...newPolygons);
         for(let i = 1; i < this.subAreas.length; i++) {
             this.subAreas[i].building = HousingPBuilding.createHousingPBuilding(this.subAreas[i], 0.90);
         }

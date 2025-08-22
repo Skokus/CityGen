@@ -46,6 +46,10 @@ function CityMap(props: CityMapProps) {
                         pbr.setPolygonBuilding(c.building);
                         pbr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
                     }
+                    if(c.accessory !== undefined){
+                        br.setBuilding(c.accessory);
+                        br.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
+                    }
                 }
             }
         }

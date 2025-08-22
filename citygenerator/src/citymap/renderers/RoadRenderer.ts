@@ -15,14 +15,14 @@ class RoadRenderer implements Renderer{
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
         ctx.beginPath();
         if(this.road instanceof MainRoad){
-            ctx.strokeStyle = "#686868";
-            ctx.lineWidth = scale*1.5;
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 1;
             if(this.road.type === MainRoadType.Wall){
                 ctx.strokeStyle = "#e500fd";
-                ctx.lineWidth = scale*4;
+                ctx.lineWidth = scale*2;
             }
         } else if(this.road instanceof SideRoad){
-            ctx.lineWidth = scale;
+            ctx.lineWidth = 1;
         }
         ctx.moveTo(scale*(this.road.p1.x + xOffSet), scale*(this.road.p1.y + yOffSet));
         ctx.lineTo(scale*(this.road.completionPoint.x + xOffSet), scale*(this.road.completionPoint.y + yOffSet));

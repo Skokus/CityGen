@@ -2,6 +2,8 @@ import Renderer from "./Renderer";
 import Building from "../models/building/Building";
 import SquareBuilding from "../models/building/SquareBuilding";
 import building from "../models/building/Building";
+import FountainBuilding from "../models/building/FountainBuilding";
+import CircleBuilding from "../models/building/CircleBuilding";
 
 class BuildingRenderer implements Renderer{
 
@@ -12,9 +14,9 @@ class BuildingRenderer implements Renderer{
     }
 
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
+        const x = scale*(this.building.x + xOffSet);
+        const y = scale*(this.building.y + yOffSet);
         if(this.building instanceof SquareBuilding){
-            const x = scale*(this.building.x + xOffSet);
-            const y = scale*(this.building.y + yOffSet);
             const h = this.building.height * scale;
             const a = this.building.angle;
             ctx.beginPath();
@@ -28,6 +30,31 @@ class BuildingRenderer implements Renderer{
             ctx.fillStyle = this.building.color;
             ctx.fill();
             ctx.closePath();
+        } else if(this.building instanceof CircleBuilding){
+            if(this.building instanceof FountainBuilding){
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.arc(x, y, this.building.radius*scale, 0, 2 * Math.PI);
+                ctx.fillStyle = this.building.outlineColor;
+                ctx.strokeStyle = "black";
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.arc(x, y, this.building.radius*scale*0.8, 0, 2 * Math.PI);
+                ctx.fillStyle = this.building.color;
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.arc(x, y, this.building.radius*scale*0.2, 0, 2 * Math.PI);
+                ctx.fillStyle = this.building.outlineColor;
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
+            }
         }
     }
 
