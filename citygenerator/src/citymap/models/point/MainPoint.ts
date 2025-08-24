@@ -35,7 +35,7 @@ class MainPoint extends Point {
 
     public getForwardDirection(): number {
         for (var i = 0; i < this.connectedRoads.length; i++) {
-            if (this.connectedRoads[i].length > 0) {
+            if (this.connectedRoads[i].length > 0 && this.connectedRoads[(i+2)%this.connectedRoads.length].length === 0) {
                 return (i + 2) % this.connectedRoads.length;
             }
         }
@@ -75,6 +75,37 @@ class MainPoint extends Point {
     public completePoint(){
         this.isComplete = true;
     }
+
+    public canBeExtended(): boolean {
+        return this.canBeHorizontallyExtended() || this.canBeVerticallyExtended();
+    }
+
+    public canBeSided(): boolean {
+        let canBeHorizontallySided = false;
+        let canBeVerticallySided = false;
+        if((this.connectedRoads[0].length > 0 && this.connectedRoads[2].length > 0) && (this.connectedRoads[1].length === 0 || this.connectedRoads[3].length === 0)) {
+            canBeVerticallySided = true;
+        }
+        if((this.connectedRoads[1].length > 0 && this.connectedRoads[3].length > 0) && (this.connectedRoads[0].length === 0 || this.connectedRoads[2].length === 0)) {
+            canBeHorizontallySided = true;
+        }
+        return canBeHorizontallySided || canBeVerticallySided;
+    }
+
+    private canBeHorizontallyExtended(){
+        let canBeHorizontallyExtended = false;
+        if((this.connectedRoads[0].length > 0) !== (this.connectedRoads[2].length > 0))
+            canBeHorizontallyExtended = true;
+        return canBeHorizontallyExtended;
+    }
+
+    private canBeVerticallyExtended(){
+        let canBeVerticallyExtended = false;
+        if((this.connectedRoads[1].length > 0) !== (this.connectedRoads[3].length > 0))
+            canBeVerticallyExtended = true;
+        return canBeVerticallyExtended;
+    }
+
 }
 
 export default MainPoint;

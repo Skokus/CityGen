@@ -76,7 +76,7 @@ class City {
     }
 
     public addExtentionRoad(distance: number): void {
-        const points = this.getAllPoints().filter(point => point.getRoadCount() === 1);
+        const points = this.getAllPoints().filter(point => point.canBeExtended());
         var direction = -1;
         var randomPoint = new MainPoint(0, 0);
         while (direction < 0) {
@@ -127,7 +127,8 @@ class City {
     }
 
     public addSideRoad(distance: number): void {
-        const points = this.getAllPoints().filter(point => point.getRoadCount() > 1 && point.getRoadCount() < 4);
+        const points = this.getAllPoints().filter(point => point.canBeSided());
+        console.log(points[0]);
         if (points.length === 0)
             return;
         var direction = -1;
@@ -219,7 +220,7 @@ class City {
 
     public static getExampleCity(): City {
         const p1 = new MainPoint(200, 200, 0);
-        const p2 = new MainPoint(300, 210, 0);
+        const p2 = new MainPoint(300, 210, 1);
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r]);
         //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(50, 50), 100, 70, 15, Math.PI/10));
