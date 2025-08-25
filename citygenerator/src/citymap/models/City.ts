@@ -19,6 +19,9 @@ class City {
     defaultCompletion = 1.0;
     wallRank = 2;
 
+    expendRange = 2;
+    sideRange = 1;
+
     constructor(roads: MainRoad[]) {
         this.roads = roads;
         this.polygons = [];
@@ -76,7 +79,7 @@ class City {
     }
 
     public addExtentionRoad(distance: number): void {
-        const points = this.getAllPoints().filter(point => point.canBeExtended());
+        const points = this.getMinimalExpandablePointsWithinRange();
         var direction = -1;
         var randomPoint = new MainPoint(0, 0);
         while (direction < 0) {
@@ -127,7 +130,7 @@ class City {
     }
 
     public addSideRoad(distance: number): void {
-        const points = this.getAllPoints().filter(point => point.canBeSided());
+        const points = this.getMinimalSideablePointsWithinRange();
         console.log(points[0]);
         if (points.length === 0)
             return;
@@ -234,6 +237,48 @@ class City {
             pointSet.add(road.getPoint2());
         }
         return Array.from(pointSet);
+    }
+
+    private getMinimalExpandablePointsWithinRange(): MainPoint[] {
+        const min = this.getMinimalExpandablePointDistance();
+        const max = min + this.expendRange;
+        return this.getExtendablePoints().filter((point) => point.distanceFromCenter >= min && point.distanceFromCenter < max);
+    }
+
+    private getMinimalSideablePointsWithinRange(): MainPoint[] {
+        const min = this.getMinimalSidedPointDistance();
+        const max = min + this.sideRange;
+        return this.getSideablePoints().filter((point) => point.distanceFromCenter >= min && point.distanceFromCenter < max);
+    }
+
+    private getMinimalExpandablePointDistance(): number {
+        let min = 1000;
+        const points = this.getExtendablePoints();
+        for(let i = 0; i < points.length; i++) {
+            if(points[i].distanceFromCenter < min){
+                min = points[i].distanceFromCenter;
+            }
+        }
+        return min;
+    }
+
+    private getMinimalSidedPointDistance(): number {
+        let min = 1000;
+        const points = this.getSideablePoints();
+        for(let i = 0; i < points.length; i++) {
+            if(points[i].distanceFromCenter < min){
+                min = points[i].distanceFromCenter;
+            }
+        }
+        return min;
+    }
+
+    private getExtendablePoints(): MainPoint[] {
+        return this.getAllPoints().filter((point) => point.canBeExtended());
+    }
+
+    private getSideablePoints(): MainPoint[] {
+        return this.getAllPoints().filter((point) => point.canBeSided());
     }
 
     private findCycles(pointCap: number, currentPoints: MainPoint[], currentRoads: MainRoad[]): DistrictPolygon[] {
