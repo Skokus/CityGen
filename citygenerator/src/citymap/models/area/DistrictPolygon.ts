@@ -9,6 +9,7 @@ import DistrictPolygonType from "./DistrictPolygonType";
 import MarketBoothPBuilding from "../building/polygonbuilding/MarketBoothPBuilding";
 import ChurchPBuilding from "../building/polygonbuilding/ChurchPBuilding";
 import FountainBuilding from "../building/FountainBuilding";
+import CastlePBuilding from "../building/polygonbuilding/CastlePBuilding";
 
 class DistrictPolygon extends Polygon {
 
@@ -109,6 +110,10 @@ class DistrictPolygon extends Polygon {
         }
     }
 
+    public createCastle(ratio: number): void {
+        this.subAreas[0].building = CastlePBuilding.createCastlePBuilding(this.subAreas[0], ratio);
+    }
+
     protected createInitialSubArea(roads: Road[]): SubareaPolygon {
         let subRoads = [];
         for (let road of roads) {
@@ -142,6 +147,7 @@ class DistrictPolygon extends Polygon {
             road.addRankOfPolygon(this.rank);
         }
     }
+
 }
 
 export default DistrictPolygon;

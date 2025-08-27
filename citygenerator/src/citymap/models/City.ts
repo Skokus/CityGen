@@ -214,6 +214,13 @@ class City {
         }
     }
 
+    public createCastle(ratio: number) : void {
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2  && p.subAreas[0].building === undefined)
+        if (possiblePolygons.length > 0) {
+            possiblePolygons[0].createCastle(ratio);
+        }
+    }
+
     public splitRandomPolygonUnevenly(){
         const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
         if (possiblePolygons.length > 0) {

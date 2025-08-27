@@ -69,6 +69,12 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function createCastle() {
+        city.createCastle(0.8);
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     function addRoadCompletion(){
         city.addRoadCompletionScalar(0.2);
         setCity(city);
@@ -137,6 +143,10 @@ function CityPanel() {
                 <button onClick={() => {
                     splitPolygonUnevenly()
                 }}>Split with church
+                </button>
+                <button onClick={() => {
+                    createCastle()
+                }}>Create Castle
                 </button>
                 <br/>
                 <button onClick={() => {
