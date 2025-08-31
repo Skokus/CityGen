@@ -25,7 +25,8 @@ class PolygonBuildingRenderer implements Renderer{
         ctx.fill();
         ctx.strokeStyle = "black";
         if(this.polygonBuilding instanceof CastlePBuilding){
-            ctx.lineWidth = this.polygonBuilding.towers[0].radius * 0.5;
+            ctx.strokeStyle = this.polygonBuilding.towers[0].color;
+            ctx.lineWidth = this.polygonBuilding.towers[0].radius * 0.7;
         }
         ctx.stroke();
         ctx.closePath();

@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/building/SquareBuilding.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/building/SquareBuilding.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/building/TowerBuilding.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/building/TowerBuilding.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/building/polygonbuilding/CastlePBuilding.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/building/polygonbuilding/CastlePBuilding.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonBuildingRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonBuildingRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,6 +161,8 @@
       <workItem from="1756051291120" duration="4858000" />
       <workItem from="1756145012747" duration="2328000" />
       <workItem from="1756315542494" duration="2603000" />
+      <workItem from="1756403227152" duration="2709000" />
+      <workItem from="1756486890679" duration="1002000" />
     </task>
     <servers />
   </component>

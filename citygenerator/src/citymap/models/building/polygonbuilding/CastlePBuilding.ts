@@ -38,6 +38,15 @@ class CastlePBuilding extends PolygonBuilding {
             }
             this.towers.push(new TowerBuilding(p.x, p.y, min * ratio));
         }
+        const c = polygon.centroid;
+        let min = Road.distanceFromPoint(c, polygon.roads[0].p1, polygon.roads[0].p2);
+        for(let i = 1; i < polygon.roads.length; i++) {
+            let l = Road.distanceFromPoint(c, polygon.roads[i].p1, polygon.roads[i].p2)
+            if(l < min){
+                min = l;
+            }
+        }
+        this.towers.push(new TowerBuilding(c.x, c.y, min * ratio * 0.6));
     }
 }
 

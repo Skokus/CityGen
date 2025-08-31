@@ -1,6 +1,6 @@
 import Building from "./Building";
 
-class SquareBuilding extends Building{
+class SquareBuilding extends Building {
 
     protected getRandomColor(): string {
         return "#a86503";
