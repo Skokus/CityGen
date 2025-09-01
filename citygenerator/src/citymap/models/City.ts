@@ -6,14 +6,16 @@ import MainPoint from "./point/MainPoint";
 import DistrictPolygonType from "./area/DistrictPolygonType";
 import LakePolygon from "./area/LakePolygon";
 import Point from "./point/Point";
+import River from "./River";
 
 class City {
 
     roads: MainRoad[];
     polygons: DistrictPolygon[];
     lakes: LakePolygon[];
+    rivers: River[];
     popRadius = 50;
-    angle = Math.PI / 9;
+    angle = Math.PI/9;
 
     districtBorderMaxCount = 4;
     defaultCompletion = 1.0;
@@ -26,6 +28,7 @@ class City {
         this.roads = roads;
         this.polygons = [];
         this.lakes = [];
+        this.rivers = [];
     }
 
     public addNewRoad(distance: number): void {
@@ -234,6 +237,7 @@ class City {
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r]);
         //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(50, 50), 100, 70, 15, Math.PI/10));
+        c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40, 20));
         return c;
     }
 

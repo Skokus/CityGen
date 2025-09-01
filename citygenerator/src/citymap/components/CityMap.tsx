@@ -8,6 +8,7 @@ import GridCity from "../models/squaregridcity/GridCity";
 import gridCity from "../models/squaregridcity/GridCity";
 import PolygonBuildingRenderer from "../renderers/PolygonBuildingRenderer";
 import SubareaPolygon from "../models/area/SubareaPolygon";
+import RiverRenderer from "../renderers/RiverRenderer";
 
 interface CityMapProps {
     zoomScale: number;
@@ -36,6 +37,7 @@ function CityMap(props: CityMapProps) {
         const polr = new PolygonRenderer();
         const br = new BuildingRenderer();
         const pbr = new PolygonBuildingRenderer();
+        const rivr = new RiverRenderer();
 
         if (props.city.polygons.length > 0) {
             for (const p of props.city.polygons) {
@@ -57,6 +59,12 @@ function CityMap(props: CityMapProps) {
             for (const l of props.city.lakes) {
                 polr.setPolygon(l);
                 polr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
+            }
+        }
+        if (props.city.rivers.length > 0) {
+            for (const r of props.city.rivers) {
+                rivr.setRiver(r);
+                rivr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
             }
         }
         for (const r of props.city.roads) {

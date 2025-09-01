@@ -21,7 +21,6 @@ class MainRoad extends Road {
 
     public addBuilding(distance: number, radius: number) {
         const availableSidePoints: SidePoint[] = this.sidePoints.filter((s) => s.isFree());
-        console.log(availableSidePoints);
         const randomPoint = availableSidePoints[Math.floor(Math.random() * availableSidePoints.length)];
         const bAngle = this.angle + Math.PI / 2;
         const side = randomPoint.getRandomSide();
@@ -110,6 +109,7 @@ class MainRoad extends Road {
     public setToWall(){
         this.type = MainRoadType.Wall;
     }
+
 }
 
 export default MainRoad;

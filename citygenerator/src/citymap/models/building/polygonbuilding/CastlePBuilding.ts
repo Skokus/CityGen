@@ -46,7 +46,7 @@ class CastlePBuilding extends PolygonBuilding {
                 min = l;
             }
         }
-        this.towers.push(new TowerBuilding(c.x, c.y, min * ratio * 0.6));
+        this.towers.push(new TowerBuilding(c.x, c.y, min * ratio * 0.8));
     }
 }
 
