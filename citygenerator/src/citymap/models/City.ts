@@ -206,7 +206,7 @@ class City {
     public splitRandomPolygon(): void {
         const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
         if (possiblePolygons.length > 0) {
-            possiblePolygons[0].splitPolygonMultipleTimes(5);
+            possiblePolygons[0].splitPolygonMultipleTimesWithSize(200);
         }
     }
 
@@ -237,7 +237,7 @@ class City {
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r]);
         //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(50, 50), 100, 70, 15, Math.PI/10));
-        c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40, 20));
+        //c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40, 20));
         return c;
     }
 

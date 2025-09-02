@@ -28,6 +28,18 @@ class DistrictPolygon extends Polygon {
         return super.getClockWiseBorderPoints() as MainPoint[];
     }
 
+    public getCompletionRate(): number {
+        let totalArea: number = 0;
+        let completedArea: number = 0;
+        for(let i = 0; i < this.subAreas.length; i++) {
+            totalArea += this.subAreas[i].getArea();
+            if(this.subAreas[i].building !== undefined){
+                completedArea += this.subAreas[i].getArea();
+            }
+        }
+        return completedArea/totalArea;
+    }
+
     public getPoints(): MainPoint[] {
         return super.getPoints() as MainPoint[];
     }
@@ -70,6 +82,26 @@ class DistrictPolygon extends Polygon {
                 newPolygons.push(...a.splitPolygonByLongestRoad());
             }
             this.subAreas = newPolygons;
+        }
+        for(let p of newPolygons) {
+            p.building = HousingPBuilding.createHousingPBuilding(p, 0.90);
+        }
+    }
+
+    public splitPolygonMultipleTimesWithSize(maxsize: number): void {
+        let newPolygons: SubareaPolygon[] = [];
+        let l = newPolygons.length;
+        while(true) {
+            newPolygons = [];
+            for (let a of this.subAreas) {
+                if(a.getArea() > maxsize)
+                    newPolygons.push(...a.splitPolygonByLongestRoad());
+                else newPolygons.push(a);
+            }
+            this.subAreas = newPolygons;
+            if(newPolygons.length === l)
+                break;
+            l = newPolygons.length;
         }
         for(let p of newPolygons) {
             p.building = HousingPBuilding.createHousingPBuilding(p, 0.90);

@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/building/polygonbuilding/CastlePBuilding.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/building/polygonbuilding/CastlePBuilding.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonBuildingRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonBuildingRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,6 +163,8 @@
       <workItem from="1756486890679" duration="1002000" />
       <workItem from="1756656645611" duration="2454000" />
       <workItem from="1756744316663" duration="3754000" />
+      <workItem from="1756810166587" duration="1494000" />
+      <workItem from="1756833317066" duration="4673000" />
     </task>
     <servers />
   </component>
