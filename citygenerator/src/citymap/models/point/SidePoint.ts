@@ -3,8 +3,8 @@ import Building from "../building/Building";
 
 class SidePoint extends Point{
 
-    topBuilding: Building | undefined; //1
-    bottomBuilding: Building | undefined; //-1
+    topBuilding: Building | undefined | null; //1
+    bottomBuilding: Building | undefined | null; //-1
     width: number; //maximum radius of the building
 
     constructor(x: number, y: number, width: number) {
@@ -48,13 +48,19 @@ class SidePoint extends Point{
     }
     public getAllBuildings(){
         let allBuildings: Building[] = [];
-        if(this.topBuilding !== undefined){
+        if(this.topBuilding !== undefined && this.topBuilding !== null){
             allBuildings.push(this.topBuilding);
         }
-        if(this.bottomBuilding !== undefined){
+        if(this.bottomBuilding !== undefined && this.bottomBuilding !== null){
             allBuildings.push(this.bottomBuilding);
         }
         return allBuildings;
+    }
+    public isBottomOccupied(){
+        return this.bottomBuilding !== undefined;
+    }
+    public isTopOccupied(){
+        return this.topBuilding !== undefined;
     }
 }
 

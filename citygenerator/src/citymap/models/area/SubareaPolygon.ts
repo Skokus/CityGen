@@ -4,6 +4,7 @@ import Road from "../road/Road";
 import Point from "../point/Point";
 import PolygonBuilding from "../building/polygonbuilding/PolygonBuilding";
 import Building from "../building/Building";
+import {Md5} from "ts-md5";
 
 class SubareaPolygon extends Polygon{
 
@@ -176,6 +177,15 @@ class SubareaPolygon extends Polygon{
             }
         }
         return min*ratio;
+    }
+
+    public isOccupied(): boolean{
+        return this.building !== undefined;
+    }
+
+    public hashValue(seed: number, iteration: number): number {
+        const hash = Md5.hashStr(seed + "SubareaPolygon" + this.centroid.x + ", " + this.centroid.y + iteration +" area:" + this.getArea()).substring(0,4);
+        return parseInt(hash, 16)/65535;
     }
 
 }

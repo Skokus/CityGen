@@ -6,8 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/River.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/River.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/Point.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/Point.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/RiverPoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/RiverPoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/SidePoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/SidePoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/RiverRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/RiverRoad.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/Road.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/RiverRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/RiverRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,6 +177,21 @@
       <workItem from="1756744316663" duration="3754000" />
       <workItem from="1756810166587" duration="1494000" />
       <workItem from="1756833317066" duration="4673000" />
+      <workItem from="1756843146604" duration="23000" />
+      <workItem from="1756887764438" duration="1302000" />
+      <workItem from="1756988937755" duration="3708000" />
+      <workItem from="1757072391667" duration="894000" />
+      <workItem from="1757080161648" duration="315000" />
+      <workItem from="1757339816051" duration="1080000" />
+      <workItem from="1757519535646" duration="225000" />
+      <workItem from="1759332228566" duration="1220000" />
+      <workItem from="1760637255045" duration="1042000" />
+      <workItem from="1760804282829" duration="2344000" />
+      <workItem from="1760874023738" duration="2711000" />
+      <workItem from="1760890801359" duration="1362000" />
+      <workItem from="1760896731646" duration="6874000" />
+      <workItem from="1760958623268" duration="1429000" />
+      <workItem from="1760968869756" duration="2037000" />
     </task>
     <servers />
   </component>

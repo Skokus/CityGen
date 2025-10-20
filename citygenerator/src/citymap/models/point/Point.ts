@@ -1,4 +1,8 @@
+import River from "../River";
+import Road from "../road/Road";
+
 class Point {
+
     x: number;
     y: number;
 
@@ -21,6 +25,25 @@ class Point {
     public isAboveLine(a: number, b: number){
         return this.y < (a * this.x + b);
     }
+
+    public distanceFromPoint(point: Point){
+        var a = this.x - point.x;
+        var b = this.y - point.y;
+        return Math.sqrt(a*a + b*b)
+    }
+
+    public distanceFromRiver(river: River){
+        let minDistance = Number.MAX_SAFE_INTEGER;
+        for(let riverRoad of river.riverRoads){
+            const dist = Road.distanceFromPoint(this, riverRoad.p1, riverRoad.p2);
+            if(dist < minDistance){
+                minDistance = dist;
+            }
+        }
+        console.log(minDistance);
+        return minDistance;
+    }
+
 }
 
 export default Point;

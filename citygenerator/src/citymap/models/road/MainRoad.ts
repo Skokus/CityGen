@@ -110,6 +110,18 @@ class MainRoad extends Road {
         this.type = MainRoadType.Wall;
     }
 
+    public occupiedPercentage(): number {
+        let occupiedSpots = 0;
+        let allSpots = 0;
+        for (const point of this.sidePoints) {
+            if(point.isTopOccupied())
+                occupiedSpots++;
+            if(point.isBottomOccupied())
+                occupiedSpots++;
+            allSpots += 2;
+        }
+        return occupiedSpots/allSpots;
+    }
 }
 
 export default MainRoad;

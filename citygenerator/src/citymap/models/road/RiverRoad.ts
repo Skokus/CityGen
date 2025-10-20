@@ -1,7 +1,4 @@
 import Road from "./Road";
-import SidePoint from "../point/SidePoint";
-import MainPoint from "../point/MainPoint";
-import MainRoadType from "./MainRoadType";
 import RiverPoint from "../point/RiverPoint";
 
 class RiverRoad extends Road {

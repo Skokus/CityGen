@@ -7,6 +7,8 @@ import DistrictPolygonType from "./area/DistrictPolygonType";
 import LakePolygon from "./area/LakePolygon";
 import Point from "./point/Point";
 import River from "./River";
+import SubareaPolygon from "./area/SubareaPolygon";
+import HousingPBuilding from "./building/polygonbuilding/HousingPBuilding";
 
 class City {
 
@@ -14,6 +16,7 @@ class City {
     polygons: DistrictPolygon[];
     lakes: LakePolygon[];
     rivers: River[];
+    center: Point;
     popRadius = 50;
     angle = Math.PI/9;
 
@@ -23,12 +26,72 @@ class City {
 
     expendRange = 2;
     sideRange = 1;
+    buildingToPolygonRatio = 0.8;
+    iteration = 0;
+    seed = 0;
+
+    polygonBuildingMaxSize = 500;
+    pHouseRandomWage = 0.2;
+    pHouseCenterWage = 1.0;
+    pHouseWaterWage = 1.0;
+    pHouseOccupiedWage = 1.0;
 
     constructor(roads: MainRoad[]) {
         this.roads = roads;
         this.polygons = [];
         this.lakes = [];
         this.rivers = [];
+        this.center = roads[0].getPoint1();
+    }
+
+    public pickBestHousingBuildingCandidate(): SubareaPolygon | undefined{
+        let possibleSpots: SubareaPolygon[] = [];
+        let maxFitValue = 0;
+        let maxSpot: SubareaPolygon | undefined = undefined;
+
+        for(let i = 0; i < this.polygons.length; i++){
+            possibleSpots.push(...this.polygons[i].subAreas.filter((a) => !a.isOccupied()))
+        }
+
+        let maxDistanceFromCenter = 0;
+        let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
+        let maxDistanceFromWater = 0;
+        let minDistanceFromWater = Number.MAX_SAFE_INTEGER;
+
+        for(let spot of possibleSpots){
+            const spotDistanceFromCenter = spot.centroid.distanceFromPoint(this.center);
+            if(spotDistanceFromCenter > maxDistanceFromCenter){
+                maxDistanceFromCenter = spotDistanceFromCenter;
+            }
+            if(spotDistanceFromCenter < minDistanceFromCenter){
+                minDistanceFromCenter = spotDistanceFromCenter;
+            }
+        }
+        if(this.rivers.length > 0){
+            for(let spot of possibleSpots){
+                const spotDistanceFromWater = spot.centroid.distanceFromRiver(this.rivers[0]);
+                if(spotDistanceFromWater > maxDistanceFromWater){
+                    maxDistanceFromWater = spotDistanceFromWater;
+                }
+                if(spotDistanceFromWater < minDistanceFromWater){
+                    minDistanceFromWater = spotDistanceFromWater;
+                }
+            }
+        }
+        for(let spot of possibleSpots){
+            let spotValue = 0;
+            if(minDistanceFromCenter !== maxDistanceFromCenter)
+                spotValue += this.pHouseCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter);
+            if(minDistanceFromWater !== maxDistanceFromWater)
+                spotValue += this.pHouseWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromRiver(this.rivers[0]))/(maxDistanceFromWater-minDistanceFromWater);
+            spotValue += this.pHouseRandomWage * spot.hashValue(this.seed, this.iteration);
+            if(spotValue > maxFitValue){
+                maxFitValue = spotValue;
+                maxSpot = spot;
+            }
+        }
+        console.log(maxSpot);
+        return maxSpot;
     }
 
     public addNewRoad(distance: number): void {
@@ -193,6 +256,13 @@ class City {
         road.addBuilding(distance, radius);
     }
 
+    public addHousingPBuilding(): void {
+        const spot = this.pickBestHousingBuildingCandidate();
+        if(spot !== undefined){
+            spot.building = HousingPBuilding.createHousingPBuilding(spot, this.buildingToPolygonRatio);
+        }
+    }
+
     public getAllBuildings(): Building[] {
         const buildingSet = new Set<Building>();
         for (const road of this.roads) {
@@ -206,7 +276,7 @@ class City {
     public splitRandomPolygon(): void {
         const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
         if (possiblePolygons.length > 0) {
-            possiblePolygons[0].splitPolygonMultipleTimesWithSize(200);
+            possiblePolygons[0].splitPolygonMultipleTimesWithSize(this.polygonBuildingMaxSize);
         }
     }
 
@@ -225,19 +295,19 @@ class City {
     }
 
     public splitRandomPolygonUnevenly(){
-        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2);
         if (possiblePolygons.length > 0) {
             possiblePolygons[0].splitPolygonUnevenly(5);
         }
     }
 
     public static getExampleCity(): City {
-        const p1 = new MainPoint(200, 200, 0);
-        const p2 = new MainPoint(300, 210, 1);
+        const p1 = new MainPoint(500, 500, 0);
+        const p2 = new MainPoint(600, 510, 1);
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r]);
-        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(50, 50), 100, 70, 15, Math.PI/10));
-        //c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40, 20));
+        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 250, 25, Math.PI/10));
+        c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40));
         return c;
     }
 
@@ -357,6 +427,7 @@ class City {
                 }
             }
         }
+        this.pickBestHousingBuildingCandidate();
     }
 
     public addRoadCompletionScalar(amount: number){

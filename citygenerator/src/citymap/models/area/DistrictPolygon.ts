@@ -94,17 +94,14 @@ class DistrictPolygon extends Polygon {
         while(true) {
             newPolygons = [];
             for (let a of this.subAreas) {
-                if(a.getArea() > maxsize)
+                if (a.getArea() > maxsize)
                     newPolygons.push(...a.splitPolygonByLongestRoad());
                 else newPolygons.push(a);
             }
             this.subAreas = newPolygons;
-            if(newPolygons.length === l)
+            if (newPolygons.length === l)
                 break;
             l = newPolygons.length;
-        }
-        for(let p of newPolygons) {
-            p.building = HousingPBuilding.createHousingPBuilding(p, 0.90);
         }
     }
 
@@ -178,6 +175,18 @@ class DistrictPolygon extends Polygon {
         for(let road of this.getRoads()) {
             road.addRankOfPolygon(this.rank);
         }
+    }
+
+    public occupiedPercentage(): number{
+        var totalArea = 0;
+        var occupiedArea = 0;
+        for (const area of this.subAreas) {
+            if(area.isOccupied()){
+                occupiedArea += area.getArea();
+            }
+            totalArea += area.getArea();
+        }
+        return occupiedArea/totalArea;
     }
 
 }

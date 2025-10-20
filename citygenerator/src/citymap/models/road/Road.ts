@@ -144,6 +144,7 @@ class Road {
         this.completionRate = r;
         this.completionPoint = this.getPointFromRoadScalar(r);
     }
+
 }
 
 export default Road;

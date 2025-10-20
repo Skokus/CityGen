@@ -15,17 +15,13 @@ class RiverRenderer implements Renderer{
         if(this.river.riverRoads.length === 0)
             return;
         ctx.beginPath();
-        ctx.fillStyle = "#0056ae";
         let points = this.river.getRiverPoints();
-        ctx.moveTo(scale*(points[0].rightPoint.x + xOffSet), scale*(points[0].rightPoint.y + yOffSet));
+        ctx.moveTo(scale*(points[0].x + xOffSet), scale*(points[0].y + yOffSet));
         for(let i = 1; i < points.length; i++){
-            ctx.lineTo(scale*(points[i].rightPoint.x + xOffSet), scale*(points[i].rightPoint.y + yOffSet));
+            ctx.lineTo(scale*(points[i].x + xOffSet), scale*(points[i].y + yOffSet));
         }
-        for(let i = points.length - 1; i >= 0; i--){
-            ctx.lineTo(scale*(points[i].leftPoint.x + xOffSet), scale*(points[i].leftPoint.y + yOffSet));
-        }
-        ctx.strokeStyle = "black";
-        ctx.fill();
+        ctx.lineWidth = scale * 3;
+        ctx.strokeStyle = "#0056ae";
         ctx.stroke();
         ctx.closePath();
     }
