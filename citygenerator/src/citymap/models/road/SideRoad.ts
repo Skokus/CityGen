@@ -1,22 +1,24 @@
-import SquareBuilding from "../building/SquareBuilding";
 import Road from "./Road";
-import SidePoint from "../point/SidePoint";
-import MainPoint from "../point/MainPoint";
-import Building from "../building/Building";
 import Point from "../point/Point";
+import MainRoad from "./MainRoad";
 
 class SideRoad extends Road{
 
-    isMainRoad: boolean;
+    mainRoad: MainRoad | undefined;
 
-    constructor(p1: Point, p2: Point, isMainRoad: boolean) {
+    constructor(p1: Point, p2: Point, mainRoad: MainRoad | undefined) {
         super(p1, p2);
-        this.isMainRoad = isMainRoad;
+        this.mainRoad = mainRoad;
     }
 
     public splitRoad(p: Point): SideRoad[]{
-        return [new SideRoad(this.p1, p, this.isMainRoad), new SideRoad(p, this.p2, this.isMainRoad)];
+        return [new SideRoad(this.p1, p, this.mainRoad), new SideRoad(p, this.p2, this.mainRoad)];
     }
+
+    get isMainRoad(): boolean {
+        return this.mainRoad instanceof MainRoad;
+    }
+
 }
 
 export default SideRoad;

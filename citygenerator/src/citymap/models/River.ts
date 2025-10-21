@@ -1,6 +1,5 @@
 import RiverRoad from "./road/RiverRoad";
 import RiverPoint from "./point/RiverPoint";
-import riverPoint from "./point/RiverPoint";
 import Point from "./point/Point";
 
 class River {

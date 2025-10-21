@@ -28,6 +28,17 @@ class MainRoad extends Road {
         randomPoint.buildBuilding(side, new SquareBuilding(bCenter.x, bCenter.y, radius, bAngle));
     }
 
+    public removeBuilding(building: Building){
+        for(let sidepoint of this.sidePoints){
+            if(sidepoint.topBuilding === building){
+                sidepoint.topBuilding = null;
+            }
+            else if(sidepoint.bottomBuilding === building){
+                sidepoint.bottomBuilding = null;
+            }
+        }
+    }
+
     public getAllBuildings(): Building[] {
         let allBuildings: Building[] = [];
         for (const p of this.sidePoints) {

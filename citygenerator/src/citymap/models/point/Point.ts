@@ -1,4 +1,3 @@
-import River from "../River";
 import Road from "../road/Road";
 
 class Point {
@@ -32,15 +31,14 @@ class Point {
         return Math.sqrt(a*a + b*b)
     }
 
-    public distanceFromRiver(river: River){
+    public distanceFromWater(roads: Road[]){
         let minDistance = Number.MAX_SAFE_INTEGER;
-        for(let riverRoad of river.riverRoads){
+        for(let riverRoad of roads){
             const dist = Road.distanceFromPoint(this, riverRoad.p1, riverRoad.p2);
             if(dist < minDistance){
                 minDistance = dist;
             }
         }
-        console.log(minDistance);
         return minDistance;
     }
 
