@@ -13,13 +13,13 @@ import CastlePBuilding from "../building/polygonbuilding/CastlePBuilding";
 
 class DistrictPolygon extends Polygon {
 
-    subAreas: SubareaPolygon[];
+    subAreas: SubareaPolygon;
     rank: number;
     type: DistrictPolygonType;
 
     constructor(roads: MainRoad[]) {
         super(roads);
-        this.subAreas = [this.createInitialSubArea(roads)];
+        this.subAreas = this.createInitialSubArea(roads);
         this.rank = 0;
         this.type = DistrictPolygonType.Farm;
     }
@@ -50,71 +50,23 @@ class DistrictPolygon extends Polygon {
         return false;
     }
 
-    public splitPolygonByLongestRoad(): Polygon[] {
-        this.subAreas.push(...this.subAreas[0].splitPolygonByLongestRoad());
-        this.subAreas.shift();
-        return [this];
-    }
-
-    public splitPolygonWithSmallerPolygon(ratio: number): Polygon[] {
-        this.subAreas.push(...this.subAreas[0].splitPolygonWithSmallerPolygon(ratio));
-        this.subAreas.shift();
-        return [this];
-    }
-
     public splitPolygonMultipleTimesWithSize(maxsize: number): void {
-        let newPolygons: SubareaPolygon[] = [];
-        let l = newPolygons.length;
-        while(true) {
-            newPolygons = [];
-            for (let a of this.subAreas) {
-                if (a.getArea() > maxsize)
-                    newPolygons.push(...a.splitPolygonByLongestRoad());
-                else newPolygons.push(a);
-            }
-            this.subAreas = newPolygons;
-            if (newPolygons.length === l)
-                break;
-            l = newPolygons.length;
-        }
+        this.subAreas.splitAboveSize(maxsize);
     }
 
     public splitPolygonBySmallerPolygon(ratio: number): void {
-        let newPolygons: SubareaPolygon[] = [];
-        for (let a of this.subAreas) {
-            newPolygons.push(...a.splitPolygonWithSmallerPolygon(ratio));
-        }
-        this.subAreas = newPolygons;
-        const c = this.subAreas[0];
-        this.subAreas[0].accessory = new FountainBuilding(c.centroid.x, c.centroid.y, c.getAccessoryRadius(0.6));
-        for(let i = 1; i < newPolygons.length; i++) {
-            this.subAreas[i].building = MarketBoothPBuilding.createMarketBoothPBuilding(this.subAreas[i], 0.80);
-        }
-    }
-
-    public splitPolygonUnevenly(n: number): void {
-        let newPolygons: SubareaPolygon[] = [];
-        for (let a of this.subAreas) {
-            newPolygons.push(...a.splitPolygonByLongestRoad());
-        }
-        this.subAreas = [newPolygons[0]];
-        this.subAreas[0].building = ChurchPBuilding.createChurchPBuilding(this.subAreas[0], 0.90);
-        newPolygons.shift();
-        for (let i = 1; i < n; i++) {
-            let temp = [];
-            for (let i = 0; i < newPolygons.length; i++) {
-                temp.push(...newPolygons[i].splitPolygonByLongestRoad());
+        this.subAreas.splitPolygonWithSmallerPolygon(ratio);
+        if(this.subAreas.subPolygons !== undefined) {
+            const c = this.subAreas.subPolygons[0];
+            this.subAreas.subPolygons[0].accessory = new FountainBuilding(c.centroid.x, c.centroid.y, c.getAccessoryRadius(0.6));
+            for(let i = 1; i < this.subAreas.subPolygons.length; i++) {
+                this.subAreas.subPolygons[i].building = MarketBoothPBuilding.createMarketBoothPBuilding(this.subAreas.subPolygons[i], 0.80);
             }
-            newPolygons = temp;
-        }
-        this.subAreas.push(...newPolygons);
-        for(let i = 1; i < this.subAreas.length; i++) {
-            this.subAreas[i].building = HousingPBuilding.createHousingPBuilding(this.subAreas[i], 0.90);
         }
     }
 
     public createCastle(ratio: number): void {
-        this.subAreas[0].building = CastlePBuilding.createCastlePBuilding(this.subAreas[0], ratio);
+        //this.subAreas[0].building = CastlePBuilding.createCastlePBuilding(this.subAreas[0], ratio);
     }
 
     protected createInitialSubArea(roads: Road[]): SubareaPolygon {
@@ -152,15 +104,7 @@ class DistrictPolygon extends Polygon {
     }
 
     public occupiedPercentage(): number{
-        var totalArea = 0;
-        var occupiedArea = 0;
-        for (const area of this.subAreas) {
-            if(area.isOccupied()){
-                occupiedArea += area.getArea();
-            }
-            totalArea += area.getArea();
-        }
-        return occupiedArea/totalArea;
+        return 1;
     }
 
 }

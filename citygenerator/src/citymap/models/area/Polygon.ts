@@ -93,13 +93,6 @@ class Polygon {
         return true;
     }
 
-    public splitPolygonByLongestRoad(): Polygon[] {
-        return [this];
-    }
-
-    public splitPolygonWithSmallerPolygon(ratio: number): Polygon[] {
-        return [this];
-    }
 }
 
 export default Polygon;

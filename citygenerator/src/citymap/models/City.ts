@@ -53,7 +53,7 @@ class City {
         let waterRoads: Road[] = [];
 
         for(let i = 0; i < this.polygons.length; i++){
-            possibleSpots.push(...this.polygons[i].subAreas.filter((a) => (!a.isOccupied() && a.containsMainRoads())))
+            possibleSpots.push(...this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.containsMainRoads())))
         }
 
         let maxDistanceFromCenter = 0;
@@ -84,7 +84,7 @@ class City {
             }
         }
         for(let i = 0; i < this.polygons.length; i++){
-            var spots = this.polygons[i].subAreas.filter((a) => (!a.isOccupied() && a.containsMainRoads()));
+            var spots = this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.containsMainRoads()));
             for(let spot of spots){
                 let spotValue = 0;
                 if(minDistanceFromCenter !== maxDistanceFromCenter)
@@ -283,31 +283,28 @@ class City {
     }
 
     public splitRandomPolygon(): void {
-        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.subPolygons === undefined)
         if (possiblePolygons.length > 0) {
             possiblePolygons[0].splitPolygonMultipleTimesWithSize(this.polygonBuildingMaxSize);
         }
     }
 
     public splitRandomPolygonWithSmallerPolygon(ratio: number): void {
-        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2)
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.subPolygons === undefined)
         if (possiblePolygons.length > 0) {
             possiblePolygons[0].splitPolygonBySmallerPolygon(ratio);
         }
     }
 
     public createCastle(ratio: number) : void {
-        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2  && p.subAreas[0].building === undefined)
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.subPolygons === undefined)
         if (possiblePolygons.length > 0) {
             possiblePolygons[0].createCastle(ratio);
         }
     }
 
     public splitRandomPolygonUnevenly(){
-        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.length < 2);
-        if (possiblePolygons.length > 0) {
-            possiblePolygons[0].splitPolygonUnevenly(5);
-        }
+
     }
 
     public static getExampleCity(): City {

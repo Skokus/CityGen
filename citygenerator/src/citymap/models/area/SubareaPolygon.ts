@@ -16,7 +16,37 @@ class SubareaPolygon extends Polygon{
         return this.roads as SideRoad[];
     }
 
-    public splitPolygonByLongestRoad(): SubareaPolygon[] {
+    public getAllPolygons(): SubareaPolygon[] {
+        let all: SubareaPolygon[] = [];
+        if(this.subPolygons === undefined || this.subPolygons.length === 0){
+            return [this];
+        }
+        for(let sub of this.subPolygons){
+            if(sub !== undefined && this.subPolygons.length > 0){
+                for(let a of this.subPolygons){
+                    all.push(...a.getAllPolygons());
+                }
+            } else {
+                all.push(this);
+            }
+        }
+        return all;
+    }
+
+    public splitAboveSize(maxsize: number): void {
+        if(this.getArea() > maxsize){
+            this.splitPolygonByLongestRoad();
+            if(this.subPolygons !== undefined) {
+                for(const a of this.subPolygons){
+                    a.splitAboveSize(maxsize);
+                }
+            }
+        } else {
+            this.subPolygons = [];
+        }
+    }
+
+    public splitPolygonByLongestRoad(): void {
         let roads = this.getRoads();
         var i = this.containsMainRoads() ? this.getLongestRoadId() : this.getLongestSideRoadId();
         var i2 = 0;
@@ -54,7 +84,6 @@ class SubareaPolygon extends Polygon{
         bordersAbove.push(newRoad);
         bordersBelow.push(newRoad);
         this.subPolygons = [new SubareaPolygon(bordersAbove), new SubareaPolygon(bordersBelow)];
-        return [new SubareaPolygon(bordersAbove), new SubareaPolygon(bordersBelow)];
     }
 
     public buildBuilding(pbuilding: PolygonBuilding){
@@ -76,7 +105,7 @@ class SubareaPolygon extends Polygon{
         this.building = pbuilding;
     }
 
-    public splitPolygonWithSmallerPolygon(ratio: number): SubareaPolygon[] {
+    public splitPolygonWithSmallerPolygon(ratio: number): void {
         let newPolygons: SubareaPolygon[] = [];
         let smallerPolygonPoints: Point[] = [];
         for(const point of this.getClockWiseBorderPoints()) {
@@ -98,7 +127,6 @@ class SubareaPolygon extends Polygon{
             newPolygons.push(...rectPolygon.splitRectangle(1, 0,10));
         }
         this.subPolygons = newPolygons;
-        return newPolygons;
     }
 
     public splitRectangle(baseRoadId: number, counterBaseRoadId: number, distance: number): SubareaPolygon[] {
