@@ -5,7 +5,6 @@ import Point from "../point/Point";
 import PolygonBuilding from "../building/polygonbuilding/PolygonBuilding";
 import Building from "../building/Building";
 import {Md5} from "ts-md5";
-import MainRoad from "../road/MainRoad";
 
 class SubareaPolygon extends Polygon{
 
@@ -134,24 +133,6 @@ class SubareaPolygon extends Polygon{
         return newPolygons;
     }
 
-    public getLongestMainRoadId(): number {
-        const maxroads = this.getRoads().filter(p => p.isMainRoad);
-        let max = maxroads[0].length;
-        let maxRoad = maxroads[0];
-        for(let i = 1; i < maxroads.length; i++){
-            if(maxroads[i].length > max){
-                max = maxroads[i].length;
-                maxRoad = maxroads[i];
-            }
-        }
-        for(let i = 0; i < this.getRoads().length; i++){
-            if(maxRoad === this.getRoads()[i]){
-                return i;
-            }
-        }
-        return 0;
-    }
-
     public getLongestSideRoadId(): number {
         const sideroads = this.getRoads().filter(p => !p.isMainRoad);
         let max = sideroads[0].length;
@@ -168,15 +149,6 @@ class SubareaPolygon extends Polygon{
             }
         }
         return 0;
-    }
-
-    public containsSideRoads(): boolean {
-        for(let road of this.getRoads()){
-            if(!road.isMainRoad){
-                return true;
-            }
-        }
-        return false;
     }
 
     public containsMainRoads(): boolean {
