@@ -10,6 +10,7 @@ class SubareaPolygon extends Polygon{
 
     building: PolygonBuilding | undefined;
     accessory: Building | undefined;
+    subPolygons: SubareaPolygon[] | undefined = undefined;
 
     public getRoads(): SideRoad[]{
         return this.roads as SideRoad[];
@@ -52,6 +53,7 @@ class SubareaPolygon extends Polygon{
         var newRoad = new SideRoad(p1, p2, undefined);
         bordersAbove.push(newRoad);
         bordersBelow.push(newRoad);
+        this.subPolygons = [new SubareaPolygon(bordersAbove), new SubareaPolygon(bordersBelow)];
         return [new SubareaPolygon(bordersAbove), new SubareaPolygon(bordersBelow)];
     }
 
@@ -95,6 +97,7 @@ class SubareaPolygon extends Polygon{
             const rectPolygon = new SubareaPolygon([road1, road2, road3, road4]);
             newPolygons.push(...rectPolygon.splitRectangle(1, 0,10));
         }
+        this.subPolygons = newPolygons;
         return newPolygons;
     }
 
@@ -130,6 +133,7 @@ class SubareaPolygon extends Polygon{
             const road2 = new SideRoad(basePoints[i+1], counterBasePoints[i+1], undefined);
             newPolygons.push(new SubareaPolygon([road1, betweenRoads[i], road2, betweenRoads[i+1]]));
         }
+        this.subPolygons = newPolygons;
         return newPolygons;
     }
 
