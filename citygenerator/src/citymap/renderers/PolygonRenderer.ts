@@ -29,9 +29,9 @@ class PolygonRenderer implements Renderer{
         for(let i = 1; i < points.length; i++){
             ctx.lineTo(scale*(points[i].x + xOffSet), scale*(points[i].y + yOffSet));
         }
-        ctx.fill();
         ctx.strokeStyle = "black";
         ctx.stroke();
+        ctx.fill();
         ctx.closePath();
     }
 

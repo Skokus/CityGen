@@ -9,6 +9,8 @@ import Point from "./point/Point";
 import River from "./River";
 import SubareaPolygon from "./area/SubareaPolygon";
 import HousingPBuilding from "./building/polygonbuilding/HousingPBuilding";
+import SidePoint from "./point/SidePoint";
+import SquareBuilding from "./building/SquareBuilding";
 
 class City {
 
@@ -45,7 +47,7 @@ class City {
         this.center = roads[0].getPoint1();
     }
 
-    public pickBestHousingBuildingCandidate(): SubareaPolygon | undefined {
+    public pickBestPHousingBuildingCandidate(): SubareaPolygon | undefined {
 
         let possibleSpots: SubareaPolygon[] = [];
         let maxFitValue = 0;
@@ -100,6 +102,24 @@ class City {
             }
         }
         return maxSpot;
+    }
+
+    public pickBestHousingBuildingCandidate(): SidePoint | undefined {
+        let allFreeSpots: SidePoint[] = [];
+        for(const r of this.roads){
+            allFreeSpots.push(...r.getAllFreeSpots());
+        }
+        if(allFreeSpots.length > 0){
+            return allFreeSpots[0];
+        }
+        return undefined;
+    }
+
+    public addBuilding(): void {
+        const spot = this.pickBestHousingBuildingCandidate();
+        if(spot !== undefined){
+            spot.buildBuilding(new SquareBuilding(spot.x, spot.y, spot.radius, spot.angle));
+        }
     }
 
     public addNewRoad(distance: number): void {
@@ -259,14 +279,8 @@ class City {
         return;
     }
 
-    public addBuilding(distance: number, radius: number): void {
-        const posRoads = this.roads;
-        const road = posRoads[Math.floor(Math.random() * posRoads.length)];
-        road.addBuilding(distance, radius);
-    }
-
     public addHousingPBuilding(): void {
-        const spot = this.pickBestHousingBuildingCandidate();
+        const spot = this.pickBestPHousingBuildingCandidate();
         if(spot !== undefined){
             spot.buildBuilding(HousingPBuilding.createHousingPBuilding(spot, this.buildingToPolygonRatio));
         }
@@ -301,10 +315,6 @@ class City {
         if (possiblePolygons.length > 0) {
             possiblePolygons[0].createCastle(ratio);
         }
-    }
-
-    public splitRandomPolygonUnevenly(){
-
     }
 
     public static getExampleCity(): City {
@@ -433,7 +443,7 @@ class City {
                 }
             }
         }
-        this.pickBestHousingBuildingCandidate();
+        this.pickBestPHousingBuildingCandidate();
     }
 
     public addRoadCompletionScalar(amount: number){

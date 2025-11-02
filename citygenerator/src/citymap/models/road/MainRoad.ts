@@ -8,54 +8,70 @@ import MainRoadType from "./MainRoadType";
 
 class MainRoad extends Road {
 
-    sidePoints: SidePoint[];
+    topSidePoints: SidePoint[];
+    bottomSidePoints: SidePoint[];
     connectedPolygonRanks: number[];
     type: MainRoadType;
 
     constructor(p1: MainPoint, p2: MainPoint, completionRate?: number) {
         super(p1, p2, completionRate);
-        this.sidePoints = [];
+        this.topSidePoints = [];
+        this.bottomSidePoints = [];
         this.connectedPolygonRanks = [];
         this.type = MainRoadType.Road;
     }
 
-    public addBuilding(distance: number, radius: number) {
-        const availableSidePoints: SidePoint[] = this.sidePoints.filter((s) => s.isFree());
-        const randomPoint = availableSidePoints[Math.floor(Math.random() * availableSidePoints.length)];
-        const bAngle = this.angle + Math.PI / 2;
-        const side = randomPoint.getRandomSide();
-        const bCenter = randomPoint.getOffsetDistancedPoint(distance * side, bAngle, radius);
-        randomPoint.buildBuilding(side, new SquareBuilding(bCenter.x, bCenter.y, radius, bAngle));
+    public getAllFreeSpots(): SidePoint[] {
+        let freeSpots = [];
+        freeSpots.push(...this.topSidePoints.filter(sidePoint => sidePoint.isFree()));
+        freeSpots.push(...this.bottomSidePoints.filter(sidePoint => sidePoint.isFree()));
+        return freeSpots;
     }
 
     public removeBuilding(building: Building){
-        for(let sidepoint of this.sidePoints){
-            if(sidepoint.topBuilding === building){
-                sidepoint.topBuilding = null;
+        for(let sidepoint of this.topSidePoints) {
+            if (sidepoint.building === building) {
+                sidepoint.building = null;
             }
-            else if(sidepoint.bottomBuilding === building){
-                sidepoint.bottomBuilding = null;
+        }
+        for(let sidepoint of this.bottomSidePoints) {
+            if (sidepoint.building === building) {
+                sidepoint.building = null;
             }
         }
     }
 
     public getAllBuildings(): Building[] {
         let allBuildings: Building[] = [];
-        for (const p of this.sidePoints) {
+        for (const p of this.topSidePoints) {
+            allBuildings.push(...p.getAllBuildings());
+        }
+        for (const p of this.bottomSidePoints) {
             allBuildings.push(...p.getAllBuildings());
         }
         return allBuildings;
     }
 
     public createSidePoints(distance: number): void {
-        if (distance > this.length || this.sidePoints.length > 0) {
+        if (distance > this.length || this.topSidePoints.length > 0) {
             return;
         }
+        let newSidePoints: SidePoint[] = [];
+        let newSidePoints2: SidePoint[] = [];
         const n = Math.floor(this.length/distance);
         const ratio = 1 / n;
         for (let i = 0; i < n; i++) {
-            let s = this.createSidePointOnRoad(i * ratio + ratio / 2, this.length / distance);
-            this.sidePoints.push(s);
+            let s = this.createSidePointNextToRoad(i * ratio + ratio / 2, this.length / distance, 1);
+            newSidePoints.push(s);
+            let s2 = this.createSidePointNextToRoad(i * ratio + ratio / 2, this.length / distance, -1);
+            newSidePoints2.push(s2);
+        }
+        if(newSidePoints[0].isAboveLine(this.slope, this.yInter)){
+            this.topSidePoints = newSidePoints;
+            this.bottomSidePoints = newSidePoints2;
+        } else {
+            this.topSidePoints = newSidePoints2;
+            this.bottomSidePoints = newSidePoints;
         }
     }
 
@@ -94,12 +110,14 @@ class MainRoad extends Road {
         return [new MainRoad(this.p1 as MainPoint, p as MainPoint), new MainRoad(p as MainPoint, this.p2 as MainPoint)];
     }
 
-    private createSidePointOnRoad(scalar: number, width: number): SidePoint {
+    //rotation either -1 or 1
+    private createSidePointNextToRoad(scalar: number, distance: number, rotation: number): SidePoint {
         const distX = this.p2.x - this.p1.x;
         const distY = this.p2.y - this.p1.y;
         const modX = (distX * scalar) + this.p1.x;
         const modY = (distY * scalar) + this.p1.y;
-        return new SidePoint(modX, modY, width);
+        const p = new Point(modX, modY).getDistancedPoint(distance, this.angle + rotation * Math.PI/2);
+        return new SidePoint(p.x, p.y, distance, this.angle + Math.PI/2);
     }
 
     public addCompletionScalar(scalar: number) {
@@ -124,15 +142,10 @@ class MainRoad extends Road {
     public occupiedPercentage(): number {
         let occupiedSpots = 0;
         let allSpots = 0;
-        for (const point of this.sidePoints) {
-            if(point.isTopOccupied())
-                occupiedSpots++;
-            if(point.isBottomOccupied())
-                occupiedSpots++;
-            allSpots += 2;
-        }
+
         return occupiedSpots/allSpots;
     }
+
 }
 
 export default MainRoad;

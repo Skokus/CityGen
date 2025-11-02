@@ -3,65 +3,41 @@ import Building from "../building/Building";
 
 class SidePoint extends Point{
 
-    topBuilding: Building | undefined | null; //1
-    bottomBuilding: Building | undefined | null; //-1
-    width: number; //maximum radius of the building
+    building: Building | undefined | null; //1
+    radius: number;
+    angle: number;
 
-    constructor(x: number, y: number, width: number) {
+    constructor(x: number, y: number, radius: number, angle: number) {
         super(x, y);
-        this.topBuilding = undefined;
-        this.bottomBuilding = undefined;
-        this.width = width;
-    }
-
-    public getRandomSide(): number{
-        if(this.bottomBuilding !== undefined && this.topBuilding !== undefined){
-            return Math.random() > 0.5 ? 1 : -1;
-        }
-        if(!this.topBuilding){
-            return 1;
-        }
-        if (!this.bottomBuilding) {
-            return -1;
-        }
-        return 0;
+        this.building = undefined;
+        this.radius = radius;
+        this.angle = angle;
     }
 
     public isFree(): boolean{
-        return this.bottomBuilding === undefined || this.topBuilding === undefined;
+        return this.building === undefined
     }
 
-    public getOffsetDistancedPoint(distance: number, angle: number, radius: number): Point {
-        const maxOffSet = (this.width - radius)/2;
+    public getOffsetDistancedPoint(width: number, distance: number, angle: number, radius: number): Point {
+        const maxOffSet = (width - radius)/2;
         const side = Math.random() > 0.5 ? 1 : -1; //choosing the direction in which the offset will go
         const offset = side * Math.random() * maxOffSet;
         const newX = this.x + distance * Math.cos(angle) + offset * Math.cos(angle + Math.PI/2 * side);
         const newY = this.y + distance * Math.sin(angle) + offset * Math.sin(angle + Math.PI/2 * side);
         return new Point(newX, newY);
     }
-    public buildBuilding(side: number, building: Building): void {
-        if(side === 1){
-            this.topBuilding = building;
-        } else if(side === -1){
-            this.bottomBuilding = building;
+
+    public buildBuilding(building: Building): void {
+        this.building = building;
+    }
+
+    public getAllBuildings(): Building[]{
+        if(this.building !== undefined && this.building !== null){
+            return [this.building];
         }
+        return [];
     }
-    public getAllBuildings(){
-        let allBuildings: Building[] = [];
-        if(this.topBuilding !== undefined && this.topBuilding !== null){
-            allBuildings.push(this.topBuilding);
-        }
-        if(this.bottomBuilding !== undefined && this.bottomBuilding !== null){
-            allBuildings.push(this.bottomBuilding);
-        }
-        return allBuildings;
-    }
-    public isBottomOccupied(){
-        return this.bottomBuilding !== undefined;
-    }
-    public isTopOccupied(){
-        return this.topBuilding !== undefined;
-    }
+
 }
 
 export default SidePoint;

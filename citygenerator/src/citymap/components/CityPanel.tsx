@@ -46,7 +46,7 @@ function CityPanel() {
     }
 
     function addBuilding() {
-        city.addBuilding(getRandomBuildingDistance(), getRandomBuildingSize());
+        city.addBuilding();
         setCity(city);
         setCounter(counter + 1);
     }
@@ -59,12 +59,6 @@ function CityPanel() {
 
     function splitPolygonWithSmallerPolygon() {
         city.splitRandomPolygonWithSmallerPolygon(0.7);
-        setCity(city);
-        setCounter(counter + 1);
-    }
-
-    function splitPolygonUnevenly() {
-        city.splitRandomPolygonUnevenly();
         setCity(city);
         setCounter(counter + 1);
     }
@@ -150,10 +144,6 @@ function CityPanel() {
                 <button onClick={() => {
                     splitPolygonWithSmallerPolygon()
                 }}>Split with marketplace
-                </button>
-                <button onClick={() => {
-                    splitPolygonUnevenly()
-                }}>Split with church
                 </button>
                 <button onClick={() => {
                     createCastle()
