@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/SidePoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/SidePoint.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +186,8 @@
       <workItem from="1761850301233" duration="1519000" />
       <workItem from="1762103396575" duration="1489000" />
       <workItem from="1762111084560" duration="4807000" />
-      <workItem from="1762193522257" duration="2367000" />
+      <workItem from="1762193522257" duration="2543000" />
+      <workItem from="1762204180264" duration="3819000" />
     </task>
     <servers />
   </component>

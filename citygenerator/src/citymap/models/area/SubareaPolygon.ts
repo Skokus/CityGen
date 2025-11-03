@@ -33,6 +33,24 @@ class SubareaPolygon extends Polygon{
         return all;
     }
 
+    public getPolygonsAboveSize(minsize: number): SubareaPolygon[]{
+        let all: SubareaPolygon[] = [];
+        if(this.getArea() < minsize){
+            return [];
+        } else if(this.subPolygons === undefined || this.subPolygons.length === 0){
+            return [this];
+        } else {
+            for(let sub of this.subPolygons){
+                all.push(...sub.getPolygonsAboveSize(minsize));
+            }
+        }
+        if(all.length > 0){
+            return all;
+        } else {
+            return [this];
+        }
+    }
+
     public splitAboveSize(maxsize: number): void {
         if(this.getArea() > maxsize){
             this.splitPolygonByLongestRoad();
@@ -103,6 +121,20 @@ class SubareaPolygon extends Polygon{
             }
         }
         this.building = pbuilding;
+        if(this.subPolygons !== undefined){
+            for(let sub of this.subPolygons){
+                sub.removeBuilding();
+            }
+        }
+    }
+
+    private removeBuilding(): void {
+        this.building = undefined;
+        if(this.subPolygons !== undefined) {
+            for(let sub of this.subPolygons){
+                sub.removeBuilding();
+            }
+        }
     }
 
     public splitPolygonWithSmallerPolygon(ratio: number): void {
@@ -201,6 +233,21 @@ class SubareaPolygon extends Polygon{
             }
         }
         return min*ratio;
+    }
+
+    public getOccupationRate(): number {
+        if(this.isOccupied()){
+            return 1;
+        }
+        if(this.subPolygons === undefined || this.subPolygons.length === 0){
+            return this.isOccupied() ? 0 : 1;
+        } else {
+            let ocpd = 0;
+            for(const p of this.subPolygons){
+                ocpd += p.getOccupationRate()*p.getArea()/this.getArea();
+            }
+            return ocpd;
+        }
     }
 
     public isOccupied(): boolean{
