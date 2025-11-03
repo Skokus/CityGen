@@ -1,5 +1,6 @@
 import Point from "./Point";
 import Building from "../building/Building";
+import {Md5} from "ts-md5";
 
 class SidePoint extends Point{
 
@@ -38,6 +39,10 @@ class SidePoint extends Point{
         return [];
     }
 
+    public hashValue(seed: number, iteration: number): number {
+        const hash = Md5.hashStr(seed + "SidePoint" + this.x + ", " + this.y + iteration + " area:" + this.angle).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
 }
 
 export default SidePoint;

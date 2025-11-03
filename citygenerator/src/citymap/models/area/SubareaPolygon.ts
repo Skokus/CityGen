@@ -90,11 +90,11 @@ class SubareaPolygon extends Polygon{
         for(let road of this.getRoads()){
             if(road.mainRoad !== undefined){
                 for(let building of road.mainRoad.getAllBuildings()){
-                    if(building.point.distanceFromPoint(this.centroid) < building.radius){
+                    if(Math.abs(building.point.distanceFromPoint(this.centroid) - building.radius) <= 0.00001){
                         road.mainRoad.removeBuilding(building);
                     }
                     for(let border of this.getRoads()){
-                        if(Road.distanceFromPoint(building.point, border.p1, border.p2) < building.radius){
+                        if(Math.abs(Road.distanceFromPoint(building.point, border.p1, border.p2) - building.radius) <= 0.00001){
                             road.mainRoad.removeBuilding(building);
                             break;
                         }

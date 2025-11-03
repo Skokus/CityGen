@@ -142,8 +142,26 @@ class MainRoad extends Road {
     public occupiedPercentage(): number {
         let occupiedSpots = 0;
         let allSpots = 0;
-
-        return occupiedSpots/allSpots;
+        for(const p of this.topSidePoints){
+            if(p.building !== undefined && p.building !== null){
+                occupiedSpots++;
+                allSpots++;
+            } else if(p.building === undefined){
+                occupiedSpots++;
+            }
+        }
+        for(const p of this.bottomSidePoints){
+            if(p.building !== undefined && p.building !== null){
+                occupiedSpots++;
+                allSpots++;
+            } else if(p.building === undefined){
+                occupiedSpots++;
+            }
+        }
+        if(allSpots !== 0){
+            return occupiedSpots/allSpots;
+        }
+        return 0;
     }
 
 }

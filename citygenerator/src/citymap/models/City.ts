@@ -39,6 +39,11 @@ class City {
     pHouseWaterWage = 1.0;
     pHouseOccupiedWage = 1.0;
 
+    houseRandomWage = 0.2;
+    houseCenterWage = 1.0;
+    houseWaterWage = 1.0;
+    houseOccupiedWage = 0;
+
     constructor(roads: MainRoad[]) {
         this.roads = roads;
         this.polygons = [];
@@ -106,13 +111,56 @@ class City {
 
     public pickBestHousingBuildingCandidate(): SidePoint | undefined {
         let allFreeSpots: SidePoint[] = [];
+        let maxFitValue = 0;
+        let maxSpot: SidePoint | undefined = undefined;
+        let waterRoads: Road[] = [];
         for(const r of this.roads){
             allFreeSpots.push(...r.getAllFreeSpots());
         }
-        if(allFreeSpots.length > 0){
-            return allFreeSpots[0];
+        let maxDistanceFromCenter = 0;
+        let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
+        let maxDistanceFromWater = 0;
+        let minDistanceFromWater = Number.MAX_SAFE_INTEGER;
+
+        for(let spot of allFreeSpots){
+            const spotDistanceFromCenter = spot.distanceFromPoint(this.center);
+            if(spotDistanceFromCenter > maxDistanceFromCenter){
+                maxDistanceFromCenter = spotDistanceFromCenter;
+            }
+            if(spotDistanceFromCenter < minDistanceFromCenter){
+                minDistanceFromCenter = spotDistanceFromCenter;
+            }
         }
-        return undefined;
+
+        if(this.rivers.length > 0){
+            waterRoads.push(...this.rivers[0].riverRoads);
+            for(let spot of allFreeSpots){
+                const spotDistanceFromWater = spot.distanceFromWater(waterRoads);
+                if(spotDistanceFromWater > maxDistanceFromWater){
+                    maxDistanceFromWater = spotDistanceFromWater;
+                }
+                if(spotDistanceFromWater < minDistanceFromWater){
+                    minDistanceFromWater = spotDistanceFromWater;
+                }
+            }
+        }
+        for(let i = 0; i < this.roads.length; i++){
+            var spots = this.roads[i].getAllFreeSpots();
+            for(let spot of spots){
+                let spotValue = 0;
+                if(minDistanceFromCenter !== maxDistanceFromCenter)
+                    spotValue += this.houseCenterWage * (maxDistanceFromCenter-spot.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter);
+                if(minDistanceFromWater !== maxDistanceFromWater)
+                    spotValue += this.houseWaterWage * (maxDistanceFromWater-spot.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater);
+                spotValue += this.houseRandomWage * spot.hashValue(this.seed, this.iteration);
+                spotValue += this.houseOccupiedWage * this.roads[i].occupiedPercentage() > this.idealPolygonOccupationRate ? 0 : 1;
+                if(spotValue > maxFitValue){
+                    maxFitValue = spotValue;
+                    maxSpot = spot;
+                }
+            }
+        }
+        return maxSpot;
     }
 
     public addBuilding(): void {
