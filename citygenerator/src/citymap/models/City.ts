@@ -11,6 +11,7 @@ import SubareaPolygon from "./area/SubareaPolygon";
 import HousingPBuilding from "./building/polygonbuilding/HousingPBuilding";
 import SidePoint from "./point/SidePoint";
 import SquareBuilding from "./building/SquareBuilding";
+import ChurchPBuilding from "./building/polygonbuilding/ChurchPBuilding";
 
 class City {
 
@@ -43,6 +44,12 @@ class City {
     houseCenterWage = 1.0;
     houseWaterWage = 1.0;
     houseOccupiedWage = 0;
+
+    churchBuildingMinSize = 4000;
+    churchRandomWage = 0.2;
+    churchCenterWage = 1.0;
+    churchWaterWage = 0.0;
+    churchOccupiedWage = 7.0;
 
     constructor(roads: MainRoad[]) {
         this.roads = roads;
@@ -163,11 +170,62 @@ class City {
         return maxSpot;
     }
 
-    public addBuilding(): void {
-        const spot = this.pickBestHousingBuildingCandidate();
-        if(spot !== undefined){
-            spot.buildBuilding(new SquareBuilding(spot.x, spot.y, spot.radius, spot.angle));
+    public pickBestChurchBuildingCandidate(): SubareaPolygon | undefined {
+
+        let possibleSpots: SubareaPolygon[] = [];
+        let maxFitValue = 0;
+        let maxSpot: SubareaPolygon | undefined = undefined;
+        let waterRoads: Road[] = [];
+
+        for(let i = 0; i < this.polygons.length; i++){
+            possibleSpots.push(...this.polygons[i].subAreas.getPolygonsAboveSize(this.churchBuildingMinSize).filter((a) => (!a.isOccupied() && a.containsMainRoads())))
         }
+
+        let maxDistanceFromCenter = 0;
+        let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
+        let maxDistanceFromWater = 0;
+        let minDistanceFromWater = Number.MAX_SAFE_INTEGER;
+
+        for(let spot of possibleSpots){
+            const spotDistanceFromCenter = spot.centroid.distanceFromPoint(this.center);
+            if(spotDistanceFromCenter > maxDistanceFromCenter){
+                maxDistanceFromCenter = spotDistanceFromCenter;
+            }
+            if(spotDistanceFromCenter < minDistanceFromCenter){
+                minDistanceFromCenter = spotDistanceFromCenter;
+            }
+        }
+
+        if(this.rivers.length > 0){
+            waterRoads.push(...this.rivers[0].riverRoads);
+            for(let spot of possibleSpots){
+                const spotDistanceFromWater = spot.centroid.distanceFromWater(waterRoads);
+                if(spotDistanceFromWater > maxDistanceFromWater){
+                    maxDistanceFromWater = spotDistanceFromWater;
+                }
+                if(spotDistanceFromWater < minDistanceFromWater){
+                    minDistanceFromWater = spotDistanceFromWater;
+                }
+            }
+        }
+        for(let i = 0; i < this.polygons.length; i++){
+            var spots = this.polygons[i].subAreas.getPolygonsAboveSize(this.churchBuildingMinSize).filter((a) => (!a.isOccupied() && a.containsMainRoads()));
+            for(let spot of spots){
+                let spotValue = 0;
+                if(minDistanceFromCenter !== maxDistanceFromCenter)
+                    spotValue += (this.churchCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter));
+                if(minDistanceFromWater !== maxDistanceFromWater)
+                    spotValue += (this.churchWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater));
+                spotValue += (this.churchRandomWage * spot.hashValue(this.seed, this.iteration));
+                spotValue += (this.churchOccupiedWage * (1 - spot.getOccupationRate()));
+                console.log("OCCUPIED " + spot.getOccupationRate());
+                if(spotValue > maxFitValue){
+                    maxFitValue = spotValue;
+                    maxSpot = spot;
+                }
+            }
+        }
+        return maxSpot;
     }
 
     public addNewRoad(distance: number): void {
@@ -327,10 +385,24 @@ class City {
         return;
     }
 
+    public addBuilding(): void {
+        const spot = this.pickBestHousingBuildingCandidate();
+        if(spot !== undefined){
+            spot.buildBuilding(new SquareBuilding(spot.x, spot.y, spot.radius, spot.angle));
+        }
+    }
+
     public addHousingPBuilding(): void {
         const spot = this.pickBestPHousingBuildingCandidate();
         if(spot !== undefined){
             spot.buildBuilding(HousingPBuilding.createHousingPBuilding(spot, this.buildingToPolygonRatio));
+        }
+    }
+
+    public addChurchPBuilding(): void {
+        const spot = this.pickBestChurchBuildingCandidate();
+        if(spot !== undefined){
+            spot.buildBuilding(ChurchPBuilding.createChurchPBuilding(spot, this.buildingToPolygonRatio));
         }
     }
 

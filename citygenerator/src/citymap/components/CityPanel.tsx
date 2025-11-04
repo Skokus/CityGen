@@ -76,6 +76,12 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function addChurchPBuilding(){
+        city.addChurchPBuilding();
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     function addRoadCompletion(){
         city.addRoadCompletionScalar(0.2);
         setCity(city);
@@ -136,6 +142,10 @@ function CityPanel() {
                 <button onClick={() => {
                     addHousingPBuilding()
                 }}>Add house
+                </button>
+                <button onClick={() => {
+                    addChurchPBuilding()
+                }}>Add church
                 </button>
                 <button onClick={() => {
                     splitPolygon()

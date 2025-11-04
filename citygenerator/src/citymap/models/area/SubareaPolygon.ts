@@ -33,6 +33,22 @@ class SubareaPolygon extends Polygon{
         return all;
     }
 
+    public getAllPolygonsWithBuildings(): SubareaPolygon[] {
+        let all: SubareaPolygon[] = [];
+        if(this.building !== undefined || this.accessory !== undefined){
+            return [this];
+        } else {
+            if(this.subPolygons !== undefined && this.subPolygons.length > 0){
+                for(let a of this.subPolygons){
+                    all.push(...a.getAllPolygonsWithBuildings());
+                }
+            } else {
+                return [];
+            }
+        }
+        return all;
+    }
+
     public getPolygonsAboveSize(minsize: number): SubareaPolygon[]{
         let all: SubareaPolygon[] = [];
         if(this.getArea() < minsize){
@@ -240,7 +256,7 @@ class SubareaPolygon extends Polygon{
             return 1;
         }
         if(this.subPolygons === undefined || this.subPolygons.length === 0){
-            return this.isOccupied() ? 0 : 1;
+            return 0;
         } else {
             let ocpd = 0;
             for(const p of this.subPolygons){

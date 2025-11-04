@@ -6,7 +6,7 @@ import Road from "../../road/Road";
 class ChurchPBuilding extends PolygonBuilding {
 
     protected getDefaultColor(): string {
-        return "#09006a";
+        return "#604fff";
     }
 
     //ratio of smaller polygon to bigger one (borders)
