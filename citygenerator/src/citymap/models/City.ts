@@ -432,9 +432,9 @@ class City {
         }
     }
 
-    public static getExampleCity(): City {
-        const p1 = new MainPoint(500, 500, 0);
-        const p2 = new MainPoint(600, 510, 1);
+    public static getExampleCity(x1: number, y1: number, x2: number, y2: number): City {
+        const p1 = new MainPoint(x1, y1, 0);
+        const p2 = new MainPoint(x2, y2, 1);
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r]);
         //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 250, 25, Math.PI/10));

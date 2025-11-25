@@ -13,7 +13,12 @@ function CityPanel() {
     const [minBuildingDistanceFromRoad, setMinBuildingDistanceFromRoad] = useState(10);
     const [seed, setSeed] = useState(0);
 
-    const [city, setCity] = useState(City.getExampleCity());
+    const [x1, setX1] = useState(500);
+    const [y1, setY1] = useState(500);
+    const [x2, setX2] = useState(600);
+    const [y2, setY2] = useState(510);
+
+    const [city, setCity] = useState(City.getExampleCity(x1, y1, x2, y2));
     const [counter, setCounter] = useState(0);
     const [zoomScale, setZoomScale] = useState(1.4);
     const [xOffset, setXOffset] = useState(10);
@@ -26,6 +31,12 @@ function CityPanel() {
         const timer = setTimeout(() => ticking && addNewRoad(), timePeriod)
         return () => clearTimeout(timer)
     }, [counter, ticking]);
+
+    function restartCity(){
+        const newcity = City.getExampleCity(x1, y1, x2, y2);
+        setCity(newcity);
+        setCounter(counter + 1);
+    }
 
     function addNewRoad() {
         city.addNewRoad(getRandomMainRoadDistance());
@@ -243,6 +254,38 @@ function CityPanel() {
                 <input className="input" id={"minBuildingDistanceFromRoad"} name="minBuildingDistanceFromRoadInput" type="number" defaultValue={minBuildingDistanceFromRoad} onChange={e => {
                     setMinBuildingDistanceFromRoad(e.target.valueAsNumber)
                 }}/>
+                <br/>
+                <label className="inputLabel">
+                    X of first point of starting road:
+                </label>
+                <input className="input" id={"x1"} name="x1" type="number" defaultValue={x1} onChange={e => {
+                    setX1(e.target.valueAsNumber)
+                }}/>
+                <br/>
+                <label className="inputLabel">
+                    Y of first point of starting road:
+                </label>
+                <input className="input" id={"y1"} name="y1" type="number" defaultValue={y1} onChange={e => {
+                    setY1(e.target.valueAsNumber)
+                }}/>
+                <br/>
+                <label className="inputLabel">
+                    X of second point of starting road:
+                </label>
+                <input className="input" id={"x2"} name="x2" type="number" defaultValue={x2} onChange={e => {
+                    setX2(e.target.valueAsNumber)
+                }}/>
+                <br/>
+                <label className="inputLabel">
+                    Y of second point of starting road:
+                </label>
+                <input className="input" id={"y2"} name="y2" type="number" defaultValue={y2} onChange={e => {
+                    setY2(e.target.valueAsNumber)
+                }}/>
+                <button onClick={() => {
+                    restartCity();
+                }}>Restart city
+                </button>
             </div>
         </div>
     );
