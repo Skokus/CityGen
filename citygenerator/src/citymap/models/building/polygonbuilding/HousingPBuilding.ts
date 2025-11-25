@@ -2,6 +2,7 @@ import Point from "../../point/Point";
 import PolygonBuilding from "./PolygonBuilding";
 import Polygon from "../../area/Polygon";
 import Road from "../../road/Road";
+import {Md5} from "ts-md5";
 
 class HousingPBuilding extends PolygonBuilding {
 
@@ -22,6 +23,11 @@ class HousingPBuilding extends PolygonBuilding {
             newBorderPoints.push(new Road(polygon.centroid, point).getPointFromRoadScalar(ratio));
         }
         return new HousingPBuilding(newBorderPoints);
+    }
+
+    public hashValue(seed: number): number {
+        const hash = Md5.hashStr(seed + "HousingPBuilding" + this.centroid.x + ", " + this.centroid.y).substring(0,4);
+        return parseInt(hash, 16)/65535;
     }
 }
 

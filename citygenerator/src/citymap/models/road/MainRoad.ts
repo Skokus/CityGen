@@ -5,6 +5,7 @@ import MainPoint from "../point/MainPoint";
 import Building from "../building/Building";
 import Point from "../point/Point";
 import MainRoadType from "./MainRoadType";
+import {Md5} from "ts-md5";
 
 class MainRoad extends Road {
 
@@ -92,11 +93,16 @@ class MainRoad extends Road {
         return this.p2 as MainPoint;
     }
 
-    public getRandomPoint(): MainPoint {
-        if (Math.random() > 0.5)
+    public getRandomPoint(seed: number): MainPoint {
+        if (this.getRandomMainPointHash(seed) > 0.5)
             return this.p1 as MainPoint;
         else
             return this.p2 as MainPoint;
+    }
+
+    private getRandomMainPointHash(seed: number){
+        const hash = Md5.hashStr(seed + "RandomPointMainRoad" + this.p1.x + ", " + this.p1.y + ", " + this.p2.x + ", " + + this.p2.y).substring(0,4);
+        return parseInt(hash, 16)/65535;
     }
 
     public getOtherPoint(p: Point): MainPoint { //USE ONLY WITH p AS p1 OR p2

@@ -18,7 +18,7 @@ function CityPanel() {
     const [x2, setX2] = useState(600);
     const [y2, setY2] = useState(510);
 
-    const [city, setCity] = useState(City.getExampleCity(x1, y1, x2, y2));
+    const [city, setCity] = useState(City.getExampleCity(x1, y1, x2, y2, seed));
     const [counter, setCounter] = useState(0);
     const [zoomScale, setZoomScale] = useState(1.4);
     const [xOffset, setXOffset] = useState(10);
@@ -33,25 +33,25 @@ function CityPanel() {
     }, [counter, ticking]);
 
     function restartCity(){
-        const newcity = City.getExampleCity(x1, y1, x2, y2);
+        const newcity = City.getExampleCity(x1, y1, x2, y2, seed);
         setCity(newcity);
         setCounter(counter + 1);
     }
 
     function addNewRoad() {
-        city.addNewRoad(getRandomMainRoadDistance());
+        city.addNewRoad(100);
         setCity(city);
         setCounter(counter + 1);
     }
 
     function addForwardRoad() {
-        city.addExtentionRoad(getRandomMainRoadDistance());
+        city.addExtentionRoad(minRoadLength, maxRoadLength);
         setCity(city);
         setCounter(counter + 1);
     }
 
     function addCrossroadRoad() {
-        city.addSideRoad(getRandomMainRoadDistance());
+        city.addSideRoad(minRoadLength, maxRoadLength);
         setCity(city);
         setCounter(counter + 1);
     }
@@ -97,18 +97,6 @@ function CityPanel() {
         city.addRoadCompletionScalar(0.2);
         setCity(city);
         setCounter(counter + 1);
-    }
-
-    function getRandomMainRoadDistance() {
-        return Math.random() * (maxRoadLength - minRoadLength) + minRoadLength;
-    }
-
-    function getRandomBuildingSize() {
-        return Math.random() * (maxBuildingSize - minBuildingSize) + minBuildingSize;
-    }
-
-    function getRandomBuildingDistance() {
-        return Math.random() * (maxBuildingDistanceFromRoad - minBuildingDistanceFromRoad) + minBuildingDistanceFromRoad;
     }
 
     function zoomInMap() {

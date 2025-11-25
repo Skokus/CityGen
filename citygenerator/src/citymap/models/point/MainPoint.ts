@@ -1,5 +1,6 @@
 import Point from "./Point";
 import MainRoad from "../road/MainRoad";
+import {Md5} from "ts-md5";
 
 class MainPoint extends Point {
 
@@ -18,19 +19,6 @@ class MainPoint extends Point {
 
     public getDistancedPoint(distance: number, angle: number): Point {
         return new Point(this.x + distance * Math.cos(angle), this.y + distance * Math.sin(angle));
-    }
-
-    public getRandomDirection(): number {
-        var possibleDirections: number[] = [];
-        for (var i = 0; i < this.connectedRoads.length; i++) {
-            if (this.connectedRoads[i].length === 0) {
-                possibleDirections.push(i);
-            }
-        }
-        if (possibleDirections.length > 0) {
-            return possibleDirections[Math.floor(Math.random() * possibleDirections.length)];
-        }
-        return -1;
     }
 
     public getForwardDirection(): number {
@@ -104,6 +92,21 @@ class MainPoint extends Point {
         if((this.connectedRoads[1].length > 0) !== (this.connectedRoads[3].length > 0))
             canBeVerticallyExtended = true;
         return canBeVerticallyExtended;
+    }
+
+    public getAngleHashValue(seed: number, direction: number): number {
+        const hash = Md5.hashStr(seed + "MainPointAngle" + this.x + ", " + this.y + ", direction" + direction).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
+
+    public getDistanceHashValue(seed: number, direction: number): number {
+        const hash = Md5.hashStr(seed + "MainPointDistance" + this.x + ", " + this.y + ", direction" + direction).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
+
+    public getLakeHashValue(seed: number): number {
+        const hash = Md5.hashStr(seed + "LakeMainPoint" + this.x + ", " + this.y).substring(0,4);
+        return parseInt(hash, 16)/65535;
     }
 
 }

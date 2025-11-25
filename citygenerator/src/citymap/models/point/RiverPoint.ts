@@ -1,4 +1,5 @@
 import MainPoint from "./MainPoint";
+import {Md5} from "ts-md5";
 
 class RiverPoint extends MainPoint {
 
@@ -13,6 +14,10 @@ class RiverPoint extends MainPoint {
         return new RiverPoint(this.x + distance * Math.cos(angle), this.y + distance * Math.sin(angle), angle);
     }
 
+    public getRiverHashValue(seed: number): number {
+        const hash = Md5.hashStr(seed + "RiverPoint" + this.x + ", " + this.y + ", angle" + this.angle).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
 }
 
 export default RiverPoint;

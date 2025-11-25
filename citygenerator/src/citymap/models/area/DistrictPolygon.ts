@@ -50,8 +50,8 @@ class DistrictPolygon extends Polygon {
         return false;
     }
 
-    public splitPolygonMultipleTimesWithSize(maxsize: number): void {
-        this.subAreas.splitAboveSize(maxsize);
+    public splitPolygonMultipleTimesWithSize(seed: number, maxsize: number): void {
+        this.subAreas.splitAboveSize(seed, maxsize);
     }
 
     public splitPolygonBySmallerPolygon(ratio: number): void {

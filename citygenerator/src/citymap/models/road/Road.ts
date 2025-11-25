@@ -1,6 +1,7 @@
 import Building from "../building/Building";
 import SquareBuilding from "../building/SquareBuilding";
 import Point from "../point/Point";
+import {Md5} from "ts-md5";
 
 class Road {
 
@@ -52,21 +53,11 @@ class Road {
         return p.y - this.perpendicularSlope * p.x;
     }
 
-    public getRandomPoint(): Point {
-        if (Math.random() > 0.5)
+    public getRandomPoint(seed: number): Point {
+        if (this.getRandomPointHash(seed) > 0.5)
             return this.p1;
         else
             return this.p2;
-    }
-
-    public getRandomPointInsideRoad(): Point {
-        var scalar = Math.random() * 0.1 + 0.45;
-        var distX = this.p2.x - this.p1.x;
-        var distY = this.p2.y - this.p1.y;
-
-        var modX = (distX * scalar) + this.p1.x;
-        var modY = (distY * scalar) + this.p1.y;
-        return new Point(modX, modY);
     }
 
     public getOtherPoint(p: Point) { //USE ONLY WITH p AS p1 OR p2
@@ -145,6 +136,10 @@ class Road {
         this.completionPoint = this.getPointFromRoadScalar(r);
     }
 
+    private getRandomPointHash(seed: number){
+        const hash = Md5.hashStr(seed + "RandomPointRoad" + this.p1.x + ", " + this.p1.y + ", " + this.p2.x + ", " + + this.p2.y).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
 }
 
 export default Road;

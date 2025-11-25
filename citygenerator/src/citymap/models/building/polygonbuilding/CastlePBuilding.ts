@@ -3,6 +3,7 @@ import PolygonBuilding from "./PolygonBuilding";
 import Polygon from "../../area/Polygon";
 import Road from "../../road/Road";
 import TowerBuilding from "../TowerBuilding";
+import {Md5} from "ts-md5";
 
 class CastlePBuilding extends PolygonBuilding {
 
@@ -48,6 +49,12 @@ class CastlePBuilding extends PolygonBuilding {
         }
         this.towers.push(new TowerBuilding(c.x, c.y, min * ratio * 0.8));
     }
+
+    public hashValue(seed: number): number {
+        const hash = Md5.hashStr(seed + "CastlePBuilding" + this.centroid.x + ", " + this.centroid.y).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
+
 }
 
 export default CastlePBuilding;

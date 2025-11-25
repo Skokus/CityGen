@@ -19,11 +19,11 @@ class River {
         return Array.from(points) as RiverPoint[];
     }
 
-    public static createRiver(startX: number, startY: number, startAngle: number, angleRange: number, maxAngleChange: number, stepDistance: number, n: number): River {
+    public static createRiver(startX: number, startY: number, startAngle: number, angleRange: number, maxAngleChange: number, stepDistance: number, n: number, seed: number): River {
         let riverPoints: RiverPoint[] = [];
         riverPoints.push(new RiverPoint(startX, startY, startAngle));
         for(let i = 1; i < n; i++){
-            const newAngle = riverPoints[i-1].angle + (Math.random() * maxAngleChange * 2 - maxAngleChange);
+            const newAngle = riverPoints[i-1].angle + (riverPoints[i-1].getRiverHashValue(seed) * maxAngleChange * 2 - maxAngleChange);
             riverPoints.push(riverPoints[i-1].getDistancedRiverPoint(stepDistance, newAngle));
         }
         let riverRoads: RiverRoad[] = [];

@@ -51,7 +51,8 @@ class City {
     churchWaterWage = 0.0;
     churchOccupiedWage = 7.0;
 
-    constructor(roads: MainRoad[]) {
+    constructor(roads: MainRoad[], seed: number) {
+        this.seed = seed;
         this.roads = roads;
         this.polygons = [];
         this.lakes = [];
@@ -105,7 +106,7 @@ class City {
                     spotValue += this.pHouseCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter);
                 if(minDistanceFromWater !== maxDistanceFromWater)
                     spotValue += this.pHouseWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater);
-                spotValue += this.pHouseRandomWage * spot.hashValue(this.seed, this.iteration);
+                spotValue += this.pHouseRandomWage * spot.hashValue(this.seed);
                 spotValue += this.pHouseOccupiedWage * this.polygons[i].occupiedPercentage() > this.idealPolygonOccupationRate ? 0 : 1;
                 if(spotValue > maxFitValue){
                     maxFitValue = spotValue;
@@ -216,7 +217,7 @@ class City {
                     spotValue += (this.churchCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter));
                 if(minDistanceFromWater !== maxDistanceFromWater)
                     spotValue += (this.churchWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater));
-                spotValue += (this.churchRandomWage * spot.hashValue(this.seed, this.iteration));
+                spotValue += (this.churchRandomWage * spot.hashValue(this.seed));
                 spotValue += (this.churchOccupiedWage * (1 - spot.getOccupationRate()));
                 console.log("OCCUPIED " + spot.getOccupationRate());
                 if(spotValue > maxFitValue){
@@ -229,56 +230,10 @@ class City {
     }
 
     public addNewRoad(distance: number): void {
-        const points = this.getAllPoints();
-        var direction = -1;
-        var randomPoint = new MainPoint(0, 0);
-        while (direction < 0) {
-            randomPoint = points[Math.floor(Math.random() * points.length)];
-            direction = randomPoint.getRandomDirection();
-        }
-        const randomAngle = (Math.PI / 2) * direction + (Math.random() * this.angle) - this.angle / 2;
-        const p = randomPoint.getDistancedPoint(distance, randomAngle);
-        const newPoint = new MainPoint(p.x, p.y, randomPoint.distanceFromCenter + 1);
-        const roadsFromRandomPoint = randomPoint.getAllRoads();
-        const excludedPointSet = new Set<MainPoint>();
-        for (const road of roadsFromRandomPoint) {
-            excludedPointSet.add(road.getPoint1());
-            excludedPointSet.add(road.getPoint2());
-        }
-        const excludedPoints = Array.from(excludedPointSet);
-        const allPoints = this.getAllPoints().filter(point => !excludedPoints.includes(point));
-        let expectedPoint = newPoint;
 
-        let min = 200;
-        for (let point of allPoints) {
-            let dist = Road.distanceFromPoint(point, randomPoint, newPoint);
-            if (dist < min) {
-                min = dist;
-                expectedPoint = point;
-            }
-        }
-        if (min < this.popRadius) {
-            const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion);
-            this.roads.push(newRoad);
-            this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
-            return;
-        }
-
-        for (let road of this.roads) {
-            let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
-            if (dist < this.popRadius) {
-                expectedPoint = road.getRandomPoint();
-                const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion);
-                this.roads.push(newRoad);
-                this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
-                return;
-            }
-        }
-        const newRoad = MainRoad.createMainRoad(randomPoint, newPoint, direction, this.defaultCompletion);
-        this.roads.push(newRoad);
     }
 
-    public addExtentionRoad(distance: number): void {
+    public addExtentionRoad(minDistance: number, maxDistance: number): void {
         const points = this.getMinimalExpandablePointsWithinRange();
         var direction = -1;
         var randomPoint = new MainPoint(0, 0);
@@ -286,7 +241,8 @@ class City {
             randomPoint = points[Math.floor(Math.random() * points.length)];
             direction = randomPoint.getForwardDirection();
         }
-        const randomAngle = (Math.PI / 2) * direction + (Math.random() * this.angle) - this.angle / 2;
+        const randomAngle = (Math.PI / 2) * direction + (randomPoint.getAngleHashValue(this.seed, direction) * this.angle) - this.angle / 2;
+        const distance = randomPoint.getDistanceHashValue(this.seed, direction) * (minDistance - maxDistance) + minDistance;
         const p = randomPoint.getDistancedPoint(distance, randomAngle);
         const newPoint = new MainPoint(p.x, p.y, randomPoint.distanceFromCenter + 1);
         const roadsFromRandomPoint = randomPoint.getAllRoads();
@@ -317,7 +273,7 @@ class City {
         for (let road of this.getAllRoadsAndRiverRoads()) {
             let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
             if (dist < this.popRadius) {
-                expectedPoint = road.getRandomPoint() as MainPoint;
+                expectedPoint = road.getRandomPoint(this.seed) as MainPoint;
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion);
                 this.roads.push(newRoad);
                 this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
@@ -328,7 +284,7 @@ class City {
         this.roads.push(newRoad);
     }
 
-    public addSideRoad(distance: number): void {
+    public addSideRoad(minDistance: number, maxDistance: number): void {
         const points = this.getMinimalSideablePointsWithinRange();
         if (points.length === 0)
             return;
@@ -338,7 +294,8 @@ class City {
             randomPoint = points[Math.floor(Math.random() * points.length)];
             direction = randomPoint.getSideDirection();
         }
-        const randomAngle = (Math.PI / 2) * direction + (Math.random() * this.angle) - this.angle / 2;
+        const randomAngle = (Math.PI / 2) * direction + (randomPoint.getAngleHashValue(this.seed, direction) * this.angle) - this.angle / 2;
+        const distance = randomPoint.getDistanceHashValue(this.seed, direction) * (minDistance - maxDistance) + minDistance;
         const p = randomPoint.getDistancedPoint(distance, randomAngle);
         const newPoint = new MainPoint(p.x, p.y, randomPoint.distanceFromCenter + 1);
         const roadsFromRandomPoint = randomPoint.getAllRoads();
@@ -369,7 +326,7 @@ class City {
         for (let road of this.getAllRoadsAndRiverRoads()) {
             let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
             if (dist < this.popRadius) {
-                expectedPoint = road.getRandomPoint() as MainPoint;
+                expectedPoint = road.getRandomPoint(this.seed) as MainPoint;
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion);
                 this.roads.push(newRoad);
                 this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
@@ -414,7 +371,7 @@ class City {
     public splitRandomPolygon(): void {
         const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.subPolygons === undefined)
         if (possiblePolygons.length > 0) {
-            possiblePolygons[0].splitPolygonMultipleTimesWithSize(this.polygonBuildingMaxSize);
+            possiblePolygons[0].splitPolygonMultipleTimesWithSize(this.seed, this.polygonBuildingMaxSize);
         }
     }
 
@@ -432,13 +389,13 @@ class City {
         }
     }
 
-    public static getExampleCity(x1: number, y1: number, x2: number, y2: number): City {
+    public static getExampleCity(x1: number, y1: number, x2: number, y2: number, seed: number): City {
         const p1 = new MainPoint(x1, y1, 0);
         const p2 = new MainPoint(x2, y2, 1);
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
-        const c = new City([r]);
-        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 250, 25, Math.PI/10));
-        c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40));
+        const c = new City([r], seed);
+        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 250, 25, Math.PI/10, seed));
+        c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40, seed));
         return c;
     }
 

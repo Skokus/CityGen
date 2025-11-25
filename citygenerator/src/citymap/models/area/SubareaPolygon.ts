@@ -67,12 +67,12 @@ class SubareaPolygon extends Polygon{
         }
     }
 
-    public splitAboveSize(maxsize: number): void {
+    public splitAboveSize(seed: number, maxsize: number): void {
         if(this.getArea() > maxsize){
-            this.splitPolygonByLongestRoad();
+            this.splitPolygonByLongestRoad(seed);
             if(this.subPolygons !== undefined) {
                 for(const a of this.subPolygons){
-                    a.splitAboveSize(maxsize);
+                    a.splitAboveSize(seed, maxsize);
                 }
             }
         } else {
@@ -80,11 +80,11 @@ class SubareaPolygon extends Polygon{
         }
     }
 
-    public splitPolygonByLongestRoad(): void {
+    public splitPolygonByLongestRoad(seed: number): void {
         let roads = this.getRoads();
         var i = this.containsMainRoads() ? this.getLongestRoadId() : this.getLongestSideRoadId();
         var i2 = 0;
-        var p1 = roads[i].getRandomPointInsideRoad();
+        var p1 = roads[i].getRandomPointInsideRoad(seed);
         var a = roads[i].perpendicularSlope;
         var b = roads[i].getPerpendicularB(p1);
         var p2: Point = new Point(1000,1000);
@@ -270,8 +270,8 @@ class SubareaPolygon extends Polygon{
         return this.building !== undefined;
     }
 
-    public hashValue(seed: number, iteration: number): number {
-        const hash = Md5.hashStr(seed + "SubareaPolygon" + this.centroid.x + ", " + this.centroid.y + iteration +" area:" + this.getArea()).substring(0,4);
+    public hashValue(seed: number): number {
+        const hash = Md5.hashStr(seed + "SubareaPolygon" + this.centroid.x + ", " + this.centroid.y +" area:" + this.getArea()).substring(0,4);
         return parseInt(hash, 16)/65535;
     }
 
