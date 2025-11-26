@@ -34,7 +34,7 @@ class City {
     seed = 0;
     idealPolygonOccupationRate = 0.1;
 
-    polygonBuildingMaxSize = 500;
+    polygonBuildingMaxSize = 312.5;
     pHouseRandomWage = 0.2;
     pHouseCenterWage = 1.0;
     pHouseWaterWage = 1.0;
@@ -394,8 +394,8 @@ class City {
         const p2 = new MainPoint(x2, y2, 1);
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r], seed);
-        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 250, 25, Math.PI/10, seed));
-        c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40, seed));
+        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 250, 25, Math.PI/10, seed));
+        //c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40, seed));
         return c;
     }
 

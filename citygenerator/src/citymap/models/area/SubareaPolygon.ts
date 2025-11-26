@@ -231,6 +231,24 @@ class SubareaPolygon extends Polygon{
         return 0;
     }
 
+    public getLongestMainRoadId(): number {
+        const mainroads = this.getRoads().filter(p => p.isMainRoad);
+        let max = mainroads[0].length;
+        let maxRoad = mainroads[0];
+        for(let i = 1; i < mainroads.length; i++){
+            if(mainroads[i].length > max){
+                max = mainroads[i].length;
+                maxRoad = mainroads[i];
+            }
+        }
+        for(let i = 0; i < this.getRoads().length; i++){
+            if(maxRoad === this.getRoads()[i]){
+                return i;
+            }
+        }
+        return 0;
+    }
+
     public containsMainRoads(): boolean {
         for(let road of this.getRoads()){
             if(road.isMainRoad){
@@ -240,6 +258,14 @@ class SubareaPolygon extends Polygon{
         return false;
     }
 
+    public containsSideRoads(): boolean {
+        for(let road of this.getRoads()){
+            if(!road.isMainRoad){
+                return true;
+            }
+        }
+        return false;
+    }
     public getAccessoryRadius(ratio: number): number { //ratio so that the circle doesn't fill till the edges of the polygon
         const c = this.centroid;
         let min = Road.distanceFromPoint(c, this.roads[0].p1, this.roads[0].p2);
