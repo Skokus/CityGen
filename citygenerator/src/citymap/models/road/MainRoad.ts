@@ -6,6 +6,7 @@ import Building from "../building/Building";
 import Point from "../point/Point";
 import MainRoadType from "./MainRoadType";
 import {Md5} from "ts-md5";
+import RiverPoint from "../point/RiverPoint";
 
 class MainRoad extends Road {
 
@@ -82,6 +83,16 @@ class MainRoad extends Road {
         point1.addRoad(road, direction);
         point2.addRoad(road, (direction + 2) % l);
         road.createSidePoints(10);
+        if((point1 instanceof RiverPoint && !(point2 instanceof RiverPoint))){
+            if(point1.distanceFromCenter <= 0){
+                point1.distanceFromCenter = (point2.distanceFromCenter + 1);
+            }
+        }
+        if((point2 instanceof RiverPoint && !(point1 instanceof RiverPoint))){
+            if(point2.distanceFromCenter <= 0){
+                point2.distanceFromCenter = point1.distanceFromCenter + 1;
+            }
+        }
         return road;
     }
 
