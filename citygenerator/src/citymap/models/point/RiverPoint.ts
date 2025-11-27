@@ -18,6 +18,7 @@ class RiverPoint extends MainPoint {
         const hash = Md5.hashStr(seed + "RiverPoint" + this.x + ", " + this.y + ", angle" + this.angle).substring(0,4);
         return parseInt(hash, 16)/65535;
     }
+
 }
 
 export default RiverPoint;

@@ -1,8 +1,8 @@
 import Polygon from "./Polygon";
 import MainRoad from "../road/MainRoad";
-import MainPoint from "../point/MainPoint";
 import Point from "../point/Point";
 import {Md5} from "ts-md5";
+import LakePoint from "../point/LakePoint";
 
 class LakePolygon extends Polygon {
 
@@ -10,12 +10,12 @@ class LakePolygon extends Polygon {
         super(roads);
     }
 
-    public getClockWiseBorderPoints(): MainPoint[] {
-        return super.getClockWiseBorderPoints() as MainPoint[];
+    public getClockWiseBorderPoints(): LakePoint[] {
+        return super.getClockWiseBorderPoints() as LakePoint[];
     }
 
-    public getPoints(): MainPoint[] {
-        return super.getPoints() as MainPoint[];
+    public getPoints(): LakePoint[] {
+        return super.getPoints() as LakePoint[];
     }
 
     public static createNewLakePolygon(center: Point, maxRadius: number, minRadius: number, numberOfEdges: number, edgeAngleOffset: number, seed: number): LakePolygon {
@@ -23,9 +23,10 @@ class LakePolygon extends Polygon {
         for (let i = 0; i < numberOfEdges; i++) {
             angles.push(i*2*Math.PI/numberOfEdges);
         }
-        const edgePoints: MainPoint[] = [];
+        const edgePoints: LakePoint[] = [];
         for (let i = 0; i < numberOfEdges; i++) {
-            edgePoints.push(center.getDistancedPoint(minRadius+LakePolygon.getPointDistanceHashValue(seed, i)*(maxRadius-minRadius), angles[i]) as MainPoint);
+            var p = center.getDistancedPoint(minRadius+LakePolygon.getPointDistanceHashValue(seed, i)*(maxRadius-minRadius), angles[i]);
+            edgePoints.push(new LakePoint(p.x, p.y, 0));
         }
         const edgeRoads: MainRoad[] = [];
         for (let i = 0; i < numberOfEdges; i++) {
@@ -39,19 +40,15 @@ class LakePolygon extends Polygon {
         return parseInt(hash, 16)/65535;
     }
 
-    public getClosestPointToAngle(angle: number): MainPoint{
+    public getClosestPointToAngle(angle: number): LakePoint{
         const points = this.getClockWiseBorderPoints();
         var i2 = 0;
         var prevangle = 0;
         var i3 = 0;
         var nextangle = 0;
-        console.log("HERE");
-        console.log(angle);
         for(let i = 0; i < points.length; i++) {
             const pangle = this.centroid.getAngle(points[i]);
-            console.log(pangle);
             if(pangle < angle){
-                console.log("AHA")
                 i3 = i;
                 nextangle = pangle;
                 i2 = (i-1)%points.length;

@@ -398,7 +398,7 @@ class City {
         const c = new City([r], seed);
         c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 300, 24, Math.PI/10, seed));
         const rc = c.lakes[0].getClosestPointToAngle(riverStartAngle);
-        c.rivers.push(River.createRiver(rc.x, rc.y, riverStartAngle, Math.PI/9, Math.PI/8, 100, 40, seed));
+        c.rivers.push(River.createRiver(rc, riverStartAngle, Math.PI/9, Math.PI/8, 100, 40, seed));
         return c;
     }
 

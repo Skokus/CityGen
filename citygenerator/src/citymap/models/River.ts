@@ -1,6 +1,8 @@
 import RiverRoad from "./road/RiverRoad";
 import RiverPoint from "./point/RiverPoint";
 import Point from "./point/Point";
+import LakePoint from "./point/LakePoint";
+import MainPoint from "./point/MainPoint";
 
 class River {
 
@@ -19,10 +21,15 @@ class River {
         return Array.from(points) as RiverPoint[];
     }
 
-    public static createRiver(startX: number, startY: number, startAngle: number, angleRange: number, maxAngleChange: number, stepDistance: number, n: number, seed: number): River {
+    public static createRiver(startPoint: LakePoint, startAngle: number, angleRange: number, maxAngleChange: number, stepDistance: number, n: number, seed: number): River {
         let riverPoints: RiverPoint[] = [];
-        riverPoints.push(new RiverPoint(startX, startY, startAngle));
+        startPoint.angle = startAngle;
+        riverPoints.push(startPoint);
         for(let i = 1; i < n; i++){
+            console.log("AAAA");
+            if(riverPoints[i-1] instanceof Point){
+                console.log("HERE");
+            }
             let newAngle = riverPoints[i-1].angle + (riverPoints[i-1].getRiverHashValue(seed) * maxAngleChange * 2 - maxAngleChange);
             const anglediff = (newAngle - startAngle + 180 + 360) % 360 - 180
             if(anglediff > angleRange){
