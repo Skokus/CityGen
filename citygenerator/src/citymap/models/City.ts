@@ -23,6 +23,8 @@ class City {
     popRadius = 30;
     angle = Math.PI/9;
 
+    riverStartAngle = 0*Math.PI/9;
+
     districtBorderMaxCount = 4;
     defaultCompletion = 1.0;
     wallRank = 2;
@@ -389,13 +391,14 @@ class City {
         }
     }
 
-    public static getExampleCity(x1: number, y1: number, x2: number, y2: number, seed: number): City {
+    public static getExampleCity(x1: number, y1: number, x2: number, y2: number, seed: number, riverStartAngle: number): City {
         const p1 = new MainPoint(x1, y1, 0);
         const p2 = new MainPoint(x2, y2, 1);
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r], seed);
-        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 250, 25, Math.PI/10, seed));
-        c.rivers.push(River.createRiver(0, 0, 0*Math.PI/2, Math.PI, Math.PI/8, 100, 40, seed));
+        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 300, 24, Math.PI/10, seed));
+        const rc = c.lakes[0].getClosestPointToAngle(riverStartAngle);
+        c.rivers.push(River.createRiver(rc.x, rc.y, riverStartAngle, Math.PI/9, Math.PI/8, 100, 40, seed));
         return c;
     }
 

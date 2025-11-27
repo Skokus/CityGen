@@ -22,9 +22,14 @@ class River {
     public static createRiver(startX: number, startY: number, startAngle: number, angleRange: number, maxAngleChange: number, stepDistance: number, n: number, seed: number): River {
         let riverPoints: RiverPoint[] = [];
         riverPoints.push(new RiverPoint(startX, startY, startAngle));
-        console.log(new RiverPoint(startX, startY, startAngle));
         for(let i = 1; i < n; i++){
-            const newAngle = riverPoints[i-1].angle + (riverPoints[i-1].getRiverHashValue(seed) * maxAngleChange * 2 - maxAngleChange);
+            let newAngle = riverPoints[i-1].angle + (riverPoints[i-1].getRiverHashValue(seed) * maxAngleChange * 2 - maxAngleChange);
+            const anglediff = (newAngle - startAngle + 180 + 360) % 360 - 180
+            if(anglediff > angleRange){
+                newAngle = startAngle + angleRange;
+            } else if(anglediff < -angleRange){
+                newAngle = startAngle - angleRange;
+            }
             riverPoints.push(riverPoints[i-1].getDistancedRiverPoint(stepDistance, newAngle));
         }
         let riverRoads: RiverRoad[] = [];

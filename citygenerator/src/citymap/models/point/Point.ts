@@ -15,7 +15,7 @@ class Point {
     }
 
     public getAngle(p: Point): number {
-        return Math.atan2(this.y - p.y, this.x - p.x);
+        return Math.PI + Math.atan2(this.y - p.y, this.x - p.x);
     }
 
     public isNan(): boolean {

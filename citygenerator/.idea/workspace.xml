@@ -6,9 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/River.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/River.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/LakePolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/LakePolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/Polygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/Point.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/Point.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +201,9 @@
       <workItem from="1764085677118" duration="6494000" />
       <workItem from="1764171674338" duration="2490000" />
       <workItem from="1764194315830" duration="1109000" />
+      <workItem from="1764265632188" duration="3348000" />
+      <workItem from="1764269246286" duration="41000" />
+      <workItem from="1764282724487" duration="1463000" />
     </task>
     <servers />
   </component>

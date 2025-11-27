@@ -37,12 +37,12 @@ class Polygon {
         var ret: Point[] = [];
         var ps = this.getPoints();
         var c = this.centroid
-        while (ps.length !== 0) {
-            var ang = ps[0].getAngle(c);
+        while(ps.length !== 0) {
+            var ang = c.getAngle(ps[0]);
             var i = 0;
             ps.forEach((p, idx) => {
-                if (p.getAngle(c) > ang) {
-                    ang = p.getAngle(c);
+                if (c.getAngle(p) > ang) {
+                    ang = c.getAngle(p);
                     i = idx;
                 }
             });

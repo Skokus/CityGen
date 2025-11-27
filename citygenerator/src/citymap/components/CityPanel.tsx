@@ -12,13 +12,13 @@ function CityPanel() {
     const [maxBuildingDistanceFromRoad, setMaxBuildingDistanceFromRoad] = useState(10);
     const [minBuildingDistanceFromRoad, setMinBuildingDistanceFromRoad] = useState(10);
     const [seed, setSeed] = useState(0);
-
+    const [riverStartAngle, setRiverStartAngle] = useState(Math.PI/2);
     const [x1, setX1] = useState(500);
     const [y1, setY1] = useState(500);
     const [x2, setX2] = useState(600);
     const [y2, setY2] = useState(510);
 
-    const [city, setCity] = useState(City.getExampleCity(x1, y1, x2, y2, seed));
+    const [city, setCity] = useState(City.getExampleCity(x1, y1, x2, y2, seed, riverStartAngle));
     const [counter, setCounter] = useState(0);
     const [zoomScale, setZoomScale] = useState(1.4);
     const [xOffset, setXOffset] = useState(10);
@@ -33,7 +33,7 @@ function CityPanel() {
     }, [counter, ticking]);
 
     function restartCity(){
-        const newcity = City.getExampleCity(x1, y1, x2, y2, seed);
+        const newcity = City.getExampleCity(x1, y1, x2, y2, seed, riverStartAngle);
         setCity(newcity);
         setCounter(counter + 1);
     }
