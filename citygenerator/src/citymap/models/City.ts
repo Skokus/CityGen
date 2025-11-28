@@ -268,6 +268,7 @@ class City {
         if (min < this.popRadius) {
             const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion);
             this.roads.push(newRoad);
+            this.deleteBuildingsWithNewRoad(newRoad);
             this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
             return;
         }
@@ -278,6 +279,7 @@ class City {
                 expectedPoint = road.getRandomPoint(this.seed) as MainPoint;
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion);
                 this.roads.push(newRoad);
+                this.deleteBuildingsWithNewRoad(newRoad);
                 this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
                 return;
             }
@@ -321,6 +323,7 @@ class City {
         if (min < this.popRadius) {
             const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion);
             this.roads.push(newRoad);
+            this.deleteBuildingsWithNewRoad(newRoad);
             this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
             return;
         }
@@ -331,12 +334,34 @@ class City {
                 expectedPoint = road.getRandomPoint(this.seed) as MainPoint;
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion);
                 this.roads.push(newRoad);
+                this.deleteBuildingsWithNewRoad(newRoad);
                 this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
                 return;
             }
         }
         const newRoad = MainRoad.createMainRoad(randomPoint, newPoint, direction, this.defaultCompletion);
         this.roads.push(newRoad);
+        this.deleteBuildingsWithNewRoad(newRoad);
+    }
+
+    public deleteBuildingsWithNewRoad(road: MainRoad){
+        for(let r of road.getPoint1().getAllRealRoads().filter((r) => r !== road)){
+            console.log("HERE");
+            for(let b of r.getAllBuildings()){
+                console.log(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2()));
+                if(Math.abs(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2())) <= b.radius){
+                    console.log("TUTAJ2")
+                    r.removeBuilding(b);
+                }
+            }
+        }
+        for(let r of road.getPoint2().getAllRealRoads().filter((r) => r !== road)){
+            for(let b of r.getAllBuildings()){
+                if(Math.abs(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2()) - b.radius) <= 0.0001){
+                    r.removeBuilding(b);
+                }
+            }
+        }
     }
 
     public addBuilding(): void {

@@ -55,6 +55,10 @@ class MainPoint extends Point {
         return this.connectedRoads.flat();
     }
 
+    public getAllRealRoads(): MainRoad[] {
+        return this.connectedRoads.flat().filter((r) => r !== null);
+    }
+    
     public setLowerRank(lowerRank: number): void {
         if (this.rank === undefined || lowerRank < this.rank)
             this.rank = lowerRank;
@@ -101,11 +105,6 @@ class MainPoint extends Point {
 
     public getDistanceHashValue(seed: number, direction: number): number {
         const hash = Md5.hashStr(seed + "MainPointDistance" + this.x + ", " + this.y + ", direction" + direction).substring(0,4);
-        return parseInt(hash, 16)/65535;
-    }
-
-    public getLakeHashValue(seed: number): number {
-        const hash = Md5.hashStr(seed + "LakeMainPoint" + this.x + ", " + this.y).substring(0,4);
         return parseInt(hash, 16)/65535;
     }
 

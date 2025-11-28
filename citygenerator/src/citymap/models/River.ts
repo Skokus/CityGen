@@ -26,10 +26,6 @@ class River {
         startPoint.angle = startAngle;
         riverPoints.push(startPoint);
         for(let i = 1; i < n; i++){
-            console.log("AAAA");
-            if(riverPoints[i-1] instanceof Point){
-                console.log("HERE");
-            }
             let newAngle = riverPoints[i-1].angle + (riverPoints[i-1].getRiverHashValue(seed) * maxAngleChange * 2 - maxAngleChange);
             const anglediff = (newAngle - startAngle + 180 + 360) % 360 - 180
             if(anglediff > angleRange){

@@ -127,7 +127,6 @@ class MainRoad extends Road {
         return [new MainRoad(this.p1 as MainPoint, p as MainPoint), new MainRoad(p as MainPoint, this.p2 as MainPoint)];
     }
 
-    //rotation either -1 or 1
     private createSidePointNextToRoad(scalar: number, distance: number, rotation: number): SidePoint {
         const distX = this.p2.x - this.p1.x;
         const distY = this.p2.y - this.p1.y;
