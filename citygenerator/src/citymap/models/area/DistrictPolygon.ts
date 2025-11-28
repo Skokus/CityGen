@@ -66,7 +66,7 @@ class DistrictPolygon extends Polygon {
     }
 
     public createCastle(ratio: number): void {
-        //this.subAreas[0].building = CastlePBuilding.createCastlePBuilding(this.subAreas[0], ratio);
+        this.subAreas.buildBuilding(CastlePBuilding.createCastlePBuilding(this.subAreas, ratio));
     }
 
     protected createInitialSubArea(roads: Road[]): SubareaPolygon {
@@ -86,9 +86,9 @@ class DistrictPolygon extends Polygon {
         }
         if (minPointTier === Number.MAX_VALUE) {
             for (const point of this.getPoints()) {
-                point.setLowerRank(2);
+                point.setLowerRank(1);
             }
-            this.rank = 1;
+            this.rank = 0;
         } else {
             for (const point of this.getPoints()) {
                 point.setLowerRank(minPointTier + 1);

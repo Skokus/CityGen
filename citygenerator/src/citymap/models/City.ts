@@ -12,6 +12,7 @@ import HousingPBuilding from "./building/polygonbuilding/HousingPBuilding";
 import SidePoint from "./point/SidePoint";
 import SquareBuilding from "./building/SquareBuilding";
 import ChurchPBuilding from "./building/polygonbuilding/ChurchPBuilding";
+import CastlePBuilding from "./building/polygonbuilding/CastlePBuilding";
 
 class City {
 
@@ -27,7 +28,7 @@ class City {
 
     districtBorderMaxCount = 4;
     defaultCompletion = 1.0;
-    wallRank = 2;
+    wallRank = 1;
 
     expendRange = 2;
     sideRange = 1;
@@ -52,6 +53,14 @@ class City {
     churchCenterWage = 1.0;
     churchWaterWage = 0.0;
     churchOccupiedWage = 7.0;
+
+    castleRandomWage = 0.2;
+    castleCenterWage = 1.0;
+    castleWaterWage = 5.0;
+    castleOccupiedWage = 1.0;
+
+    hasWalls = false;
+    hasCastle = false;
 
     constructor(roads: MainRoad[], seed: number) {
         this.seed = seed;
@@ -231,6 +240,65 @@ class City {
         return maxSpot;
     }
 
+    public pickBestCastleBuildingCandidate(): SubareaPolygon | undefined {
+        let possibleSpots: DistrictPolygon[] = [];
+        let maxFitValue = 0;
+        let maxSpot: DistrictPolygon | undefined = undefined;
+        let waterRoads: Road[] = [];
+
+        for(let i = 0; i < this.polygons.length; i++){
+            possibleSpots.push(...this.polygons.filter((r) => (r.rank === this.wallRank)))
+        }
+
+        let maxDistanceFromCenter = 0;
+        let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
+        let maxDistanceFromWater = 0;
+        let minDistanceFromWater = Number.MAX_SAFE_INTEGER;
+
+        for(let spot of possibleSpots){
+            const spotDistanceFromCenter = spot.centroid.distanceFromPoint(this.center);
+            if(spotDistanceFromCenter > maxDistanceFromCenter){
+                maxDistanceFromCenter = spotDistanceFromCenter;
+            }
+            if(spotDistanceFromCenter < minDistanceFromCenter){
+                minDistanceFromCenter = spotDistanceFromCenter;
+            }
+        }
+
+        if(this.rivers.length > 0){
+            waterRoads.push(...this.rivers[0].riverRoads);
+            for(let spot of possibleSpots){
+                const spotDistanceFromWater = spot.centroid.distanceFromWater(waterRoads);
+                if(spotDistanceFromWater > maxDistanceFromWater){
+                    maxDistanceFromWater = spotDistanceFromWater;
+                }
+                if(spotDistanceFromWater < minDistanceFromWater){
+                    minDistanceFromWater = spotDistanceFromWater;
+                }
+            }
+        }
+        for(let i = 0; i < this.polygons.length; i++){
+            for(let spot of possibleSpots){
+                let spotValue = 0;
+                if(minDistanceFromCenter !== maxDistanceFromCenter)
+                    spotValue += (this.castleCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter));
+                if(minDistanceFromWater !== maxDistanceFromWater)
+                    spotValue += (this.castleWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater));
+                spotValue += (this.castleRandomWage * spot.subAreas.castleHashValue(this.seed));
+                spotValue += (this.castleOccupiedWage * (1 - spot.subAreas.getOccupationRate()));
+                console.log(spotValue)
+                if(spotValue > maxFitValue){
+                    maxFitValue = spotValue;
+                    maxSpot = spot;
+                }
+            }
+        }
+        console.log(maxSpot);
+        if(maxSpot === undefined)
+            return undefined;
+        return maxSpot.subAreas;
+    }
+
     public addNewRoad(distance: number): void {
 
     }
@@ -382,6 +450,14 @@ class City {
         }
     }
 
+    public createCastle(ratio: number) : void {
+        const spot = this.pickBestCastleBuildingCandidate();
+        if(spot !== undefined){
+            spot.buildBuilding(CastlePBuilding.createCastlePBuilding(spot, ratio));
+            this.hasCastle = true;
+        }
+    }
+
     public getAllBuildings(): Building[] {
         const buildingSet = new Set<Building>();
         for (const road of this.roads) {
@@ -406,21 +482,16 @@ class City {
         }
     }
 
-    public createCastle(ratio: number) : void {
-        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.subPolygons === undefined)
-        if (possiblePolygons.length > 0) {
-            possiblePolygons[0].createCastle(ratio);
-        }
-    }
+
 
     public static getExampleCity(x1: number, y1: number, x2: number, y2: number, seed: number, riverStartAngle: number): City {
         const p1 = new MainPoint(x1, y1, 0);
         const p2 = new MainPoint(x2, y2, 1);
         const r = MainRoad.createMainRoad(p1, p2, 0, 1);
         const c = new City([r], seed);
-        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 300, 300, 24, Math.PI/10, seed));
+        /*c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
         const rc = c.lakes[0].getClosestPointToAngle(riverStartAngle);
-        c.rivers.push(River.createRiver(rc, riverStartAngle, Math.PI/9, Math.PI/8, 100, 40, seed));
+        c.rivers.push(River.createRiver(rc, riverStartAngle, Math.PI/9, Math.PI/8, 100, 40, seed));*/
         return c;
     }
 
@@ -561,6 +632,7 @@ class City {
                     road.setToWall();
                 }
             }
+            this.hasWalls = true;
         }
         this.pickBestPHousingBuildingCandidate();
     }

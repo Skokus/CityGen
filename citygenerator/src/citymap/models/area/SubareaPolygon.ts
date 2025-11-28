@@ -277,6 +277,7 @@ class SubareaPolygon extends Polygon{
         }
         return false;
     }
+
     public getAccessoryRadius(ratio: number): number { //ratio so that the circle doesn't fill till the edges of the polygon
         const c = this.centroid;
         let min = Road.distanceFromPoint(c, this.roads[0].p1, this.roads[0].p2);
@@ -312,6 +313,10 @@ class SubareaPolygon extends Polygon{
         return parseInt(hash, 16)/65535;
     }
 
+    public castleHashValue(seed: number): number {
+        const hash = Md5.hashStr(seed + "SubareaPolygonCastle" + this.centroid.x + ", " + this.centroid.y +" area:" + this.getArea()).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
 }
 
 export default SubareaPolygon;

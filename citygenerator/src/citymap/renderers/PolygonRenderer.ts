@@ -37,12 +37,7 @@ class PolygonRenderer implements Renderer{
 
     private getPolygonColor(): string {
         if(this.polygon instanceof DistrictPolygon){
-            switch(this.polygon.type){
-                case DistrictPolygonType.Farm:
-                    return "#ffe87b";
-                case DistrictPolygonType.Market:
-                    return "#c1c1c1";
-            }
+            return this.colors[this.polygon.rank];
         } else if(this.polygon instanceof LakePolygon){
             return "#00b8ff";
         }
