@@ -5,6 +5,7 @@ import Point from "../point/Point";
 import PolygonBuilding from "../building/polygonbuilding/PolygonBuilding";
 import Building from "../building/Building";
 import {Md5} from "ts-md5";
+import MainPoint from "../point/MainPoint";
 
 class SubareaPolygon extends Polygon{
 
@@ -124,11 +125,12 @@ class SubareaPolygon extends Polygon{
         for(let road of this.getRoads()){
             if(road.mainRoad !== undefined){
                 for(let building of road.mainRoad.getAllBuildings()){
-                    if(Math.abs(building.point.distanceFromPoint(this.centroid) - building.radius) <= 0.00001){
+                    console.log("HERE2");
+                    if(Math.abs(building.point.distanceFromPoint(this.centroid)) <= building.radius){
                         road.mainRoad.removeBuilding(building);
                     }
                     for(let border of this.getRoads()){
-                        if(Math.abs(Road.distanceFromPoint(building.point, border.p1, border.p2) - building.radius) <= 0.00001){
+                        if(Math.abs(Road.distanceFromPoint(building.point, border.p1, border.p2)) <= building.radius){
                             road.mainRoad.removeBuilding(building);
                             break;
                         }
@@ -167,7 +169,7 @@ class SubareaPolygon extends Polygon{
         newPolygons.push(smallerPolygon);
         let originalPoints: Point[] = this.getClockWiseBorderPoints();
         for(let i = 0; i < originalPoints.length; i++){
-            const road1 = this.getRoadWithPoints(originalPoints[i], originalPoints[(i+1)%smallerPolygonPoints.length]);
+            const road1 = this.getSideRoadWithPoints(originalPoints[i], originalPoints[(i+1)%smallerPolygonPoints.length]);
             const road2 = smallerPolygon.getRoadWithPoints(smallerPolygonPoints[i], smallerPolygonPoints[(i+1)%smallerPolygonPoints.length]);
             const road3 = new SideRoad(originalPoints[i], smallerPolygonPoints[i], undefined);
             const road4 = new SideRoad(originalPoints[(i+1)%smallerPolygonPoints.length], smallerPolygonPoints[(i+1)%smallerPolygonPoints.length], undefined);
@@ -177,10 +179,20 @@ class SubareaPolygon extends Polygon{
         this.subPolygons = newPolygons;
     }
 
+    private getSideRoadWithPoints(point1: Point, point2: Point): SideRoad {
+        for(const road of this.getRoads()) {
+            if(road.doesContainPoint(point1) && road.doesContainPoint(point2)){
+                return road;
+            }
+
+        }
+        return this.getRoads()[0];
+    }
+
     public splitRectangle(baseRoadId: number, counterBaseRoadId: number, distance: number): SubareaPolygon[] {
         let newPolygons: SubareaPolygon[] = [];
         const baseRoad = this.roads[baseRoadId];
-        const counterBaseRoad = this.roads[counterBaseRoadId];
+        const counterBaseRoad = this.getRoads()[counterBaseRoadId];
         const n = Math.floor(baseRoad.length/distance);
         const newLength = baseRoad.length/n;
         const ratio = newLength/baseRoad.length;
@@ -201,12 +213,11 @@ class SubareaPolygon extends Polygon{
         }
         let betweenRoads: SideRoad[] = [];
         for(let i = 0; i < counterBasePoints.length; i++){
-            betweenRoads.push(new SideRoad(basePoints[i], counterBasePoints[i], undefined));
+            betweenRoads.push(new SideRoad(basePoints[i], counterBasePoints[i], counterBaseRoad.mainRoad));
         }
-        console.log(betweenRoads);
         for(let i = 0; i<basePoints.length-1; i++){
-            const road1 = new SideRoad(basePoints[i], counterBasePoints[i], undefined);
-            const road2 = new SideRoad(basePoints[i+1], counterBasePoints[i+1], undefined);
+            const road1 = new SideRoad(basePoints[i], counterBasePoints[i], counterBaseRoad.mainRoad);
+            const road2 = new SideRoad(basePoints[i+1], counterBasePoints[i+1], counterBaseRoad.mainRoad);
             newPolygons.push(new SubareaPolygon([road1, betweenRoads[i], road2, betweenRoads[i+1]]));
         }
         this.subPolygons = newPolygons;

@@ -346,11 +346,8 @@ class City {
 
     public deleteBuildingsWithNewRoad(road: MainRoad){
         for(let r of road.getPoint1().getAllRealRoads().filter((r) => r !== road)){
-            console.log("HERE");
             for(let b of r.getAllBuildings()){
-                console.log(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2()));
                 if(Math.abs(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2())) <= b.radius){
-                    console.log("TUTAJ2")
                     r.removeBuilding(b);
                 }
             }

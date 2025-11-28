@@ -60,7 +60,7 @@ class DistrictPolygon extends Polygon {
             const c = this.subAreas.subPolygons[0];
             this.subAreas.subPolygons[0].accessory = new FountainBuilding(c.centroid.x, c.centroid.y, c.getAccessoryRadius(0.6));
             for(let i = 1; i < this.subAreas.subPolygons.length; i++) {
-                this.subAreas.subPolygons[i].building = MarketBoothPBuilding.createMarketBoothPBuilding(this.subAreas.subPolygons[i], 0.80);
+                this.subAreas.subPolygons[i].buildBuilding(MarketBoothPBuilding.createMarketBoothPBuilding(this.subAreas.subPolygons[i], 0.80));
             }
         }
     }
