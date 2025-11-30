@@ -22,7 +22,7 @@ class City {
     rivers: River[];
     center: Point;
     popRadius = 30;
-    angle = Math.PI/9;
+    mainRoadAngleDeviation = Math.PI/9;
 
     riverStartAngle = 0*Math.PI/9;
 
@@ -311,7 +311,7 @@ class City {
             randomPoint = points[Math.floor(Math.random() * points.length)];
             direction = randomPoint.getForwardDirection();
         }
-        const randomAngle = (Math.PI / 2) * direction + (randomPoint.getAngleHashValue(this.seed, direction) * this.angle) - this.angle / 2;
+        const randomAngle = (Math.PI / 2) * direction + (randomPoint.getAngleHashValue(this.seed, direction) * this.mainRoadAngleDeviation) - this.mainRoadAngleDeviation / 2;
         const distance = randomPoint.getDistanceHashValue(this.seed, direction) * (minDistance - maxDistance) + minDistance;
         const p = randomPoint.getDistancedPoint(distance, randomAngle);
         const newPoint = new MainPoint(p.x, p.y, randomPoint.distanceFromCenter + 1);
@@ -366,7 +366,7 @@ class City {
             randomPoint = points[Math.floor(Math.random() * points.length)];
             direction = randomPoint.getSideDirection();
         }
-        const randomAngle = (Math.PI / 2) * direction + (randomPoint.getAngleHashValue(this.seed, direction) * this.angle) - this.angle / 2;
+        const randomAngle = (Math.PI / 2) * direction + (randomPoint.getAngleHashValue(this.seed, direction) * this.mainRoadAngleDeviation) - this.mainRoadAngleDeviation / 2;
         const distance = randomPoint.getDistanceHashValue(this.seed, direction) * (minDistance - maxDistance) + minDistance;
         const p = randomPoint.getDistancedPoint(distance, randomAngle);
         const newPoint = new MainPoint(p.x, p.y, randomPoint.distanceFromCenter + 1);

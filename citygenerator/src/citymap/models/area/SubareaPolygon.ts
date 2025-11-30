@@ -5,8 +5,6 @@ import Point from "../point/Point";
 import PolygonBuilding from "../building/polygonbuilding/PolygonBuilding";
 import Building from "../building/Building";
 import {Md5} from "ts-md5";
-import MainPoint from "../point/MainPoint";
-
 class SubareaPolygon extends Polygon{
 
     building: PolygonBuilding | undefined;
