@@ -43,6 +43,10 @@ function CityMap(props: CityMapProps) {
             for (const p of props.city.polygons) {
                 polr.setPolygon(p);
                 polr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
+                for(const s of p.getAllBuiltPolygons()){
+                    polr.setPolygon(s);
+                    polr.draw(ctx, props.zoomScale, props.xOffSet, props.yOffSet);
+                }
                 for (const c of p.subAreas.getAllPolygonsWithBuildings()) {
                     if(c.building !== undefined){
                         pbr.setPolygonBuilding(c.building);

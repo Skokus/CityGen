@@ -99,6 +99,12 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function checkDistricts(){
+        city.checkDistrictsForSideRoadUpdate();
+        setCity(city);
+        setCounter(counter + 1);
+    }
+
     function zoomInMap() {
         setZoomScale(zoomScale + 0.2);
     }
@@ -157,6 +163,10 @@ function CityPanel() {
                 <button onClick={() => {
                     createCastle()
                 }}>Create Castle
+                </button>
+                <button onClick={() => {
+                    checkDistricts()
+                }}>Check districts
                 </button>
                 <br/>
                 <button onClick={() => {

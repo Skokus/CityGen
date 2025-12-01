@@ -72,7 +72,7 @@ class DistrictPolygon extends Polygon {
     protected createInitialSubArea(roads: Road[]): SubareaPolygon {
         let subRoads = [];
         for (let road of roads) {
-            subRoads.push(new SideRoad(road.p1, road.p2, road as MainRoad));
+            subRoads.push(new SideRoad(road.p1, road.p2, road as MainRoad, true, undefined));
         }
         return new SubareaPolygon(subRoads);
     }
@@ -105,6 +105,14 @@ class DistrictPolygon extends Polygon {
 
     public occupiedPercentage(): number{
         return 1;
+    }
+
+    public checkForNewSideRoads(): void {
+        this.subAreas.buildNewSideRoads();
+    }
+
+    public getAllBuiltPolygons(): SubareaPolygon[] {
+        return this.subAreas.getAllBuiltPolygons();
     }
 
 }

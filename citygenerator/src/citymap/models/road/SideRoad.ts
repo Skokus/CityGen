@@ -6,14 +6,18 @@ import {Md5} from "ts-md5";
 class SideRoad extends Road{
 
     mainRoad: MainRoad | undefined;
+    isBuilt: boolean;
+    parentSideRoad: SideRoad | undefined;
 
-    constructor(p1: Point, p2: Point, mainRoad: MainRoad | undefined) {
+    constructor(p1: Point, p2: Point, mainRoad: MainRoad | undefined, isBuilt: boolean = false, parentSideRoad: SideRoad | undefined) {
         super(p1, p2);
         this.mainRoad = mainRoad;
+        this.isBuilt = isBuilt;
+        this.parentSideRoad = parentSideRoad;
     }
 
     public splitRoad(p: Point): SideRoad[]{
-        return [new SideRoad(this.p1, p, this.mainRoad), new SideRoad(p, this.p2, this.mainRoad)];
+        return [new SideRoad(this.p1, p, this.mainRoad, this.isBuilt, this), new SideRoad(p, this.p2, this.mainRoad, this.isBuilt, this)];
     }
 
     get isMainRoad(): boolean {
@@ -35,6 +39,13 @@ class SideRoad extends Road{
         return new Point(modX, modY);
     }
 
+    public getIsBuilt(): boolean {
+        if(this.parentSideRoad === undefined) {
+            return this.isBuilt;
+        } else {
+            return this.parentSideRoad.getIsBuilt();
+        }
+    }
 }
 
 export default SideRoad;

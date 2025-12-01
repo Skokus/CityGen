@@ -113,7 +113,7 @@ class SubareaPolygon extends Polygon{
                 });
             }
         });
-        var newRoad = new SideRoad(p1, p2, undefined);
+        var newRoad = new SideRoad(p1, p2, undefined, false, undefined);
         bordersAbove.push(newRoad);
         bordersBelow.push(newRoad);
         this.subPolygons = [new SubareaPolygon(bordersAbove), new SubareaPolygon(bordersBelow)];
@@ -123,7 +123,6 @@ class SubareaPolygon extends Polygon{
         for(let road of this.getRoads()){
             if(road.mainRoad !== undefined){
                 for(let building of road.mainRoad.getAllBuildings()){
-                    console.log("HERE2");
                     if(Math.abs(building.point.distanceFromPoint(this.centroid)) <= building.radius){
                         road.mainRoad.removeBuilding(building);
                     }
@@ -144,6 +143,12 @@ class SubareaPolygon extends Polygon{
         }
     }
 
+    public buildPolygon(){
+        for(let road of this.getRoads()){
+            road.isBuilt = true;
+        }
+    }
+
     private removeBuilding(): void {
         this.building = undefined;
         if(this.subPolygons !== undefined) {
@@ -161,7 +166,7 @@ class SubareaPolygon extends Polygon{
         }
         let smallerPolygonRoads: SideRoad[] = [];
         for(let i = 0; i < smallerPolygonPoints.length; i++) {
-            smallerPolygonRoads.push(new SideRoad(smallerPolygonPoints[i], smallerPolygonPoints[(i+1)%smallerPolygonPoints.length], undefined));
+            smallerPolygonRoads.push(new SideRoad(smallerPolygonPoints[i], smallerPolygonPoints[(i+1)%smallerPolygonPoints.length], undefined, false, undefined));
         }
         const smallerPolygon = new SubareaPolygon(smallerPolygonRoads);
         newPolygons.push(smallerPolygon);
@@ -169,8 +174,8 @@ class SubareaPolygon extends Polygon{
         for(let i = 0; i < originalPoints.length; i++){
             const road1 = this.getSideRoadWithPoints(originalPoints[i], originalPoints[(i+1)%smallerPolygonPoints.length]);
             const road2 = smallerPolygon.getRoadWithPoints(smallerPolygonPoints[i], smallerPolygonPoints[(i+1)%smallerPolygonPoints.length]);
-            const road3 = new SideRoad(originalPoints[i], smallerPolygonPoints[i], undefined);
-            const road4 = new SideRoad(originalPoints[(i+1)%smallerPolygonPoints.length], smallerPolygonPoints[(i+1)%smallerPolygonPoints.length], undefined);
+            const road3 = new SideRoad(originalPoints[i], smallerPolygonPoints[i], undefined, false, undefined);
+            const road4 = new SideRoad(originalPoints[(i+1)%smallerPolygonPoints.length], smallerPolygonPoints[(i+1)%smallerPolygonPoints.length], undefined, false, undefined);
             const rectPolygon = new SubareaPolygon([road1, road2, road3, road4]);
             newPolygons.push(...rectPolygon.splitRectangle(1, 0,10));
         }
@@ -211,11 +216,11 @@ class SubareaPolygon extends Polygon{
         }
         let betweenRoads: SideRoad[] = [];
         for(let i = 0; i < counterBasePoints.length; i++){
-            betweenRoads.push(new SideRoad(basePoints[i], counterBasePoints[i], counterBaseRoad.mainRoad));
+            betweenRoads.push(new SideRoad(basePoints[i], counterBasePoints[i], counterBaseRoad.mainRoad, false, undefined));
         }
         for(let i = 0; i<basePoints.length-1; i++){
-            const road1 = new SideRoad(basePoints[i], counterBasePoints[i], counterBaseRoad.mainRoad);
-            const road2 = new SideRoad(basePoints[i+1], counterBasePoints[i+1], counterBaseRoad.mainRoad);
+            const road1 = new SideRoad(basePoints[i], counterBasePoints[i], counterBaseRoad.mainRoad, false, undefined);
+            const road2 = new SideRoad(basePoints[i+1], counterBasePoints[i+1], counterBaseRoad.mainRoad, false, undefined);
             newPolygons.push(new SubareaPolygon([road1, betweenRoads[i], road2, betweenRoads[i+1]]));
         }
         this.subPolygons = newPolygons;
@@ -302,8 +307,58 @@ class SubareaPolygon extends Polygon{
         }
     }
 
+    public getOccupationRateNearBuiltRoads(): number {
+        if(this.hasBuiltRoads() && this.isOccupied()){
+            return 1;
+        }
+        if(this.hasBuiltRoads() && (this.subPolygons === undefined || this.subPolygons.length === 0)){
+            return 0;
+        } else {
+            let ocpd = 0;
+            if(this.subPolygons !== undefined && this.subPolygons.length > 0){
+                for(const p of this.subPolygons){
+                    if(this.getAreaNearBuiltRoads() !== 0)
+                        ocpd += p.getOccupationRateNearBuiltRoads()*p.getAreaNearBuiltRoads()/this.getAreaNearBuiltRoads();
+                }
+            }
+            return ocpd;
+        }
+    }
+
     public isOccupied(): boolean{
         return this.building !== undefined;
+    }
+
+    public getAreaNearBuiltRoads(): number{
+        if(this.hasBuiltRoads() && (this.subPolygons === undefined || this.subPolygons.length === 0)){
+            return this.getArea();
+        } else if(!this.hasBuiltRoads() && (this.subPolygons === undefined || this.subPolygons.length === 0)){
+            return 0;
+        } else {
+            let ocpd = 0;
+            if(this.subPolygons !== undefined && this.subPolygons.length > 0){
+                for(const p of this.subPolygons){
+                    ocpd += p.getAreaNearBuiltRoads();
+                }
+            }
+            return ocpd;
+        }
+    }
+
+    public isBuilt(): boolean{
+        for(let road of this.getRoads()){
+            if(!road.getIsBuilt())
+                return false;
+        }
+        return true;
+    }
+
+    public hasBuiltRoads(): boolean{
+        for(let road of this.getRoads()){
+            if(road.getIsBuilt())
+                return true;
+        }
+        return false;
     }
 
     public hashValue(seed: number): number {
@@ -314,6 +369,45 @@ class SubareaPolygon extends Polygon{
     public castleHashValue(seed: number): number {
         const hash = Md5.hashStr(seed + "SubareaPolygonCastle" + this.centroid.x + ", " + this.centroid.y +" area:" + this.getArea()).substring(0,4);
         return parseInt(hash, 16)/65535;
+    }
+
+    public buildNewSideRoads(): void {
+        if(this.getOccupationRate() < 0.999 && this.getOccupationRateNearBuiltRoads() > 0.999){
+            if(this.subPolygons !== undefined){
+                for(const p of this.subPolygons){
+                    p.buildPolygon();
+                    p.buildNewSideRoads();
+                }
+            }
+        }
+    }
+
+    public getAllBuiltPolygons(): SubareaPolygon[] {
+        if(this.building !== undefined && this.isBuilt()){
+            return [this];
+        }
+        if(this.subPolygons === undefined || this.subPolygons.length === 0){
+            if(this.isBuilt()){
+                return [this];
+            } else if(!this.isBuilt()){
+                return [];
+            }
+        } else {
+            var ret = [];
+            for(let p of this.subPolygons){
+                ret.push(...p.getAllBuiltPolygons());
+            }
+            if(ret.length > 0){
+                return ret;
+            } else {
+                if(this.isBuilt()){
+                    return [this];
+                } else if(!this.isBuilt()){
+                    return [];
+                }
+            }
+        }
+        return [];
     }
 }
 

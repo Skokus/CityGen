@@ -79,7 +79,7 @@ class City {
         let waterRoads: Road[] = [];
 
         for(let i = 0; i < this.polygons.length; i++){
-            possibleSpots.push(...this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.containsMainRoads())))
+            possibleSpots.push(...this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads())))
         }
 
         let maxDistanceFromCenter = 0;
@@ -109,8 +109,9 @@ class City {
                 }
             }
         }
+
         for(let i = 0; i < this.polygons.length; i++){
-            var spots = this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.containsMainRoads()));
+            var spots = this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads()));
             for(let spot of spots){
                 let spotValue = 0;
                 if(minDistanceFromCenter !== maxDistanceFromCenter)
@@ -230,7 +231,6 @@ class City {
                     spotValue += (this.churchWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater));
                 spotValue += (this.churchRandomWage * spot.hashValue(this.seed));
                 spotValue += (this.churchOccupiedWage * (1 - spot.getOccupationRate()));
-                console.log("OCCUPIED " + spot.getOccupationRate());
                 if(spotValue > maxFitValue){
                     maxFitValue = spotValue;
                     maxSpot = spot;
@@ -286,14 +286,12 @@ class City {
                     spotValue += (this.castleWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater));
                 spotValue += (this.castleRandomWage * spot.subAreas.castleHashValue(this.seed));
                 spotValue += (this.castleOccupiedWage * (1 - spot.subAreas.getOccupationRate()));
-                console.log(spotValue)
                 if(spotValue > maxFitValue){
                     maxFitValue = spotValue;
                     maxSpot = spot;
                 }
             }
         }
-        console.log(maxSpot);
         if(maxSpot === undefined)
             return undefined;
         return maxSpot.subAreas;
@@ -482,7 +480,11 @@ class City {
         }
     }
 
-
+    public checkDistrictsForSideRoadUpdate(): void {
+        for(const d of this.polygons){
+            d.checkForNewSideRoads();
+        }
+    }
 
     public static getExampleCity(x1: number, y1: number, x2: number, y2: number, seed: number, riverStartAngle: number): City {
         const p1 = new MainPoint(x1, y1, 0);
