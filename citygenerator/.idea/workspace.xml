@@ -6,12 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/River.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/River.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/SideRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/SideRoad.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/RiverPoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/RiverPoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/road/MainRoad.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,7 +208,11 @@
       <workItem from="1764328973164" duration="7327000" />
       <workItem from="1764356547108" duration="1687000" />
       <workItem from="1764576804628" duration="2990000" />
-      <workItem from="1764590382827" duration="3769000" />
+      <workItem from="1764590382827" duration="4341000" />
+      <workItem from="1764681355960" duration="3875000" />
+      <workItem from="1764688628773" duration="1207000" />
+      <workItem from="1764714728522" duration="19000" />
+      <workItem from="1764777792211" duration="5430000" />
     </task>
     <servers />
   </component>

@@ -7,7 +7,7 @@ function CityPanel() {
 
     const [maxRoadLength, setMaxRoadLength] = useState(100);
     const [minRoadLength, setMinRoadLength] = useState(90);
-    const [maxBuildingSize, setMaxBuildingSize] = useState(10);
+    const [pointBuildingRadius, setPointBuildingRadius] = useState(21);
     const [minBuildingSize, setMinBuildingSize] = useState(7);
     const [maxBuildingDistanceFromRoad, setMaxBuildingDistanceFromRoad] = useState(10);
     const [minBuildingDistanceFromRoad, setMinBuildingDistanceFromRoad] = useState(10);
@@ -18,7 +18,7 @@ function CityPanel() {
     const [x2, setX2] = useState(600);
     const [y2, setY2] = useState(510);
 
-    const [city, setCity] = useState(City.getExampleCity(x1, y1, x2, y2, seed, riverStartAngle));
+    const [city, setCity] = useState(City.getExampleCity(x1, y1, x2, y2, seed, pointBuildingRadius, minRoadLength, maxRoadLength));
     const [counter, setCounter] = useState(0);
     const [zoomScale, setZoomScale] = useState(1.4);
     const [xOffset, setXOffset] = useState(10);
@@ -33,7 +33,7 @@ function CityPanel() {
     }, [counter, ticking]);
 
     function restartCity(){
-        const newcity = City.getExampleCity(x1, y1, x2, y2, seed, riverStartAngle);
+        const newcity = City.getExampleCity(x1, y1, x2, y2, seed, pointBuildingRadius, minRoadLength, maxRoadLength);
         setCity(newcity);
         setCounter(counter + 1);
     }
@@ -229,10 +229,6 @@ function CityPanel() {
                 <label className="inputLabel">
                     Maximum primitive building size:
                 </label>
-                <input className="input" id={"maxPrimitiveBuildingSize"} name="maxPrimitiveBuildingSizeInput" type="number" defaultValue={maxBuildingSize} onChange={e => {
-                    setMaxBuildingSize(e.target.valueAsNumber)
-                }}/>
-                <br/>
                 <label className="inputLabel">
                     Minimum primitive building size:
                 </label>

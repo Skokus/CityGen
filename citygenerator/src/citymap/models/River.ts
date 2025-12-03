@@ -21,7 +21,7 @@ class River {
         return Array.from(points) as RiverPoint[];
     }
 
-    public static createRiver(startPoint: LakePoint, startAngle: number, angleRange: number, maxAngleChange: number, stepDistance: number, n: number, seed: number): River {
+    public static createRiver(startPoint: LakePoint, startAngle: number, angleRange: number, maxAngleChange: number, minStepDistance: number, maxStepDistance: number, n: number, seed: number): River {
         let riverPoints: RiverPoint[] = [];
         startPoint.angle = startAngle;
         riverPoints.push(startPoint);
@@ -33,6 +33,7 @@ class River {
             } else if(anglediff < -angleRange){
                 newAngle = startAngle - angleRange;
             }
+            const stepDistance = riverPoints[i-1].getDistanceHashValue(seed) * (minStepDistance - maxStepDistance) + minStepDistance;
             riverPoints.push(riverPoints[i-1].getDistancedRiverPoint(stepDistance, newAngle));
         }
         let riverRoads: RiverRoad[] = [];

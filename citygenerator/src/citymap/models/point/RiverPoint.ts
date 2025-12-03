@@ -19,6 +19,11 @@ class RiverPoint extends MainPoint {
         return parseInt(hash, 16)/65535;
     }
 
+    public getDistanceHashValue(seed: number): number {
+        const hash = Md5.hashStr(seed + "RiverPointDistance" + this.x + ", " + this.y + ",angle" + this.angle).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
+
 }
 
 export default RiverPoint;

@@ -63,9 +63,9 @@ class MainRoad extends Road {
         const n = Math.floor(this.length/distance);
         const ratio = 1 / n;
         for (let i = 0; i < n; i++) {
-            let s = this.createSidePointNextToRoad(i * ratio + ratio / 2, this.length / distance, 1);
+            let s = this.createSidePointNextToRoad(i * ratio + ratio / 2, distance, 1);
             newSidePoints.push(s);
-            let s2 = this.createSidePointNextToRoad(i * ratio + ratio / 2, this.length / distance, -1);
+            let s2 = this.createSidePointNextToRoad(i * ratio + ratio / 2, distance, -1);
             newSidePoints2.push(s2);
         }
         if(newSidePoints[0].isAboveLine(this.slope, this.yInter)){
@@ -77,12 +77,12 @@ class MainRoad extends Road {
         }
     }
 
-    public static createMainRoad(point1: MainPoint, point2: MainPoint, direction: number, completionRate: number): MainRoad {
+    public static createMainRoad(point1: MainPoint, point2: MainPoint, direction: number, completionRate: number, houseRadius: number): MainRoad {
         const l = point1.connectedRoads.length;
         const road = new MainRoad(point1, point2, completionRate);
         point1.addRoad(road, direction);
         point2.addRoad(road, (direction + 2) % l);
-        road.createSidePoints(10);
+        road.createSidePoints(houseRadius);
         if((point1 instanceof RiverPoint && !(point2 instanceof RiverPoint))){
             if(point1.distanceFromCenter <= 0){
                 point1.distanceFromCenter = (point2.distanceFromCenter + 1);
