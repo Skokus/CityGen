@@ -21,8 +21,6 @@ class City {
     lakes: LakePolygon[];
     rivers: River[];
     center: Point;
-    popRadius = 30;
-    mainRoadAngleDeviation = Math.PI/9;
 
     static riverStartAngle = 0*Math.PI/9;
     static riverStartX = 200;
@@ -34,11 +32,15 @@ class City {
     districtBorderMaxCount = 4;
     defaultCompletion = 1.0;
     wallRank = 1;
+    farmRankPercentage = 0.5;
+    minimalFarmLayer = 2;
 
     expendRange = 2;
     sideRange = 1;
     minRoadLength = 90;
     maxRoadLength = 100;
+    popRadius = 30;
+    mainRoadAngleDeviation = Math.PI/9;
 
     buildingToPolygonRatio = 0.8;
     iteration = 0;
@@ -307,10 +309,6 @@ class City {
         return maxSpot.subAreas;
     }
 
-    public addNewRoad(distance: number): void {
-
-    }
-
     public addExtentionRoad(minDistance: number, maxDistance: number): void {
         const points = this.getMinimalExpandablePointsWithinRange();
         var direction = -1;
@@ -461,6 +459,8 @@ class City {
     }
 
     public createCastle(ratio: number) : void {
+        if(this.hasCastle)
+            return;
         const spot = this.pickBestCastleBuildingCandidate();
         if(spot !== undefined){
             spot.buildBuilding(CastlePBuilding.createCastlePBuilding(spot, ratio));
@@ -481,7 +481,11 @@ class City {
     public splitRandomPolygon(): void {
         const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.subPolygons === undefined)
         if (possiblePolygons.length > 0) {
-            possiblePolygons[0].splitPolygonMultipleTimesWithSize(this.seed, this.polygonBuildingMaxSize);
+            if(possiblePolygons[0].type === DistrictPolygonType.Market){
+                possiblePolygons[0].splitPolygonBySmallerPolygon(0.8);
+            } else {
+                possiblePolygons[0].splitPolygonMultipleTimesWithSize(this.seed, this.polygonBuildingMaxSize);
+            }
         }
     }
 
@@ -510,9 +514,9 @@ class City {
         c.minRoadLength = minRoadLength;
         c.maxRoadLength = maxRoadLength;
         c.pointBuildingRadius = pointBuildingRadius;
-        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
+        /*c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
         const rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
-        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
+        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));*/
         return c;
     }
 
@@ -622,13 +626,34 @@ class City {
             if (flag) {
                 this.polygons.push(newp);
                 newp.generateRank();
-                if(newp.rank === 1){
+                if(newp.rank === 0){
                     newp.type = DistrictPolygonType.Market;
                 }
                 newp.addRankToRoads();
             }
         }
         this.checkForCityWalls();
+        this.updateDistrictsTypes();
+    }
+
+    private updateDistrictsTypes(): void {
+        var districts: DistrictPolygon[] = this.polygons.filter((p) => p.rank > 0);
+        if(districts.length === 0){
+            return;
+        }
+        const maxDistrict = districts.reduce(function(prev, current) {
+            return (prev && prev.rank > current.rank) ? prev : current
+        })
+        const maxRank = maxDistrict.rank;
+        const minRuralLayer = maxRank - this.minimalFarmLayer;
+        if(minRuralLayer <= 0)
+            return;
+        const ratioFarmLayer = Math.ceil(maxRank * this.farmRankPercentage);
+        console.log(ratioFarmLayer);
+        if(ratioFarmLayer < this.minimalFarmLayer)
+            return;
+        const ruralMaxRank = maxRank - ratioFarmLayer;
+        this.polygons.filter((p) => p.rank > 0 && p.rank <= ruralMaxRank).forEach((p) => p.type = DistrictPolygonType.Rural);
     }
 
     private checkForCityWalls(): void {

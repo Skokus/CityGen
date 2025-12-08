@@ -28,19 +28,13 @@ function CityPanel() {
     const [timePeriod, setTimePeriod] = useState(1000);
 
     useEffect(() => {
-        const timer = setTimeout(() => ticking && addNewRoad(), timePeriod)
+        const timer = setTimeout(() => ticking, timePeriod)
         return () => clearTimeout(timer)
     }, [counter, ticking]);
 
     function restartCity(){
         const newcity = City.getExampleCity(x1, y1, x2, y2, seed, pointBuildingRadius, minRoadLength, maxRoadLength);
         setCity(newcity);
-        setCounter(counter + 1);
-    }
-
-    function addNewRoad() {
-        city.addNewRoad(100);
-        setCity(city);
         setCounter(counter + 1);
     }
 
@@ -127,10 +121,6 @@ function CityPanel() {
                 <CityMap zoomScale={zoomScale} city={city} xOffSet={xOffset} yOffSet={yOffset}/>
             </div>
             <div className="sidepanel">
-                <button onClick={() => {
-                    addNewRoad()
-                }}>Add random road
-                </button>
                 <button onClick={() => {
                     addForwardRoad()
                 }}>Extend road

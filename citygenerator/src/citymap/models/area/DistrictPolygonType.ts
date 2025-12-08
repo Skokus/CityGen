@@ -1,7 +1,7 @@
 enum DistrictPolygonType {
+    Market,
     Farm,
-    Rural,
-    Market
+    Rural
 }
 
 export default DistrictPolygonType;
