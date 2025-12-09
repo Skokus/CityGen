@@ -30,6 +30,13 @@ class MainRoad extends Road {
         return freeSpots;
     }
 
+    public getAllSpotsWithBuilding(): SidePoint[] {
+        let freeSpots = [];
+        freeSpots.push(...this.topSidePoints.filter(sidePoint => sidePoint.hasBuilding()));
+        freeSpots.push(...this.bottomSidePoints.filter(sidePoint => sidePoint.hasBuilding()));
+        return freeSpots;
+    }
+
     public removeBuilding(building: Building){
         for(let sidepoint of this.topSidePoints) {
             if (sidepoint.building === building) {
@@ -62,7 +69,7 @@ class MainRoad extends Road {
         let newSidePoints2: SidePoint[] = [];
         const n = Math.floor(this.length/distance);
         const ratio = 1 / n;
-        for (let i = 0; i < n; i++) {
+        for (let i = 1; i < (n-1); i++) {
             let s = this.createSidePointNextToRoad(i * ratio + ratio / 2, distance, 1);
             newSidePoints.push(s);
             let s2 = this.createSidePointNextToRoad(i * ratio + ratio / 2, distance, -1);
@@ -180,6 +187,26 @@ class MainRoad extends Road {
         return 0;
     }
 
+    public checkFreeSpots(): void {
+        var spots: SidePoint[] = this.getAllFreeSpots();
+        var connectedRoads = [];
+        connectedRoads.push(...this.getPoint1().getAllRealRoads());
+        connectedRoads.push(...this.getPoint2().getAllRealRoads());
+        for(let p of spots){
+            for(let r of connectedRoads){
+                if(r !== this ){
+                    if(Road.distanceFromPoint(p, r.p1, r.p2) <= (p.radius+0.0001)){
+                        p.building = null;
+                    }
+                    for(let sp of r.getAllSpotsWithBuilding()){
+                        if(p.distanceFromPoint(sp) <= (p.radius+sp.radius)*0.95){
+                            p.building = null;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 export default MainRoad;

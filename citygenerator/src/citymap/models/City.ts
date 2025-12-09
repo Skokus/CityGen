@@ -148,6 +148,7 @@ class City {
         let maxSpot: SidePoint | undefined = undefined;
         let waterRoads: Road[] = [];
         for(const r of this.roads){
+            r.checkFreeSpots();
             allFreeSpots.push(...r.getAllFreeSpots());
         }
         let maxDistanceFromCenter = 0;
@@ -258,10 +259,8 @@ class City {
                     spotValue += (this.churchCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter));
                 if(minDistanceFromWater !== maxDistanceFromWater)
                     spotValue += (this.churchWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater));
-                console.log(spotValue);
                 if(minDistanceFromChurch !== maxDistanceFromChurch)
                     spotValue += (this.churchDistanceFromChurchesWage * (spot.distanceFromChurches(churchPolygons) - minDistanceFromChurch)/(maxDistanceFromChurch-minDistanceFromChurch));
-                console.log(spotValue);
                 spotValue += (this.churchRandomWage * spot.hashValue(this.seed));
                 spotValue += (this.churchOccupiedWage * (1 - spot.getOccupationRate()));
                 if(spotValue > maxFitValue){
@@ -460,7 +459,6 @@ class City {
         const spot = this.pickBestHousingBuildingCandidate();
         if(spot !== undefined){
             spot.buildBuilding(new SquareBuilding(spot.x, spot.y, spot.radius, spot.angle));
-            console.log(new SquareBuilding(spot.x, spot.y, spot.radius, spot.angle));
         }
     }
 

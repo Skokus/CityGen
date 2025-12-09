@@ -7,7 +7,7 @@ function CityPanel() {
 
     const [maxRoadLength, setMaxRoadLength] = useState(100);
     const [minRoadLength, setMinRoadLength] = useState(90);
-    const [pointBuildingRadius, setPointBuildingRadius] = useState(21);
+    const [pointBuildingRadius, setPointBuildingRadius] = useState(10);
     const [minBuildingSize, setMinBuildingSize] = useState(7);
     const [maxBuildingDistanceFromRoad, setMaxBuildingDistanceFromRoad] = useState(10);
     const [minBuildingDistanceFromRoad, setMinBuildingDistanceFromRoad] = useState(10);

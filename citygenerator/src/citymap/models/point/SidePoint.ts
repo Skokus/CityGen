@@ -16,16 +16,11 @@ class SidePoint extends Point{
     }
 
     public isFree(): boolean{
-        return this.building === undefined
+        return this.building === undefined;
     }
 
-    public getOffsetDistancedPoint(width: number, distance: number, angle: number, radius: number): Point {
-        const maxOffSet = (width - radius)/2;
-        const side = 1; //choosing the direction in which the offset will go
-        const offset = 1;
-        const newX = this.x + distance * Math.cos(angle) + offset * Math.cos(angle + Math.PI/2 * side);
-        const newY = this.y + distance * Math.sin(angle) + offset * Math.sin(angle + Math.PI/2 * side);
-        return new Point(newX, newY);
+    public hasBuilding(): boolean{
+        return this.building !== undefined && this.building !== null;
     }
 
     public buildBuilding(building: Building): void {
