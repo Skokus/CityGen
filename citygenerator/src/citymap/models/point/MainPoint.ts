@@ -98,6 +98,10 @@ class MainPoint extends Point {
         return canBeVerticallyExtended;
     }
 
+    public hashValue(seed: number,){
+        const hash = Md5.hashStr(seed + "MainPoint" + this.x + ", " + this.y).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
     public getAngleHashValue(seed: number, direction: number): number {
         const hash = Md5.hashStr(seed + "MainPointAngle" + this.x + ", " + this.y + ", direction" + direction).substring(0,4);
         return parseInt(hash, 16)/65535;

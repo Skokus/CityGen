@@ -38,14 +38,8 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
-    function addForwardRoad() {
-        city.addExtentionRoad(minRoadLength, maxRoadLength);
-        setCity(city);
-        setCounter(counter + 1);
-    }
-
-    function addCrossroadRoad() {
-        city.addSideRoad(minRoadLength, maxRoadLength);
+    function addRoad() {
+        city.addRoad(minRoadLength, maxRoadLength);
         setCity(city);
         setCounter(counter + 1);
     }
@@ -122,12 +116,8 @@ function CityPanel() {
             </div>
             <div className="sidepanel">
                 <button onClick={() => {
-                    addForwardRoad()
-                }}>Extend road
-                </button>
-                <button onClick={() => {
-                    addCrossroadRoad()
-                }}>Side road
+                    addRoad()
+                }}>Add road
                 </button>
                 <br/>
                 <button onClick={() => {

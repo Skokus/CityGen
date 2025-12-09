@@ -47,6 +47,10 @@ class City {
     seed = 0;
     idealPolygonOccupationRate = 0.1;
 
+    roadRandomWage = 0.2;
+    roadCenterWage = 5.0;
+    roadWaterWage = 1.0;
+
     polygonBuildingMaxSize = 312.5;
     pHouseRandomWage = 0.2;
     pHouseCenterWage = 1.0;
@@ -82,6 +86,58 @@ class City {
         this.lakes = [];
         this.rivers = [];
         this.center = roads[0].getPoint1();
+    }
+
+    public pickBestPointCandidate(): MainPoint | undefined {
+        let possibleSpots: MainPoint[] = [];
+        let maxFitValue = 0;
+        let maxSpot: MainPoint | undefined = undefined;
+        let waterRoads: Road[] = [];
+
+        possibleSpots.push(...this.getMinimalExpandablePointsWithinRange());
+        possibleSpots.push(...this.getMinimalSideablePointsWithinRange());
+
+        let maxDistanceFromCenter = 0;
+        let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
+        let maxDistanceFromWater = 0;
+        let minDistanceFromWater = Number.MAX_SAFE_INTEGER;
+
+        for(let spot of possibleSpots){
+            const spotDistanceFromCenter = spot.distanceFromPoint(this.center);
+            if(spotDistanceFromCenter > maxDistanceFromCenter){
+                maxDistanceFromCenter = spotDistanceFromCenter;
+            }
+            if(spotDistanceFromCenter < minDistanceFromCenter){
+                minDistanceFromCenter = spotDistanceFromCenter;
+            }
+        }
+
+        if(this.rivers.length > 0){
+            waterRoads.push(...this.rivers[0].riverRoads);
+            for(let spot of possibleSpots){
+                const spotDistanceFromWater = spot.distanceFromWater(waterRoads);
+                if(spotDistanceFromWater > maxDistanceFromWater){
+                    maxDistanceFromWater = spotDistanceFromWater;
+                }
+                if(spotDistanceFromWater < minDistanceFromWater){
+                    minDistanceFromWater = spotDistanceFromWater;
+                }
+            }
+        }
+
+        for(let i = 0; i < possibleSpots.length; i++){
+            let spotValue = 0;
+            if(minDistanceFromCenter !== maxDistanceFromCenter)
+                spotValue += this.roadCenterWage * (maxDistanceFromCenter-possibleSpots[i].distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter);
+            if(minDistanceFromWater !== maxDistanceFromWater)
+                spotValue += this.roadWaterWage * (maxDistanceFromWater-possibleSpots[i].distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater);
+            spotValue += this.roadRandomWage * possibleSpots[i].hashValue(this.seed);
+            if(spotValue > maxFitValue){
+                maxFitValue = spotValue;
+                maxSpot = possibleSpots[i];
+            }
+        }
+        return maxSpot;
     }
 
     public pickBestPHousingBuildingCandidate(): SubareaPolygon | undefined {
@@ -329,10 +385,23 @@ class City {
         return maxSpot.subAreas;
     }
 
-    public addExtentionRoad(minDistance: number, maxDistance: number): void {
+    public addRoad(minDistance: number, maxDistance: number): void {
+        const point = this.pickBestPointCandidate();
+        console.log(point);
+        if(point !== undefined){
+            if(point.canBeExtended()){
+                this.addExtentionRoad(minDistance, maxDistance, point);
+                console.log("HERE");
+            } else if(point.canBeSided()){
+                this.addSideRoad(minDistance, maxDistance, point);
+            }
+        }
+    }
+
+    public addExtentionRoad(minDistance: number, maxDistance: number, point: MainPoint): void {
         const points = this.getMinimalExpandablePointsWithinRange();
         var direction = -1;
-        var randomPoint = new MainPoint(0, 0);
+        var randomPoint = point;
         while (direction < 0) {
             randomPoint = points[Math.floor(Math.random() * points.length)];
             direction = randomPoint.getForwardDirection();
@@ -382,12 +451,12 @@ class City {
         this.roads.push(newRoad);
     }
 
-    public addSideRoad(minDistance: number, maxDistance: number): void {
+    public addSideRoad(minDistance: number, maxDistance: number, point: MainPoint): void {
         const points = this.getMinimalSideablePointsWithinRange();
         if (points.length === 0)
             return;
         var direction = -1;
-        var randomPoint = new MainPoint(0, 0);
+        var randomPoint = point;
         while (direction < 0) {
             randomPoint = points[Math.floor(Math.random() * points.length)];
             direction = randomPoint.getSideDirection();
@@ -541,9 +610,9 @@ class City {
         c.minRoadLength = minRoadLength;
         c.maxRoadLength = maxRoadLength;
         c.pointBuildingRadius = pointBuildingRadius;
-        /*c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
+        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
         const rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
-        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));*/
+        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
         return c;
     }
 
