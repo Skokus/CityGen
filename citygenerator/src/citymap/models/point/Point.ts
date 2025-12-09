@@ -1,4 +1,5 @@
 import Road from "../road/Road";
+import SubareaPolygon from "../area/SubareaPolygon";
 
 class Point {
 

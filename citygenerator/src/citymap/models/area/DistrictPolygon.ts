@@ -115,6 +115,10 @@ class DistrictPolygon extends Polygon {
         return this.subAreas.getAllBuiltPolygons();
     }
 
+    public getAllSubareasWithChurch(minsize: number): SubareaPolygon[] {
+        return this.subAreas.getPolygonsAboveSize(minsize).filter((p) => p.building instanceof ChurchPBuilding);
+    }
+
 }
 
 export default DistrictPolygon;

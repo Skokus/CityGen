@@ -37,10 +37,10 @@ class City {
 
     expendRange = 2;
     sideRange = 1;
-    minRoadLength = 90;
+    minRoadLength = 95;
     maxRoadLength = 100;
     popRadius = 30;
-    mainRoadAngleDeviation = Math.PI/9;
+    mainRoadAngleDeviation = Math.PI/10;
 
     buildingToPolygonRatio = 0.8;
     iteration = 0;
@@ -64,7 +64,8 @@ class City {
     churchRandomWage = 0.2;
     churchCenterWage = 1.0;
     churchWaterWage = 0.0;
-    churchOccupiedWage = 7.0;
+    churchOccupiedWage = 1.0;
+    churchDistanceFromChurchesWage = 5.0;
 
     castleRandomWage = 0.2;
     castleCenterWage = 1.0;
@@ -201,6 +202,7 @@ class City {
         let maxFitValue = 0;
         let maxSpot: SubareaPolygon | undefined = undefined;
         let waterRoads: Road[] = [];
+        let churchPolygons: SubareaPolygon[] = this.getAllSubAreasWithChurch(this.churchBuildingMinSize);
 
         for(let i = 0; i < this.polygons.length; i++){
             possibleSpots.push(...this.polygons[i].subAreas.getPolygonsAboveSize(this.churchBuildingMinSize).filter((a) => (!a.isOccupied() && a.containsMainRoads())))
@@ -210,6 +212,8 @@ class City {
         let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
         let maxDistanceFromWater = 0;
         let minDistanceFromWater = Number.MAX_SAFE_INTEGER;
+        let maxDistanceFromChurch = 0;
+        let minDistanceFromChurch = Number.MAX_SAFE_INTEGER;
 
         for(let spot of possibleSpots){
             const spotDistanceFromCenter = spot.centroid.distanceFromPoint(this.center);
@@ -233,6 +237,19 @@ class City {
                 }
             }
         }
+
+        if(churchPolygons.length > 0){
+            for(let spot of possibleSpots){
+                const spotDistanceFromChurches = spot.distanceFromChurches(churchPolygons);
+                if(spotDistanceFromChurches > maxDistanceFromChurch){
+                    maxDistanceFromChurch = spotDistanceFromChurches;
+                }
+                if(spotDistanceFromChurches < minDistanceFromChurch){
+                    minDistanceFromChurch = spotDistanceFromChurches;
+                }
+            }
+        }
+
         for(let i = 0; i < this.polygons.length; i++){
             var spots = this.polygons[i].subAreas.getPolygonsAboveSize(this.churchBuildingMinSize).filter((a) => (!a.isOccupied() && a.containsMainRoads()));
             for(let spot of spots){
@@ -241,6 +258,10 @@ class City {
                     spotValue += (this.churchCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter));
                 if(minDistanceFromWater !== maxDistanceFromWater)
                     spotValue += (this.churchWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater));
+                console.log(spotValue);
+                if(minDistanceFromChurch !== maxDistanceFromChurch)
+                    spotValue += (this.churchDistanceFromChurchesWage * (spot.distanceFromChurches(churchPolygons) - minDistanceFromChurch)/(maxDistanceFromChurch-minDistanceFromChurch));
+                console.log(spotValue);
                 spotValue += (this.churchRandomWage * spot.hashValue(this.seed));
                 spotValue += (this.churchOccupiedWage * (1 - spot.getOccupationRate()));
                 if(spotValue > maxFitValue){
@@ -476,6 +497,14 @@ class City {
             }
         }
         return Array.from(buildingSet);
+    }
+
+    private getAllSubAreasWithChurch(minsize: number): SubareaPolygon[]{
+        var areasWithChurch = [];
+        for(let d of this.polygons){
+            areasWithChurch.push(...d.getAllSubareasWithChurch(this.churchBuildingMinSize));
+        }
+        return areasWithChurch;
     }
 
     public splitRandomPolygon(): void {

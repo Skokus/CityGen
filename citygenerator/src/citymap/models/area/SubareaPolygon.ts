@@ -409,6 +409,17 @@ class SubareaPolygon extends Polygon{
         }
         return [];
     }
+
+    public distanceFromChurches(churchPolygons: SubareaPolygon[]){
+        let minDistance = Number.MAX_SAFE_INTEGER;
+        for(let church of churchPolygons){
+            const dist = this.centroid.distanceFromPoint(church.centroid);
+            if(dist < minDistance){
+                minDistance = dist;
+            }
+        }
+        return minDistance;
+    }
 }
 
 export default SubareaPolygon;

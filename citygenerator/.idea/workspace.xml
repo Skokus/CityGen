@@ -7,10 +7,12 @@
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygonType.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygonType.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/SubareaPolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/Point.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/Point.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PointRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PointRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,6 +217,8 @@
       <workItem from="1765128231199" duration="1384000" />
       <workItem from="1765130975587" duration="2779000" />
       <workItem from="1765216619452" duration="5848000" />
+      <workItem from="1765229769928" duration="1635000" />
+      <workItem from="1765286340445" duration="2804000" />
     </task>
     <servers />
   </component>
