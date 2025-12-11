@@ -20,7 +20,7 @@ class PointRenderer implements Renderer{
     draw(ctx: CanvasRenderingContext2D, scale: number, xOffSet: number, yOffSet: number): void {
         ctx.beginPath();
         ctx.lineWidth = 1;
-        ctx.arc(scale*(this.point.x + xOffSet), scale*(this.point.y + yOffSet), scale * 5, 0, 2 * Math.PI);
+        ctx.arc(scale*(this.point.x + xOffSet), scale*(this.point.y + yOffSet), scale, 0, 2 * Math.PI);
         ctx.fillStyle = "black";
         if(this.point instanceof MainPoint && this.point.rank !== undefined){
             ctx.fillStyle = "black";

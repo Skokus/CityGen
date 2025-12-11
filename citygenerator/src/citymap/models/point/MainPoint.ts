@@ -71,7 +71,6 @@ class MainPoint extends Point {
     public canBeExtended(): boolean {
         return this.canBeHorizontallyExtended() || this.canBeVerticallyExtended();
     }
-
     public canBeSided(): boolean {
         let canBeHorizontallySided = false;
         let canBeVerticallySided = false;
@@ -83,14 +82,12 @@ class MainPoint extends Point {
         }
         return canBeHorizontallySided || canBeVerticallySided;
     }
-
     private canBeHorizontallyExtended(){
         let canBeHorizontallyExtended = false;
         if((this.connectedRoads[0].length > 0) !== (this.connectedRoads[2].length > 0))
             canBeHorizontallyExtended = true;
         return canBeHorizontallyExtended;
     }
-
     private canBeVerticallyExtended(){
         let canBeVerticallyExtended = false;
         if((this.connectedRoads[1].length > 0) !== (this.connectedRoads[3].length > 0))
@@ -106,10 +103,27 @@ class MainPoint extends Point {
         const hash = Md5.hashStr(seed + "MainPointAngle" + this.x + ", " + this.y + ", direction" + direction).substring(0,4);
         return parseInt(hash, 16)/65535;
     }
-
     public getDistanceHashValue(seed: number, direction: number): number {
         const hash = Md5.hashStr(seed + "MainPointDistance" + this.x + ", " + this.y + ", direction" + direction).substring(0,4);
         return parseInt(hash, 16)/65535;
+    }
+
+    public numberOfDirectionsTaken(): number {
+        var n = 0;
+        for(const r of this.connectedRoads){
+            if(r.filter((p) => p !== null).length > 0){
+                n++;
+            }
+        }
+        return n;
+    }
+    public hasRoadInEveryDirection(): boolean {
+        for(const r of this.connectedRoads){
+            if(r.length <= 0){
+                return false;
+            }
+        }
+        return true;
     }
 
 }

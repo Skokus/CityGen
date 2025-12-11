@@ -24,6 +24,7 @@ class PolygonRenderer implements Renderer{
             return;
         ctx.beginPath();
         ctx.fillStyle = this.getPolygonColor();
+        ctx.lineWidth = 1;
         let points = this.polygon.getClockWiseBorderPoints();
         ctx.moveTo(scale*(points[0].x + xOffSet), scale*(points[0].y + yOffSet));
         for(let i = 1; i < points.length; i++){
@@ -31,7 +32,8 @@ class PolygonRenderer implements Renderer{
         }
         ctx.strokeStyle = "black";
         ctx.stroke();
-        ctx.fill();
+        if(this.polygon instanceof DistrictPolygon)
+            ctx.fill();
         ctx.closePath();
     }
 
@@ -47,11 +49,12 @@ class PolygonRenderer implements Renderer{
     private getDistrictPolygon(): string {
         if(this.polygon instanceof DistrictPolygon){
             if(this.polygon.type === DistrictPolygonType.Market)
-                return "#838383";
+                return "#ffffff"
+                //return "#9c9c9c";
             else if(this.polygon.type === DistrictPolygonType.Farm)
                 return "#ffe863";
             else if(this.polygon.type === DistrictPolygonType.Rural)
-                return "#b5b5b5";
+                return "#b6b6b6";
         }
         return "#ffffff";
     }

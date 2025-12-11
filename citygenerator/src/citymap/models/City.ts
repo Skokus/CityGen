@@ -48,10 +48,11 @@ class City {
     idealPolygonOccupationRate = 0.1;
 
     roadRandomWage = 0.2;
-    roadCenterWage = 5.0;
+    roadCenterWage = 1.0;
     roadWaterWage = 1.0;
+    roadExtendWage = 3.0;
 
-    polygonBuildingMaxSize = 312.5;
+    polygonBuildingMaxSize = 273;
     pHouseRandomWage = 0.2;
     pHouseCenterWage = 1.0;
     pHouseWaterWage = 1.0;
@@ -132,6 +133,8 @@ class City {
             if(minDistanceFromWater !== maxDistanceFromWater)
                 spotValue += this.roadWaterWage * (maxDistanceFromWater-possibleSpots[i].distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater);
             spotValue += this.roadRandomWage * possibleSpots[i].hashValue(this.seed);
+            spotValue += this.roadExtendWage * (possibleSpots[i].canBeExtended() ? 1 : 0);
+            //spotValue += this.roadExtendWage * (possibleSpots[i].numberOfDirectionsTaken() === 1 ? 1 : 0);
             if(spotValue > maxFitValue){
                 maxFitValue = spotValue;
                 maxSpot = possibleSpots[i];
@@ -400,12 +403,8 @@ class City {
 
     public addExtentionRoad(minDistance: number, maxDistance: number, point: MainPoint): void {
         const points = this.getMinimalExpandablePointsWithinRange();
-        var direction = -1;
         var randomPoint = point;
-        while (direction < 0) {
-            randomPoint = points[Math.floor(Math.random() * points.length)];
-            direction = randomPoint.getForwardDirection();
-        }
+        var direction = point.getForwardDirection();
         const randomAngle = (Math.PI / 2) * direction + (randomPoint.getAngleHashValue(this.seed, direction) * this.mainRoadAngleDeviation) - this.mainRoadAngleDeviation / 2;
         const distance = randomPoint.getDistanceHashValue(this.seed, direction) * (minDistance - maxDistance) + minDistance;
         const p = randomPoint.getDistancedPoint(distance, randomAngle);
@@ -452,15 +451,8 @@ class City {
     }
 
     public addSideRoad(minDistance: number, maxDistance: number, point: MainPoint): void {
-        const points = this.getMinimalSideablePointsWithinRange();
-        if (points.length === 0)
-            return;
-        var direction = -1;
         var randomPoint = point;
-        while (direction < 0) {
-            randomPoint = points[Math.floor(Math.random() * points.length)];
-            direction = randomPoint.getSideDirection();
-        }
+        var direction = point.getSideDirection();
         const randomAngle = (Math.PI / 2) * direction + (randomPoint.getAngleHashValue(this.seed, direction) * this.mainRoadAngleDeviation) - this.mainRoadAngleDeviation / 2;
         const distance = randomPoint.getDistanceHashValue(this.seed, direction) * (minDistance - maxDistance) + minDistance;
         const p = randomPoint.getDistancedPoint(distance, randomAngle);
@@ -610,9 +602,9 @@ class City {
         c.minRoadLength = minRoadLength;
         c.maxRoadLength = maxRoadLength;
         c.pointBuildingRadius = pointBuildingRadius;
-        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
+        /*c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
         const rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
-        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
+        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));*/
         return c;
     }
 
@@ -650,13 +642,15 @@ class City {
     private getMinimalExpandablePointsWithinRange(): MainPoint[] {
         const min = this.getMinimalExpandablePointDistance();
         const max = min + this.expendRange;
-        return this.getExtendablePoints().filter((point) => point.distanceFromCenter >= min && point.distanceFromCenter < max);
+        const minComp = this.getMinimalNotCompletedPointDistance();
+        return this.getExtendablePoints().filter((point) => point.distanceFromCenter >= min && point.distanceFromCenter < max && point.distanceFromCenter <= (minComp + this.expendRange));
     }
 
     private getMinimalSideablePointsWithinRange(): MainPoint[] {
         const min = this.getMinimalSidedPointDistance();
         const max = min + this.sideRange;
-        return this.getSideablePoints().filter((point) => point.distanceFromCenter >= min && point.distanceFromCenter < max);
+        const minComp = this.getMinimalNotCompletedPointDistance();
+        return this.getSideablePoints().filter((point) => point.distanceFromCenter >= min && point.distanceFromCenter < max && point.distanceFromCenter <= (minComp + this.sideRange));
     }
 
     private getMinimalExpandablePointDistance(): number {
@@ -683,6 +677,17 @@ class City {
 
     private getExtendablePoints(): MainPoint[] {
         return this.getAllPoints().filter((point) => point.canBeExtended());
+    }
+
+    private getMinimalNotCompletedPointDistance(): number {
+        let min = 1000;
+        const points = this.getAllPoints().filter((p) => !p.hasRoadInEveryDirection());
+        for(let i = 0; i < points.length; i++) {
+            if(points[i].distanceFromCenter < min){
+                min = points[i].distanceFromCenter;
+            }
+        }
+        return min;
     }
 
     private getSideablePoints(): MainPoint[] {
