@@ -21,6 +21,7 @@ class City {
     lakes: LakePolygon[];
     rivers: River[];
     center: Point;
+    iteration: number = 0;
 
     static riverStartAngle = 0*Math.PI/9;
     static riverStartX = 200;
@@ -43,27 +44,28 @@ class City {
     mainRoadAngleDeviation = Math.PI/10;
 
     buildingToPolygonRatio = 0.8;
-    iteration = 0;
     seed = 0;
-    idealPolygonOccupationRate = 0.1;
+    globalRoadOccupationGoal = 0.5;
+    globalPolygonOccupationGoal = 0.5;
 
     roadRandomWage = 0.2;
     roadCenterWage = 1.0;
     roadWaterWage = 1.0;
     roadExtendWage = 3.0;
 
-    polygonBuildingMaxSize = 273;
+    idealRoadOccupationRate = 0.5;
+    pointBuildingRadius = 12;
+    houseRandomWage = 0.2;
+    houseCenterWage = 1.0;
+    houseWaterWage = 1.0;
+    houseOccupiedWage = 10;
+
+    idealPolygonOccupationRate = 0.1;
+    polygonBuildingMaxSize = 250;
     pHouseRandomWage = 0.2;
     pHouseCenterWage = 1.0;
     pHouseWaterWage = 1.0;
     pHouseOccupiedWage = 1.0;
-
-    pointBuildingRadius = 10;
-    idealRoadOccupationRate = 0.1;
-    houseRandomWage = 0.2;
-    houseCenterWage = 1.0;
-    houseWaterWage = 1.0;
-    houseOccupiedWage = 0;
 
     churchBuildingMinSize = 3000;
     churchRandomWage = 0.2;
@@ -87,6 +89,53 @@ class City {
         this.lakes = [];
         this.rivers = [];
         this.center = roads[0].getPoint1();
+    }
+
+    public nextIteration(): void {
+        const globalRoadOccupiedRate = this.getGlobalRoadOccupiedRate();
+        const globalPolygonOccupiedRate = this.getGlobalPolygonOccupiedRate();
+        if(globalPolygonOccupiedRate < this.globalPolygonOccupationGoal){
+            this.addHousingPBuilding();
+        } else if(globalRoadOccupiedRate < this.globalRoadOccupationGoal){
+            this.addBuilding();
+        } else {
+            this.addRoad(this.minRoadLength, this.maxRoadLength);
+        }
+        if(!this.hasWalls){
+            this.checkForCityWalls();
+        }
+        this.checkDistrictsForSideRoadUpdate();
+        this.iteration++;
+    }
+
+    public getGlobalRoadOccupiedRate(): number {
+        let occupied = 0;
+        let total = 0;
+        for(let r of this.roads){
+            if(r.hasNonNullSpots()){
+                occupied += r.occupiedPercentage();
+                total += 1;
+            }
+        }
+        if(total === 0){
+            return 1;
+        }
+        return occupied/total;
+    }
+
+    public getGlobalPolygonOccupiedRate(): number {
+        let occupiedArea = 0;
+        let totalArea = 0;
+        for(let d of this.polygons){
+            if(d.type === DistrictPolygonType.Farm || d.type === DistrictPolygonType.Rural){
+                totalArea += d.getArea();
+                occupiedArea += d.occupiedPercentage() * d.getArea();
+            }
+        }
+        if(totalArea <= 0){
+            return 1;
+        }
+        return occupiedArea/totalArea;
     }
 
     public pickBestPointCandidate(): MainPoint | undefined {
@@ -150,10 +199,12 @@ class City {
         let maxSpot: SubareaPolygon | undefined = undefined;
         let waterRoads: Road[] = [];
 
+        console.log("TEST1");
         for(let i = 0; i < this.polygons.length; i++){
             possibleSpots.push(...this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads())))
         }
-
+        console.log(possibleSpots.length);
+        console.log("TEST2");
         let maxDistanceFromCenter = 0;
         let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
         let maxDistanceFromWater = 0;
@@ -183,8 +234,7 @@ class City {
         }
 
         for(let i = 0; i < this.polygons.length; i++){
-            var spots = this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads()));
-            for(let spot of spots){
+            for(let spot of possibleSpots){
                 let spotValue = 0;
                 if(minDistanceFromCenter !== maxDistanceFromCenter)
                     spotValue += this.pHouseCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter);
@@ -390,11 +440,9 @@ class City {
 
     public addRoad(minDistance: number, maxDistance: number): void {
         const point = this.pickBestPointCandidate();
-        console.log(point);
         if(point !== undefined){
             if(point.canBeExtended()){
                 this.addExtentionRoad(minDistance, maxDistance, point);
-                console.log("HERE");
             } else if(point.canBeSided()){
                 this.addSideRoad(minDistance, maxDistance, point);
             }
@@ -524,11 +572,13 @@ class City {
     }
 
     public addHousingPBuilding(): void {
+        console.log("HERE")
         const spot = this.pickBestPHousingBuildingCandidate();
+        console.log("HERE2")
         if(spot !== undefined){
             spot.buildBuilding(HousingPBuilding.createHousingPBuilding(spot, this.buildingToPolygonRatio));
         }
-
+        console.log("HERE3")
     }
 
     public addChurchPBuilding(): void {
@@ -567,7 +617,7 @@ class City {
     }
 
     public splitRandomPolygon(): void {
-        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.subPolygons === undefined)
+        const possiblePolygons: DistrictPolygon[] = this.polygons.filter((p) => p.subAreas.subPolygons === undefined);
         if (possiblePolygons.length > 0) {
             if(possiblePolygons[0].type === DistrictPolygonType.Market){
                 possiblePolygons[0].splitPolygonBySmallerPolygon(0.8);
@@ -586,7 +636,9 @@ class City {
 
     public checkDistrictsForSideRoadUpdate(): void {
         for(const d of this.polygons){
-            d.checkForNewSideRoads();
+            if(d.type === DistrictPolygonType.Rural){
+                d.checkForNewSideRoads();
+            }
         }
     }
 
@@ -735,6 +787,7 @@ class City {
         }
         this.checkForCityWalls();
         this.updateDistrictsTypes();
+        this.splitPolygons();
     }
 
     private updateDistrictsTypes(): void {
@@ -750,7 +803,6 @@ class City {
         if(minRuralLayer <= 0)
             return;
         const ratioFarmLayer = Math.ceil(maxRank * this.farmRankPercentage);
-        console.log(ratioFarmLayer);
         if(ratioFarmLayer < this.minimalFarmLayer)
             return;
         const ruralMaxRank = maxRank - ratioFarmLayer;
@@ -781,7 +833,19 @@ class City {
             }
             this.hasWalls = true;
         }
-        this.pickBestPHousingBuildingCandidate();
+    }
+
+    private splitPolygons(): void{
+        const districts: DistrictPolygon[] = this.polygons.filter((p) => !p.isSplited);
+        for(let d of districts) {
+            if(d.type === DistrictPolygonType.Market){
+                d.splitPolygonBySmallerPolygon(0.8);
+            } else {
+                d.splitPolygonMultipleTimesWithSize(this.seed, this.polygonBuildingMaxSize);
+            }
+            d.isSplited = true;
+        }
+
     }
 
     public addRoadCompletionScalar(amount: number){

@@ -170,7 +170,7 @@ class MainRoad extends Road {
                 occupiedSpots++;
                 allSpots++;
             } else if(p.building === undefined){
-                occupiedSpots++;
+                allSpots++;
             }
         }
         for(const p of this.bottomSidePoints){
@@ -178,7 +178,7 @@ class MainRoad extends Road {
                 occupiedSpots++;
                 allSpots++;
             } else if(p.building === undefined){
-                occupiedSpots++;
+                allSpots++;
             }
         }
         if(allSpots !== 0){
@@ -208,6 +208,19 @@ class MainRoad extends Road {
         }
     }
 
+    public hasNonNullSpots(): boolean {
+        for(let p of this.topSidePoints){
+            if(p.building !== null){
+                return true;
+            }
+        }
+        for(let p of this.bottomSidePoints){
+            if(p.building !== null){
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 export default MainRoad;

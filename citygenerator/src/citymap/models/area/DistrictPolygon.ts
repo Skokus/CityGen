@@ -16,6 +16,7 @@ class DistrictPolygon extends Polygon {
     subAreas: SubareaPolygon;
     rank: number;
     type: DistrictPolygonType;
+    isSplited: boolean = false;
 
     constructor(roads: MainRoad[]) {
         super(roads);
@@ -104,6 +105,11 @@ class DistrictPolygon extends Polygon {
     }
 
     public occupiedPercentage(): number{
+        if(this.type === DistrictPolygonType.Rural){
+            return this.subAreas.getOccupationRate();
+        } else if(this.type === DistrictPolygonType.Farm){
+            return this.subAreas.getOccupationRateNearBuiltRoads();
+        }
         return 1;
     }
 

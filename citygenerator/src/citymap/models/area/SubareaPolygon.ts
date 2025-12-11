@@ -21,12 +21,12 @@ class SubareaPolygon extends Polygon{
             return [this];
         }
         for(let sub of this.subPolygons){
-            if(sub !== undefined && this.subPolygons.length > 0){
-                for(let a of this.subPolygons){
+            if(sub !== undefined && sub.subPolygons !== undefined && this.subPolygons.length > 0){
+                for(let a of sub.subPolygons){
                     all.push(...a.getAllPolygons());
                 }
             } else {
-                all.push(this);
+                all.push(sub);
             }
         }
         return all;
@@ -74,8 +74,6 @@ class SubareaPolygon extends Polygon{
                     a.splitAboveSize(seed, maxsize);
                 }
             }
-        } else {
-            this.subPolygons = [];
         }
     }
 
@@ -121,7 +119,7 @@ class SubareaPolygon extends Polygon{
 
     public buildBuilding(pbuilding: PolygonBuilding){
         for(let road of this.getRoads()){
-            if(road.mainRoad !== undefined){
+            if(road.mainRoad !== undefined && road.mainRoad.hasNonNullSpots()){
                 for(let building of road.mainRoad.getAllBuildings()){
                     if(Math.abs(building.point.distanceFromPoint(this.centroid)) <= (building.radius + 0.001)){
                         road.mainRoad.removeBuilding(building);

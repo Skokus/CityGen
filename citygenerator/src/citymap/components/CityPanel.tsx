@@ -38,6 +38,22 @@ function CityPanel() {
         setCounter(counter + 1);
     }
 
+    function nextIteration() {
+        for(let i = 0; i < 500; i++){
+            city.nextIteration();
+            setCity(city);
+            setCounter(counter + 1);
+        }
+    }
+
+    function nextOneIteration() {
+        for(let i = 0; i < 1; i++){
+            city.nextIteration();
+            setCity(city);
+            setCounter(counter + 1);
+        }
+    }
+
     function addRoad() {
         for(let i = 0; i < 50; i++)
             city.addRoad(minRoadLength, maxRoadLength);
@@ -116,6 +132,14 @@ function CityPanel() {
                 <CityMap zoomScale={zoomScale} city={city} xOffSet={xOffset} yOffSet={yOffset}/>
             </div>
             <div className="sidepanel">
+                <button onClick={() => {
+                    nextIteration()
+                }}>Next 10 Iteration
+                </button>
+                <button onClick={() => {
+                    nextOneIteration()
+                }}>Next 1 Iteration
+                </button>
                 <button onClick={() => {
                     addRoad()
                 }}>Add road
