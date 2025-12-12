@@ -87,8 +87,12 @@ class MainRoad extends Road {
     public static createMainRoad(point1: MainPoint, point2: MainPoint, direction: number, completionRate: number, houseRadius: number): MainRoad {
         const l = point1.connectedRoads.length;
         const road = new MainRoad(point1, point2, completionRate);
-        point1.addRoad(road, direction);
-        point2.addRoad(road, (direction + 2) % l);
+        const realDirection = point1.getDirectionToPoint(point2);
+        point1.addRoad(road, realDirection);
+        point2.addRoad(road, (realDirection + 2) % l);
+        if(realDirection !== direction){
+            point1.addRoad(null, direction);
+        }
         road.createSidePoints(houseRadius);
         if((point1 instanceof RiverPoint && !(point2 instanceof RiverPoint))){
             if(point1.distanceFromCenter <= 0){
@@ -116,6 +120,15 @@ class MainRoad extends Road {
             return this.p1 as MainPoint;
         else
             return this.p2 as MainPoint;
+    }
+
+    public getCloserPoint(point: Point): MainPoint {
+        const d1 = this.p1.distanceFromPoint(point);
+        const d2 = this.p2.distanceFromPoint(point);
+        if(d1 > d2){
+            return this.p2 as MainPoint;
+        }
+        return this.p1 as MainPoint;
     }
 
     private getRandomMainPointHash(seed: number){
@@ -194,7 +207,7 @@ class MainRoad extends Road {
         connectedRoads.push(...this.getPoint2().getAllRealRoads());
         for(let p of spots){
             for(let r of connectedRoads){
-                if(r !== this ){
+                if(r !== this && r !== null){
                     if(Road.distanceFromPoint(p, r.p1, r.p2) <= (p.radius+0.0001)){
                         p.building = null;
                     }

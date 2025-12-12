@@ -4,7 +4,7 @@ import {Md5} from "ts-md5";
 
 class MainPoint extends Point {
 
-    connectedRoads: MainRoad[][];
+    connectedRoads: (MainRoad | null)[][];
     distanceFromCenter: number;
     rank: number | undefined;
     isComplete: boolean;
@@ -47,15 +47,18 @@ class MainPoint extends Point {
         return count;
     }
 
-    public addRoad(road: MainRoad, direction: number) {
+    public addRoad(road: MainRoad | null, direction: number) {
+        if(road === null && this.connectedRoads[direction].includes(null)){
+            return;
+        }
         this.connectedRoads[direction].push(road);
     }
 
-    public getAllRoads(): MainRoad[] {
+    public getAllRoads(): (MainRoad | null)[] {
         return this.connectedRoads.flat();
     }
 
-    public getAllRealRoads(): MainRoad[] {
+    public getAllRealRoads(): (MainRoad | null)[] {
         return this.connectedRoads.flat().filter((r) => r !== null);
     }
     

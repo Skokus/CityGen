@@ -44,8 +44,10 @@ class DistrictPolygon extends Polygon {
         }
         for (let point of this.getPoints()) {
             for (let road of point.getAllRoads()) {
-                if (!this.roads.includes(road) && this.getPoints().includes(road.getOtherPoint(point))) {
-                    return true;
+                if(road !== null){
+                    if (!this.roads.includes(road) && this.getPoints().includes(road.getOtherPoint(point))) {
+                        return true;
+                    }
                 }
             }
         }

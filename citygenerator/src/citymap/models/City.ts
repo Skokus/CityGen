@@ -390,10 +390,8 @@ class City {
         let maxFitValue = 0;
         let maxSpot: DistrictPolygon | undefined = undefined;
         let waterRoads: Road[] = [];
-
-        for(let i = 0; i < this.polygons.length; i++){
-            possibleSpots.push(...this.polygons.filter((r) => (r.rank === this.wallRank)))
-        }
+        possibleSpots.push(...this.polygons.filter((r) => (r.rank === this.wallRank)))
+        console.log(possibleSpots.length);
 
         let maxDistanceFromCenter = 0;
         let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
@@ -444,7 +442,6 @@ class City {
 
     public addRoad(minDistance: number, maxDistance: number): void {
         const point = this.pickBestPointCandidate();
-        console.log(point);
         if(point !== undefined){
             if(point.canBeExtended()){
                 this.addExtentionRoad(minDistance, maxDistance, point);
@@ -465,12 +462,29 @@ class City {
         const roadsFromRandomPoint = randomPoint.getAllRoads();
         const excludedPointSet = new Set<MainPoint>();
         for (const road of roadsFromRandomPoint) {
-            excludedPointSet.add(road.getPoint1());
-            excludedPointSet.add(road.getPoint2());
+            if(road !== null){
+                excludedPointSet.add(road.getPoint1());
+                excludedPointSet.add(road.getPoint2());
+            }
         }
         const excludedPoints = Array.from(excludedPointSet);
         const allPoints = this.getAllRoadAndWaterPoints().filter(point => !excludedPoints.includes(point));
         let expectedPoint = newPoint;
+
+        for (let road of this.getAllRoadsAndRiverRoads()) {
+            if(!roadsFromRandomPoint.includes(road)){
+                let interPoint = road.getIntersectionPointWithRoad(randomPoint, newPoint);
+                if (!interPoint.isNan()) {
+                    console.log("HERE");
+                    expectedPoint = road.getCloserPoint(randomPoint) as MainPoint;
+                    const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
+                    this.roads.push(newRoad);
+                    this.deleteBuildingsWithNewRoad(newRoad);
+                    this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
+                    return;
+                }
+            }
+        }
 
         let min = 200;
         for (let point of allPoints) {
@@ -491,7 +505,7 @@ class City {
         for (let road of this.getAllRoadsAndRiverRoads()) {
             let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
             if (dist < this.popRadius) {
-                expectedPoint = road.getRandomPoint(this.seed) as MainPoint;
+                expectedPoint = road.getCloserPoint(randomPoint) as MainPoint;
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                 this.roads.push(newRoad);
                 this.deleteBuildingsWithNewRoad(newRoad);
@@ -513,12 +527,28 @@ class City {
         const roadsFromRandomPoint = randomPoint.getAllRoads();
         const excludedPointSet = new Set<MainPoint>();
         for (const road of roadsFromRandomPoint) {
-            excludedPointSet.add(road.getPoint1());
-            excludedPointSet.add(road.getPoint2());
+            if(road !== null){
+                excludedPointSet.add(road.getPoint1());
+                excludedPointSet.add(road.getPoint2());
+            }
         }
         const excludedPoints = Array.from(excludedPointSet);
         const allPoints = this.getAllRoadAndWaterPoints().filter(point => !excludedPoints.includes(point));
         let expectedPoint = newPoint;
+
+        for (let road of this.getAllRoadsAndRiverRoads()) {
+            if(!roadsFromRandomPoint.includes(road)){
+                let interPoint = road.getIntersectionPointWithRoad(randomPoint, newPoint);
+                if (!interPoint.isNan()) {
+                    expectedPoint = road.getCloserPoint(randomPoint) as MainPoint;
+                    const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
+                    this.roads.push(newRoad);
+                    this.deleteBuildingsWithNewRoad(newRoad);
+                    this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
+                    return;
+                }
+            }
+        }
 
         let min = 200;
         for (let point of allPoints) {
@@ -539,7 +569,7 @@ class City {
         for (let road of this.getAllRoadsAndRiverRoads()) {
             let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
             if (dist < this.popRadius) {
-                expectedPoint = road.getRandomPoint(this.seed) as MainPoint;
+                expectedPoint = road.getCloserPoint(randomPoint) as MainPoint;
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                 this.roads.push(newRoad);
                 this.deleteBuildingsWithNewRoad(newRoad);
@@ -554,16 +584,21 @@ class City {
 
     public deleteBuildingsWithNewRoad(road: MainRoad){
         for(let r of road.getPoint1().getAllRealRoads().filter((r) => r !== road)){
-            for(let b of r.getAllBuildings()){
-                if(Math.abs(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2())) <= b.radius){
-                    r.removeBuilding(b);
+            if(r !== null){
+                for(let b of r.getAllBuildings()){
+                    if(Math.abs(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2())) <= b.radius){
+                        r.removeBuilding(b);
+                    }
                 }
             }
+
         }
         for(let r of road.getPoint2().getAllRealRoads().filter((r) => r !== road)){
-            for(let b of r.getAllBuildings()){
-                if(Math.abs(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2()) - b.radius) <= 0.0001){
-                    r.removeBuilding(b);
+            if(r !== null) {
+                for (let b of r.getAllBuildings()) {
+                    if (Math.abs(Road.distanceFromPoint(b.point, road.getPoint1(), road.getPoint2()) - b.radius) <= 0.0001) {
+                        r.removeBuilding(b);
+                    }
                 }
             }
         }
@@ -688,8 +723,8 @@ class City {
         return Array.from(pointSet);
     }
 
-    private getAllRoadsAndRiverRoads(): Road[] {
-        const roads: Road[] = [];
+    private getAllRoadsAndRiverRoads(): MainRoad[] {
+        const roads: MainRoad[] = [];
         roads.push(...this.roads);
         for(const river of this.rivers) {
             roads.push(...river.riverRoads);
