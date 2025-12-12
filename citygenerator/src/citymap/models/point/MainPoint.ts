@@ -95,7 +95,7 @@ class MainPoint extends Point {
         return canBeVerticallyExtended;
     }
 
-    public hashValue(seed: number,){
+    public hashValue(seed: number){
         const hash = Md5.hashStr(seed + "MainPoint" + this.x + ", " + this.y).substring(0,4);
         return parseInt(hash, 16)/65535;
     }
@@ -126,6 +126,18 @@ class MainPoint extends Point {
         return true;
     }
 
+    public getDirectionToPoint(point2: MainPoint): number{
+        const angle = this.getAngle(point2) * 180/Math.PI;
+        if(angle > 315 || angle < 45){
+            return 0;
+        } else if(angle < 135){
+            return 1;
+        } else if(angle < 225){
+            return 2;
+        } else {
+            return 3;
+        }
+    }
 }
 
 export default MainPoint;

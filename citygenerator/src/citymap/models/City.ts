@@ -13,6 +13,7 @@ import SidePoint from "./point/SidePoint";
 import SquareBuilding from "./building/SquareBuilding";
 import ChurchPBuilding from "./building/polygonbuilding/ChurchPBuilding";
 import CastlePBuilding from "./building/polygonbuilding/CastlePBuilding";
+import RiverPoint from "./point/RiverPoint";
 
 class City {
 
@@ -23,7 +24,7 @@ class City {
     center: Point;
     iteration: number = 0;
 
-    static riverStartAngle = 0*Math.PI/9;
+    static riverStartAngle = 0*Math.PI/2;
     static riverStartX = 200;
     static riverStartY = 200;
     static riverMaxAngleChange = Math.PI/9;
@@ -73,6 +74,7 @@ class City {
     churchWaterWage = 0.0;
     churchOccupiedWage = 1.0;
     churchDistanceFromChurchesWage = 5.0;
+    districtsPerChurch = 10;
 
     castleRandomWage = 0.2;
     castleCenterWage = 1.0;
@@ -81,6 +83,7 @@ class City {
 
     hasWalls = false;
     hasCastle = false;
+    churchCounter = 0;
 
     constructor(roads: MainRoad[], seed: number) {
         this.seed = seed;
@@ -95,6 +98,9 @@ class City {
         const globalRoadOccupiedRate = this.getGlobalRoadOccupiedRate();
         const globalPolygonOccupiedRate = this.getGlobalPolygonOccupiedRate();
         if(globalPolygonOccupiedRate < this.globalPolygonOccupationGoal){
+            if(this.polygons.length/this.districtsPerChurch > this.churchCounter){
+                this.addChurchPBuilding();
+            }
             this.addHousingPBuilding();
         } else if(globalRoadOccupiedRate < this.globalRoadOccupationGoal){
             this.addBuilding();
@@ -438,6 +444,7 @@ class City {
 
     public addRoad(minDistance: number, maxDistance: number): void {
         const point = this.pickBestPointCandidate();
+        console.log(point);
         if(point !== undefined){
             if(point.canBeExtended()){
                 this.addExtentionRoad(minDistance, maxDistance, point);
@@ -580,6 +587,7 @@ class City {
         const spot = this.pickBestChurchBuildingCandidate();
         if(spot !== undefined){
             spot.buildBuilding(ChurchPBuilding.createChurchPBuilding(spot, this.buildingToPolygonRatio));
+            this.churchCounter++;
         }
     }
 
@@ -649,9 +657,12 @@ class City {
         c.minRoadLength = minRoadLength;
         c.maxRoadLength = maxRoadLength;
         c.pointBuildingRadius = pointBuildingRadius;
-        /*c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
-        const rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
-        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));*/
+        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
+        let rc = new RiverPoint(100, 100, this.riverStartAngle);
+        if(c.lakes.length > 0){
+            rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
+        }
+        //c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
         return c;
     }
 

@@ -31,7 +31,7 @@ class PolygonRenderer implements Renderer{
             ctx.lineTo(scale*(points[i].x + xOffSet), scale*(points[i].y + yOffSet));
         }
         ctx.strokeStyle = "black";
-        ctx.stroke();
+
         if(this.polygon instanceof DistrictPolygon)
             ctx.fill();
         ctx.closePath();

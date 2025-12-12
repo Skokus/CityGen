@@ -38,7 +38,7 @@ class River {
         }
         let riverRoads: RiverRoad[] = [];
         for(let i = 1; i < n; i++){
-            riverRoads.push(new RiverRoad(riverPoints[i-1], riverPoints[i]));
+            riverRoads.push(RiverRoad.createRiverRoad(riverPoints[i-1], riverPoints[i]));
         }
         return new River(riverRoads);
     }

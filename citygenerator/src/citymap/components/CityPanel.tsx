@@ -39,7 +39,7 @@ function CityPanel() {
     }
 
     function nextIteration() {
-        for(let i = 0; i < 500; i++){
+        for(let i = 0; i < 100; i++){
             city.nextIteration();
             setCity(city);
             setCounter(counter + 1);
@@ -55,7 +55,7 @@ function CityPanel() {
     }
 
     function addRoad() {
-        for(let i = 0; i < 50; i++)
+        for(let i = 0; i < 10; i++)
             city.addRoad(minRoadLength, maxRoadLength);
         setCity(city);
         setCounter(counter + 1);
