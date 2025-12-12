@@ -84,6 +84,8 @@ class City {
     hasWalls = false;
     hasCastle = false;
     churchCounter = 0;
+    hasBridges = false;
+    riverBridgeIterationUnlock = 1000;
 
     constructor(roads: MainRoad[], seed: number) {
         this.seed = seed;
@@ -112,6 +114,7 @@ class City {
         }
         this.checkDistrictsForSideRoadUpdate();
         this.iteration++;
+        this.checkUnlockBridges();
     }
 
     public getGlobalRoadOccupiedRate(): number {
@@ -391,7 +394,6 @@ class City {
         let maxSpot: DistrictPolygon | undefined = undefined;
         let waterRoads: Road[] = [];
         possibleSpots.push(...this.polygons.filter((r) => (r.rank === this.wallRank)))
-        console.log(possibleSpots.length);
 
         let maxDistanceFromCenter = 0;
         let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
@@ -475,8 +477,7 @@ class City {
             if(!roadsFromRandomPoint.includes(road)){
                 let interPoint = road.getIntersectionPointWithRoad(randomPoint, newPoint);
                 if (!interPoint.isNan()) {
-                    console.log("HERE");
-                    expectedPoint = road.getCloserPoint(randomPoint) as MainPoint;
+                    expectedPoint = road.getCloserPoint(randomPoint);
                     const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                     this.roads.push(newRoad);
                     this.deleteBuildingsWithNewRoad(newRoad);
@@ -505,7 +506,7 @@ class City {
         for (let road of this.getAllRoadsAndRiverRoads()) {
             let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
             if (dist < this.popRadius) {
-                expectedPoint = road.getCloserPoint(randomPoint) as MainPoint;
+                expectedPoint = road.getCloserPoint(randomPoint);
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                 this.roads.push(newRoad);
                 this.deleteBuildingsWithNewRoad(newRoad);
@@ -540,7 +541,7 @@ class City {
             if(!roadsFromRandomPoint.includes(road)){
                 let interPoint = road.getIntersectionPointWithRoad(randomPoint, newPoint);
                 if (!interPoint.isNan()) {
-                    expectedPoint = road.getCloserPoint(randomPoint) as MainPoint;
+                    expectedPoint = road.getCloserPoint(randomPoint);
                     const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                     this.roads.push(newRoad);
                     this.deleteBuildingsWithNewRoad(newRoad);
@@ -569,7 +570,7 @@ class City {
         for (let road of this.getAllRoadsAndRiverRoads()) {
             let dist = Road.distanceFromPoint(newPoint, road.p1, road.p2);
             if (dist < this.popRadius) {
-                expectedPoint = road.getCloserPoint(randomPoint) as MainPoint;
+                expectedPoint = road.getCloserPoint(randomPoint);
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                 this.roads.push(newRoad);
                 this.deleteBuildingsWithNewRoad(newRoad);
@@ -680,6 +681,12 @@ class City {
         }
     }
 
+    public checkUnlockBridges(): void{
+        if(this.iteration >= this.riverBridgeIterationUnlock){
+            this.hasBridges = true;
+        }
+    }
+
     public static getExampleCity(x1: number, y1: number,
                                  x2: number, y2: number,
                                  seed: number,
@@ -697,7 +704,7 @@ class City {
         if(c.lakes.length > 0){
             rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
         }
-        //c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
+        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
         return c;
     }
 
@@ -707,7 +714,13 @@ class City {
             pointSet.add(road.getPoint1());
             pointSet.add(road.getPoint2());
         }
-        return Array.from(pointSet);
+        const pointArray = Array.from(pointSet);
+        if(!this.hasBridges){
+            console.log(pointArray.length);
+            console.log(pointArray.filter((p) => !(p instanceof RiverPoint)).length);
+            return pointArray.filter((p) => !(p instanceof RiverPoint));
+        }
+        return pointArray;
     }
 
     private getAllRoadAndWaterPoints(): MainPoint[] {
@@ -718,6 +731,10 @@ class City {
         }
         for(const river of this.rivers) {
             for(const p of river.getRiverPoints())
+                pointSet.add(p);
+        }
+        for(const lake of this.lakes) {
+            for(const p of lake.getPoints())
                 pointSet.add(p);
         }
         return Array.from(pointSet);
@@ -748,7 +765,7 @@ class City {
 
     private getMinimalExpandablePointDistance(): number {
         let min = 1000;
-        const points = this.getExtendablePoints();
+        let points = this.getExtendablePoints();
         for(let i = 0; i < points.length; i++) {
             if(points[i].distanceFromCenter < min){
                 min = points[i].distanceFromCenter;
