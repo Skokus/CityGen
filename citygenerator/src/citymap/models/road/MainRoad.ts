@@ -168,7 +168,8 @@ class MainRoad extends Road {
     }
 
     public addRankOfPolygon(rank: number): void {
-        this.connectedPolygonRanks.push(rank);
+        if(rank >= 0)
+            this.connectedPolygonRanks.push(rank);
     }
 
     public setToWall(){

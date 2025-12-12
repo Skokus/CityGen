@@ -62,7 +62,7 @@ class City {
     houseOccupiedWage = 10;
 
     idealPolygonOccupationRate = 0.1;
-    polygonBuildingMaxSize = 250;
+    polygonBuildingMaxSize = 700;
     pHouseRandomWage = 0.2;
     pHouseCenterWage = 1.0;
     pHouseWaterWage = 1.0;
@@ -74,7 +74,7 @@ class City {
     churchWaterWage = 0.0;
     churchOccupiedWage = 1.0;
     churchDistanceFromChurchesWage = 5.0;
-    districtsPerChurch = 10;
+    districtsPerChurch = 30;
 
     castleRandomWage = 0.2;
     castleCenterWage = 1.0;
@@ -85,7 +85,9 @@ class City {
     hasCastle = false;
     churchCounter = 0;
     hasBridges = false;
-    riverBridgeIterationUnlock = 1000;
+    hasMarket = false;
+    riverBridgeIterationUnlock = 200;
+
 
     constructor(roads: MainRoad[], seed: number) {
         this.seed = seed;
@@ -836,18 +838,29 @@ class City {
             }
             if (flag) {
                 this.polygons.push(newp);
-                newp.generateRank();
+                newp.generateRank(this.hasMarket);
                 if(newp.rank === 0){
                     newp.type = DistrictPolygonType.Market;
+                    this.hasMarket = true;
+                } else if(newp.rank === -1){
+                    newp.type = DistrictPolygonType.Disconnected;
                 }
                 newp.addRankToRoads();
             }
         }
         this.checkForCityWalls();
+        this.checkDisconnectedPolygons();
         this.updateDistrictsTypes();
         this.splitPolygons();
     }
 
+    private checkDisconnectedPolygons(){
+        let districts: DistrictPolygon[] = this.polygons.filter((d) => d.type === DistrictPolygonType.Disconnected);
+        for(let d of districts){
+            d.generateRank(this.hasMarket);
+            d.addRankToRoads();
+        }
+    }
     private updateDistrictsTypes(): void {
         var districts: DistrictPolygon[] = this.polygons.filter((p) => p.rank > 0);
         if(districts.length === 0){
@@ -864,6 +877,7 @@ class City {
         if(ratioFarmLayer < this.minimalFarmLayer)
             return;
         const ruralMaxRank = maxRank - ratioFarmLayer;
+        this.polygons.filter((p) => p.rank > ruralMaxRank).forEach((p) => p.type = DistrictPolygonType.Farm);
         this.polygons.filter((p) => p.rank > 0 && p.rank <= ruralMaxRank).forEach((p) => p.type = DistrictPolygonType.Rural);
     }
 

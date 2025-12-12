@@ -82,7 +82,7 @@ class DistrictPolygon extends Polygon {
         return new SubareaPolygon(subRoads);
     }
 
-    public generateRank(): void {
+    public generateRank(hasMarket: boolean): void {
         let minPointTier = Number.MAX_VALUE;
         for (const point of this.getPoints()) {
             if (point.rank !== undefined && point.rank < minPointTier) {
@@ -90,10 +90,14 @@ class DistrictPolygon extends Polygon {
             }
         }
         if (minPointTier === Number.MAX_VALUE) {
-            for (const point of this.getPoints()) {
-                point.setLowerRank(1);
+            if(!hasMarket){
+                for (const point of this.getPoints()) {
+                    point.setLowerRank(1);
+                }
+                this.rank = 0;
+            } else {
+                this.rank = -1;
             }
-            this.rank = 0;
         } else {
             for (const point of this.getPoints()) {
                 point.setLowerRank(minPointTier + 1);
