@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityMap.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/LakePolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/LakePolygon.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/MainPoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/MainPoint.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -229,7 +225,9 @@
       <workItem from="1765497797693" duration="1691000" />
       <workItem from="1765500544961" duration="476000" />
       <workItem from="1765534398020" duration="6715000" />
-      <workItem from="1765551666600" duration="12156000" />
+      <workItem from="1765551666600" duration="12207000" />
+      <workItem from="1765573930240" duration="1718000" />
+      <workItem from="1765578454345" duration="2168000" />
     </task>
     <servers />
   </component>

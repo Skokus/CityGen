@@ -23,6 +23,7 @@ class PolygonRenderer implements Renderer{
         if(this.polygon.roads.length === 0)
             return;
         ctx.beginPath();
+
         ctx.fillStyle = this.getPolygonColor();
         ctx.lineWidth = 1;
         let points = this.polygon.getClockWiseBorderPoints();

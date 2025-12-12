@@ -15,6 +15,7 @@ import ChurchPBuilding from "./building/polygonbuilding/ChurchPBuilding";
 import CastlePBuilding from "./building/polygonbuilding/CastlePBuilding";
 import RiverPoint from "./point/RiverPoint";
 import LakePoint from "./point/LakePoint";
+import MainRoadType from "./road/MainRoadType";
 
 class City {
 
@@ -36,7 +37,7 @@ class City {
     defaultCompletion = 1.0;
     wallRank = 1;
     farmRankPercentage = 0.5;
-    minimalFarmLayer = 4;
+    minimalFarmLayer = 2;
 
     expendRange = 2;
     sideRange = 1;
@@ -103,6 +104,9 @@ class City {
         const globalRoadOccupiedRate = this.getGlobalRoadOccupiedRate();
         const globalPolygonOccupiedRate = this.getGlobalPolygonOccupiedRate();
         if(globalPolygonOccupiedRate < this.globalPolygonOccupationGoal){
+            if(this.hasWalls && !this.hasCastle){
+                this.createCastle(0.8);
+            }
             if(this.polygons.length/this.districtsPerChurch > this.churchCounter){
                 this.addChurchPBuilding();
             }
@@ -702,12 +706,12 @@ class City {
         c.minRoadLength = minRoadLength;
         c.maxRoadLength = maxRoadLength;
         c.pointBuildingRadius = pointBuildingRadius;
-        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 200, 190, 24, Math.PI/10, seed));
+        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 200, 190, 24, Math.PI/10, seed));
         let rc = new RiverPoint(-500, 100, this.riverStartAngle);
         if(c.lakes.length > 0){
             rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
         }
-        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
+        //c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
         return c;
     }
 
@@ -851,7 +855,6 @@ class City {
                 newp.addRankToRoads();
             }
         }
-        this.checkForCityWalls();
         this.checkDisconnectedPolygons();
         this.updateDistrictsTypes();
         this.splitPolygons();
@@ -909,9 +912,9 @@ class City {
             for(const road of this.roads) {
                 if(road.hasBothRanks(this.wallRank, this.wallRank+1)){
                     road.setToWall();
+                    this.hasWalls = true;
                 }
             }
-            this.hasWalls = true;
         }
     }
 
