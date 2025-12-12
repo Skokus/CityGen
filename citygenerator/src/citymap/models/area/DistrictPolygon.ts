@@ -17,6 +17,7 @@ class DistrictPolygon extends Polygon {
     rank: number;
     type: DistrictPolygonType;
     isSplited: boolean = false;
+    houseSubPolygonsArray: SubareaPolygon[] = [];
 
     constructor(roads: MainRoad[]) {
         super(roads);
@@ -53,6 +54,7 @@ class DistrictPolygon extends Polygon {
 
     public splitPolygonMultipleTimesWithSize(seed: number, maxsize: number): void {
         this.subAreas.splitAboveSize(seed, maxsize);
+        this.houseSubPolygonsArray = this.subAreas.getAllPolygons();
     }
 
     public splitPolygonBySmallerPolygon(ratio: number): void {
@@ -111,6 +113,10 @@ class DistrictPolygon extends Polygon {
             return this.subAreas.getOccupationRateNearBuiltRoads();
         }
         return 1;
+    }
+
+    public getHousingPolygons(): SubareaPolygon[] {
+        return this.houseSubPolygonsArray;
     }
 
     public checkForNewSideRoads(): void {

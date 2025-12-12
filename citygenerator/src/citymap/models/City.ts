@@ -199,12 +199,9 @@ class City {
         let maxSpot: SubareaPolygon | undefined = undefined;
         let waterRoads: Road[] = [];
 
-        console.log("TEST1");
         for(let i = 0; i < this.polygons.length; i++){
             possibleSpots.push(...this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads())))
         }
-        console.log(possibleSpots.length);
-        console.log("TEST2");
         let maxDistanceFromCenter = 0;
         let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
         let maxDistanceFromWater = 0;
@@ -234,7 +231,8 @@ class City {
         }
 
         for(let i = 0; i < this.polygons.length; i++){
-            for(let spot of possibleSpots){
+            const spots = this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads()));
+            for(let spot of spots){
                 let spotValue = 0;
                 if(minDistanceFromCenter !== maxDistanceFromCenter)
                     spotValue += this.pHouseCenterWage * (maxDistanceFromCenter-spot.centroid.distanceFromPoint(this.center))/(maxDistanceFromCenter-minDistanceFromCenter);
@@ -312,7 +310,7 @@ class City {
         let maxFitValue = 0;
         let maxSpot: SubareaPolygon | undefined = undefined;
         let waterRoads: Road[] = [];
-        let churchPolygons: SubareaPolygon[] = this.getAllSubAreasWithChurch(this.churchBuildingMinSize);
+        let churchPolygons: SubareaPolygon[] = this.getAllSubAreasWithChurch();
 
         for(let i = 0; i < this.polygons.length; i++){
             possibleSpots.push(...this.polygons[i].subAreas.getPolygonsAboveSize(this.churchBuildingMinSize).filter((a) => (!a.isOccupied() && a.containsMainRoads())))
@@ -572,13 +570,10 @@ class City {
     }
 
     public addHousingPBuilding(): void {
-        console.log("HERE")
         const spot = this.pickBestPHousingBuildingCandidate();
-        console.log("HERE2")
         if(spot !== undefined){
             spot.buildBuilding(HousingPBuilding.createHousingPBuilding(spot, this.buildingToPolygonRatio));
         }
-        console.log("HERE3")
     }
 
     public addChurchPBuilding(): void {
@@ -608,7 +603,7 @@ class City {
         return Array.from(buildingSet);
     }
 
-    private getAllSubAreasWithChurch(minsize: number): SubareaPolygon[]{
+    private getAllSubAreasWithChurch(): SubareaPolygon[]{
         var areasWithChurch = [];
         for(let d of this.polygons){
             areasWithChurch.push(...d.getAllSubareasWithChurch(this.churchBuildingMinSize));
