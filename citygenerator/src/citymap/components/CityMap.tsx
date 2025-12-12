@@ -87,6 +87,7 @@ function CityMap(props: CityMapProps) {
 
     return (
         <div>
+            <div>Iteration {props.city.iteration}</div>
             <canvas ref={canvasRef} width={900} height={1000}/>
         </div>
     );

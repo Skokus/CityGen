@@ -31,8 +31,7 @@ class PolygonRenderer implements Renderer{
             ctx.lineTo(scale*(points[i].x + xOffSet), scale*(points[i].y + yOffSet));
         }
         ctx.strokeStyle = "black";
-
-        if(this.polygon instanceof DistrictPolygon)
+        if(this.polygon instanceof DistrictPolygon || this.polygon instanceof LakePolygon)
             ctx.fill();
         ctx.closePath();
     }
@@ -41,7 +40,7 @@ class PolygonRenderer implements Renderer{
         if(this.polygon instanceof DistrictPolygon){
             return this.getDistrictPolygon();
         } else if(this.polygon instanceof LakePolygon){
-            return "#00b8ff";
+            return "#0056ae";
         }
         return "#ffffff";
     }
@@ -49,7 +48,7 @@ class PolygonRenderer implements Renderer{
     private getDistrictPolygon(): string {
         if(this.polygon instanceof DistrictPolygon){
             if(this.polygon.type === DistrictPolygonType.Market)
-                return "#ffffff"
+                return "#bcbcbc"
                 //return "#9c9c9c";
             else if(this.polygon.type === DistrictPolygonType.Farm)
                 return "#ffe863";

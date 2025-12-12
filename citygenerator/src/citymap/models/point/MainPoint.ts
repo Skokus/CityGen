@@ -74,6 +74,7 @@ class MainPoint extends Point {
     public canBeExtended(): boolean {
         return this.canBeHorizontallyExtended() || this.canBeVerticallyExtended();
     }
+
     public canBeSided(): boolean {
         let canBeHorizontallySided = false;
         let canBeVerticallySided = false;

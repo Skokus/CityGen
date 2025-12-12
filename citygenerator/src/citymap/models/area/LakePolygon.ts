@@ -3,6 +3,7 @@ import MainRoad from "../road/MainRoad";
 import Point from "../point/Point";
 import {Md5} from "ts-md5";
 import LakePoint from "../point/LakePoint";
+import RiverRoad from "../road/RiverRoad";
 
 class LakePolygon extends Polygon {
 
@@ -18,6 +19,10 @@ class LakePolygon extends Polygon {
         return super.getPoints() as LakePoint[];
     }
 
+    public getRoads(): MainRoad[] {
+        return this.roads as MainRoad[];
+    }
+
     public static createNewLakePolygon(center: Point, maxRadius: number, minRadius: number, numberOfEdges: number, edgeAngleOffset: number, seed: number): LakePolygon {
         const angles = [];
         for (let i = 0; i < numberOfEdges; i++) {
@@ -30,7 +35,7 @@ class LakePolygon extends Polygon {
         }
         const edgeRoads: MainRoad[] = [];
         for (let i = 0; i < numberOfEdges; i++) {
-            edgeRoads.push(new MainRoad(edgePoints[i], edgePoints[(i+1)%numberOfEdges]));
+            edgeRoads.push(RiverRoad.createRiverRoad(edgePoints[i], edgePoints[(i+1)%numberOfEdges]));
         }
         return new LakePolygon(edgeRoads);
     }

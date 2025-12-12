@@ -14,6 +14,7 @@ import SquareBuilding from "./building/SquareBuilding";
 import ChurchPBuilding from "./building/polygonbuilding/ChurchPBuilding";
 import CastlePBuilding from "./building/polygonbuilding/CastlePBuilding";
 import RiverPoint from "./point/RiverPoint";
+import LakePoint from "./point/LakePoint";
 
 class City {
 
@@ -29,20 +30,20 @@ class City {
     static riverStartY = 200;
     static riverMaxAngleChange = Math.PI/9;
     static riverAngleRange = Math.PI/6;
-    static riverSteps = 24;
+    static riverSteps = 100;
 
     districtBorderMaxCount = 4;
     defaultCompletion = 1.0;
     wallRank = 1;
     farmRankPercentage = 0.5;
-    minimalFarmLayer = 2;
+    minimalFarmLayer = 4;
 
     expendRange = 2;
     sideRange = 1;
     minRoadLength = 95;
     maxRoadLength = 100;
     popRadius = 30;
-    mainRoadAngleDeviation = Math.PI/10;
+    mainRoadAngleDeviation = Math.PI/18;
 
     buildingToPolygonRatio = 0.8;
     seed = 0;
@@ -86,7 +87,7 @@ class City {
     churchCounter = 0;
     hasBridges = false;
     hasMarket = false;
-    riverBridgeIterationUnlock = 200;
+    riverBridgeIterationUnlock = 500;
 
 
     constructor(roads: MainRoad[], seed: number) {
@@ -483,7 +484,7 @@ class City {
                     const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                     this.roads.push(newRoad);
                     this.deleteBuildingsWithNewRoad(newRoad);
-                    this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
+                    this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []), newRoad);
                     return;
                 }
             }
@@ -501,7 +502,7 @@ class City {
             const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
             this.roads.push(newRoad);
             this.deleteBuildingsWithNewRoad(newRoad);
-            this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
+            this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []), newRoad);
             return;
         }
 
@@ -512,7 +513,7 @@ class City {
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                 this.roads.push(newRoad);
                 this.deleteBuildingsWithNewRoad(newRoad);
-                this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
+                this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []), newRoad);
                 return;
             }
         }
@@ -547,7 +548,7 @@ class City {
                     const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                     this.roads.push(newRoad);
                     this.deleteBuildingsWithNewRoad(newRoad);
-                    this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
+                    this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []), newRoad);
                     return;
                 }
             }
@@ -565,7 +566,7 @@ class City {
             const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
             this.roads.push(newRoad);
             this.deleteBuildingsWithNewRoad(newRoad);
-            this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
+            this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []), newRoad);
             return;
         }
 
@@ -576,7 +577,7 @@ class City {
                 const newRoad = MainRoad.createMainRoad(randomPoint, expectedPoint, direction, this.defaultCompletion, this.pointBuildingRadius);
                 this.roads.push(newRoad);
                 this.deleteBuildingsWithNewRoad(newRoad);
-                this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []));
+                this.addPolygons(this.findCycles(this.districtBorderMaxCount, [expectedPoint], []), newRoad);
                 return;
             }
         }
@@ -701,8 +702,8 @@ class City {
         c.minRoadLength = minRoadLength;
         c.maxRoadLength = maxRoadLength;
         c.pointBuildingRadius = pointBuildingRadius;
-        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 100, 100, 24, Math.PI/10, seed));
-        let rc = new RiverPoint(100, 100, this.riverStartAngle);
+        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 200, 190, 24, Math.PI/10, seed));
+        let rc = new RiverPoint(-500, 100, this.riverStartAngle);
         if(c.lakes.length > 0){
             rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
         }
@@ -716,10 +717,9 @@ class City {
             pointSet.add(road.getPoint1());
             pointSet.add(road.getPoint2());
         }
-        const pointArray = Array.from(pointSet);
+        let pointArray = Array.from(pointSet);
+        pointArray = pointArray.filter((p) => !(p instanceof LakePoint));
         if(!this.hasBridges){
-            console.log(pointArray.length);
-            console.log(pointArray.filter((p) => !(p instanceof RiverPoint)).length);
             return pointArray.filter((p) => !(p instanceof RiverPoint));
         }
         return pointArray;
@@ -747,6 +747,9 @@ class City {
         roads.push(...this.roads);
         for(const river of this.rivers) {
             roads.push(...river.riverRoads);
+        }
+        for(const lake of this.lakes) {
+            roads.push(...lake.getRoads());
         }
         return roads;
     }
@@ -826,8 +829,8 @@ class City {
         return result;
     }
 
-    private addPolygons(polygons: DistrictPolygon[]): void {
-        const potentialPolygons: DistrictPolygon[] = polygons.filter((p) => !p.hasSmallerCycle());
+    private addPolygons(polygons: DistrictPolygon[], road: MainRoad): void {
+        const potentialPolygons: DistrictPolygon[] = polygons.filter((p) => !p.hasSmallerCycle()).filter((p) => p.getRoads().includes(road));
         for (const newp of potentialPolygons) {
             let flag = true;
             for (const p of this.polygons) {
@@ -860,6 +863,11 @@ class City {
             d.generateRank(this.hasMarket);
             d.addRankToRoads();
         }
+        for(let d of districts){
+            if(d.rank > 0){
+                d.type = DistrictPolygonType.Farm;
+            }
+        }
     }
     private updateDistrictsTypes(): void {
         var districts: DistrictPolygon[] = this.polygons.filter((p) => p.rank > 0);
@@ -877,7 +885,7 @@ class City {
         if(ratioFarmLayer < this.minimalFarmLayer)
             return;
         const ruralMaxRank = maxRank - ratioFarmLayer;
-        this.polygons.filter((p) => p.rank > ruralMaxRank).forEach((p) => p.type = DistrictPolygonType.Farm);
+        this.polygons.filter((p) => p.rank > 0).forEach((p) => p.type = DistrictPolygonType.Farm);
         this.polygons.filter((p) => p.rank > 0 && p.rank <= ruralMaxRank).forEach((p) => p.type = DistrictPolygonType.Rural);
     }
 
