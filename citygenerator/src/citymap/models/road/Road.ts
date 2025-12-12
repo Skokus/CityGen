@@ -90,6 +90,25 @@ class Road {
         return new Point(x, y);
     }
 
+    //Wyplute przez google ai na frazę get intersection between two lines typescript
+    public getIntersectionPointWithRoad(p1: Point, p2: Point): Point {
+        const p3 = this.p1;
+        const p4 = this.p2;
+        const denominator = ((p4.y - p3.y) * (p2.x - p1.x)) - ((p4.x - p3.x) * (p2.y - p1.y));
+        if (denominator === 0) {
+            return new Point(Number.NaN, Number.NaN);
+        }
+        const ua = (((p4.x - p3.x) * (p1.y - p3.y)) - ((p4.y - p3.y) * (p1.x - p3.x))) / denominator;
+        const ub = (((p2.x - p1.x) * (p1.y - p3.y)) - ((p2.y - p1.y) * (p1.x - p3.x))) / denominator;
+
+        if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+            const x = p1.x + (ua * (p2.x - p1.x));
+            const y = p1.y + (ua * (p2.y - p1.y));
+            return new Point(x, y);
+        }
+        return new Point(Number.NaN, Number.NaN);
+    }
+
     public isAboveLine(a: number, b: number) {
         return this.p1.isAboveLine(a, b) && this.p2.isAboveLine(a, b);
     }
