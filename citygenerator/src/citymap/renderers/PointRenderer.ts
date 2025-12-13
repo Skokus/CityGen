@@ -11,6 +11,9 @@ class PointRenderer implements Renderer{
         '#ff3030',
         '#001eff',
         '#be10ef',
+        '#00ffcf',
+        '#60657a',
+        '#fb7339',
     ];
 
     public setPoint(point: Point) {
@@ -22,9 +25,6 @@ class PointRenderer implements Renderer{
         ctx.lineWidth = 1;
         ctx.arc(scale*(this.point.x + xOffSet), scale*(this.point.y + yOffSet), scale, 0, 2 * Math.PI);
         ctx.fillStyle = "black";
-        if(this.point instanceof MainPoint && this.point.rank !== undefined){
-            ctx.fillStyle = "black";
-        }
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
