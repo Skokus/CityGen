@@ -98,6 +98,43 @@ class DistrictPolygon extends Polygon {
         }
     }
 
+    public blockInsideDirections(): void {
+        var roads = this.getRoads();
+        var points = this.getPoints();
+        for(let p of points){
+            let directions = [];
+            for(let i = 0; i < p.connectedRoads.length; i++){
+                for(let j = 0; j < p.connectedRoads[i].length; j++){
+                    const r = p.connectedRoads[i][j];
+                    if(r !== null && roads.includes(r)){
+                        directions.push(i)
+                    }
+                }
+            }
+            if(directions.length > 0){
+                if(directions.includes(0) && directions.includes(2)){
+                    const p1 = p.getDistancedPoint(1, Math.PI/2);
+                    const p2 = p.getDistancedPoint(1, 3*Math.PI/2);
+                    const d1 = p1.distanceFromPoint(this.centroid);
+                    const d2 = p2.distanceFromPoint(this.centroid);
+                    if(d1 < d2)
+                        p.addRoad(null, 1)
+                    else
+                        p.addRoad(null, 3)
+                } else if (directions.includes(1) && directions.includes(3)){
+                    const p1 = p.getDistancedPoint(1, 0);
+                    const p2 = p.getDistancedPoint(1, Math.PI);
+                    const d1 = p1.distanceFromPoint(this.centroid);
+                    const d2 = p2.distanceFromPoint(this.centroid);
+                    if(d1 < d2)
+                        p.addRoad(null, 0);
+                    else
+                        p.addRoad(null, 2);
+                }
+            }
+        }
+    }
+
     public createCastle(ratio: number): void {
         this.subAreas.buildBuilding(CastlePBuilding.createCastlePBuilding(this.subAreas, ratio));
     }

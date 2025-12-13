@@ -71,10 +71,10 @@ class City {
 
     churchBuildingMinSize = 3000;
     churchRandomWage = 0.2;
-    churchCenterWage = 1.0;
+    churchCenterWage = 5.0;
     churchWaterWage = 0.0;
-    churchOccupiedWage = 1.0;
-    churchDistanceFromChurchesWage = 5.0;
+    churchOccupiedWage = 0.0;
+    churchDistanceFromChurchesWage = 0.0;
     districtsPerChurch = 30;
 
     castleRandomWage = 0.2;
@@ -763,7 +763,7 @@ class City {
         if(c.lakes.length > 0){
             rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
         }
-        //c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
+        c.rivers.push(River.createRiver(rc, City.riverStartAngle, City.riverAngleRange, City.riverMaxAngleChange, minRoadLength, maxRoadLength, City.riverSteps, seed));
         return c;
     }
 
@@ -908,6 +908,7 @@ class City {
                 }
                 newp.addRankToRoads();
                 newp.blockPointBuildingsInRoads();
+                newp.blockInsideDirections();
             }
         }
         this.checkDisconnectedPolygons();

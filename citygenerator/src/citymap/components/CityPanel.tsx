@@ -55,7 +55,7 @@ function CityPanel() {
     }
 
     function addRoad() {
-        for(let i = 0; i < 100; i++)
+        for(let i = 0; i < 50; i++)
             city.addRoad(minRoadLength, maxRoadLength);
         setCity(city);
         setCounter(counter + 1);
