@@ -21,7 +21,7 @@ class River {
         return Array.from(points) as RiverPoint[];
     }
 
-    public static createRiver(startPoint: LakePoint, startAngle: number, angleRange: number, maxAngleChange: number, minStepDistance: number, maxStepDistance: number, n: number, seed: number): River {
+    public static createRiver(startPoint: RiverPoint, startAngle: number, angleRange: number, maxAngleChange: number, minStepDistance: number, maxStepDistance: number, n: number, seed: number): River {
         let riverPoints: RiverPoint[] = [];
         startPoint.angle = startAngle;
         riverPoints.push(startPoint);
