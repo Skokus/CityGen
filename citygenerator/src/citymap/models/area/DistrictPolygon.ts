@@ -4,7 +4,6 @@ import MainPoint from "../point/MainPoint";
 import SubareaPolygon from "./SubareaPolygon";
 import SideRoad from "../road/SideRoad";
 import Road from "../road/Road";
-import HousingPBuilding from "../building/polygonbuilding/HousingPBuilding";
 import DistrictPolygonType from "./DistrictPolygonType";
 import MarketBoothPBuilding from "../building/polygonbuilding/MarketBoothPBuilding";
 import ChurchPBuilding from "../building/polygonbuilding/ChurchPBuilding";
@@ -61,12 +60,41 @@ class DistrictPolygon extends Polygon {
 
     public splitPolygonBySmallerPolygon(ratio: number): void {
         this.subAreas.splitPolygonWithSmallerPolygon(ratio);
-        if(this.subAreas.subPolygons !== undefined) {
-            const c = this.subAreas.subPolygons[0];
-            this.subAreas.subPolygons[0].accessory = new FountainBuilding(c.centroid.x, c.centroid.y, c.getAccessoryRadius(0.6));
-            for(let i = 1; i < this.subAreas.subPolygons.length; i++) {
-                this.subAreas.subPolygons[i].buildBuilding(MarketBoothPBuilding.createMarketBoothPBuilding(this.subAreas.subPolygons[i], 0.80));
+    }
+
+    public buildMarketBuilding(seed: number): void {
+        if(this.type !== DistrictPolygonType.Market)
+            return;
+        var areas = this.subAreas.subPolygons;
+        if(areas !== undefined && areas.length > 0) {
+            var freeAreas = areas.filter((a) => !a.isOccupied()).slice(1, areas.length);
+            if(freeAreas.length <= 0)
+                return;
+            if(areas.length/2 > freeAreas.length && areas[0].accessory === undefined){
+                areas[0].accessory = new FountainBuilding(areas[0].centroid.x, areas[0].centroid.y, areas[0].getAccessoryRadius(0.6));
+            } else {
+                var maxArea = freeAreas[0];
+                var max = maxArea.marketBuildingHashValue(seed);
+                for(let i = 1; i < freeAreas.length; i++){
+                    if(freeAreas[i].marketBuildingHashValue(seed) > max){
+                        max = freeAreas[i].marketBuildingHashValue(seed);
+                        maxArea = freeAreas[i];
+                    }
+                }
+                maxArea.buildBuilding(MarketBoothPBuilding.createMarketBoothPBuilding(maxArea, 0.80));
             }
+        }
+    }
+
+    public blockPointBuildingsInRoads(): void {
+        for(let r of this.getRoads()){
+            r.blockSidePoints();
+        }
+    }
+
+    public removePointBuildingsInRoads(): void { //for market only
+        for(let r of this.getRoads()){
+            r.removeAllBuildingsOnSidePoints();
         }
     }
 

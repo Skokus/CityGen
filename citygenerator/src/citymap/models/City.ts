@@ -40,15 +40,15 @@ class City {
 
     expendRange = 2;
     sideRange = 1;
-    minRoadLength = 95;
+    minRoadLength = 90;
     maxRoadLength = 100;
-    popRadius = 30;
-    mainRoadAngleDeviation = Math.PI/5;
+    popRadius = 25;
+    mainRoadAngleDeviation = Math.PI/10;
 
     buildingToPolygonRatio = 0.8;
     seed = 0;
-    globalRoadOccupationGoal = 0.5;
-    globalPolygonOccupationGoal = 0.5;
+    globalRoadOccupationGoal = 0.2;
+    globalPolygonOccupationGoal = 0.2;
 
     roadRandomWage = 0.2;
     roadCenterWage = 1.0;
@@ -87,8 +87,8 @@ class City {
     churchCounter = 0;
     hasBridges = false;
     hasMarket = false;
+    newMarketBoothIteration = 20;
     riverBridgeIterationUnlock = 500;
-
 
     constructor(roads: MainRoad[], seed: number) {
         this.seed = seed;
@@ -120,6 +120,8 @@ class City {
         }
         this.checkDistrictsForSideRoadUpdate();
         this.iteration++;
+        if(this.iteration > 0 && this.iteration%this.newMarketBoothIteration === 0)
+            this.addMarketPBuilding(this.seed);
         this.checkUnlockBridges();
     }
 
@@ -209,20 +211,20 @@ class City {
 
     public pickBestPHousingBuildingCandidate(): SubareaPolygon | undefined {
 
-        let possibleSpots: SubareaPolygon[] = [];
+        let possibleSpots: SubareaPolygon[][] = [];
         let maxFitValue = 0;
         let maxSpot: SubareaPolygon | undefined = undefined;
         let waterRoads: Road[] = [];
 
         for(let i = 0; i < this.polygons.length; i++){
-            possibleSpots.push(...this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads())))
+            possibleSpots.push(this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads())));
         }
         let maxDistanceFromCenter = 0;
         let minDistanceFromCenter = Number.MAX_SAFE_INTEGER;
         let maxDistanceFromWater = 0;
         let minDistanceFromWater = Number.MAX_SAFE_INTEGER;
 
-        for(let spot of possibleSpots){
+        for(let spot of possibleSpots.flat()){
             const spotDistanceFromCenter = spot.centroid.distanceFromPoint(this.center);
             if(spotDistanceFromCenter > maxDistanceFromCenter){
                 maxDistanceFromCenter = spotDistanceFromCenter;
@@ -234,7 +236,7 @@ class City {
 
         if(this.rivers.length > 0){
             waterRoads.push(...this.rivers[0].riverRoads);
-            for(let spot of possibleSpots){
+            for(let spot of possibleSpots.flat()){
                 const spotDistanceFromWater = spot.centroid.distanceFromWater(waterRoads);
                 if(spotDistanceFromWater > maxDistanceFromWater){
                     maxDistanceFromWater = spotDistanceFromWater;
@@ -245,8 +247,9 @@ class City {
             }
         }
 
-        for(let i = 0; i < this.polygons.length; i++){
-            const spots = this.polygons[i].subAreas.getAllPolygons().filter((a) => (!a.isOccupied() && a.hasBuiltRoads()));
+        for(let i = 0; i < possibleSpots.length; i++){
+            const spots = possibleSpots[i];
+            const occupation = this.polygons[i].occupiedPercentage() > this.idealPolygonOccupationRate ? 0 : 1;
             for(let spot of spots){
                 let spotValue = 0;
                 if(minDistanceFromCenter !== maxDistanceFromCenter)
@@ -254,7 +257,7 @@ class City {
                 if(minDistanceFromWater !== maxDistanceFromWater)
                     spotValue += this.pHouseWaterWage * (maxDistanceFromWater-spot.centroid.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater);
                 spotValue += this.pHouseRandomWage * spot.hashValue(this.seed);
-                spotValue += this.pHouseOccupiedWage * this.polygons[i].occupiedPercentage() > this.idealPolygonOccupationRate ? 0 : 1;
+                spotValue += this.pHouseOccupiedWage * occupation;
                 if(spotValue > maxFitValue){
                     maxFitValue = spotValue;
                     maxSpot = spot;
@@ -674,6 +677,15 @@ class City {
         }
     }
 
+    public addMarketPBuilding(seed: number): void {
+        if(this.polygons.length > 0){
+            var markets = this.polygons.filter((p) => p.type === DistrictPolygonType.Market);
+            for(let m of markets){
+                m.buildMarketBuilding(seed);
+            }
+        }
+    }
+
     public createCastle(ratio: number) : void {
         if(this.hasCastle)
             return;
@@ -888,11 +900,14 @@ class City {
                 newp.generateRank(this.hasMarket);
                 if(newp.rank === 0){
                     newp.type = DistrictPolygonType.Market;
+                    newp.removePointBuildingsInRoads();
                     this.hasMarket = true;
+                    this.center = newp.centroid;
                 } else if(newp.rank === -1){
                     newp.type = DistrictPolygonType.Disconnected;
                 }
                 newp.addRankToRoads();
+                newp.blockPointBuildingsInRoads();
             }
         }
         this.checkDisconnectedPolygons();

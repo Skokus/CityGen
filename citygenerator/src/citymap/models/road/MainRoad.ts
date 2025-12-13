@@ -75,12 +75,37 @@ class MainRoad extends Road {
             let s2 = this.createSidePointNextToRoad(i * ratio + ratio / 2, distance, -1);
             newSidePoints2.push(s2);
         }
+        if(newSidePoints.length <= 0) {
+            return;
+        }
         if(newSidePoints[0].isAboveLine(this.slope, this.yInter)){
             this.topSidePoints = newSidePoints;
             this.bottomSidePoints = newSidePoints2;
         } else {
             this.topSidePoints = newSidePoints2;
             this.bottomSidePoints = newSidePoints;
+        }
+    }
+
+    public blockSidePoints(): void {
+        for(let sidepoint of this.topSidePoints) {
+            if (sidepoint.building === undefined) {
+                sidepoint.building = null;
+            }
+        }
+        for(let sidepoint of this.bottomSidePoints) {
+            if (sidepoint.building === undefined) {
+                sidepoint.building = null;
+            }
+        }
+    }
+
+    public removeAllBuildingsOnSidePoints(): void { //for market only
+        for(let sidepoint of this.topSidePoints) {
+            sidepoint.building = null;
+        }
+        for(let sidepoint of this.bottomSidePoints) {
+            sidepoint.building = null;
         }
     }
 

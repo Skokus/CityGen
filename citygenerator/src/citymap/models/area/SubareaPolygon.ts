@@ -325,7 +325,7 @@ class SubareaPolygon extends Polygon{
     }
 
     public isOccupied(): boolean{
-        return this.building !== undefined;
+        return this.building !== undefined || this.accessory !== undefined;
     }
 
     public getAreaNearBuiltRoads(): number{
@@ -367,6 +367,11 @@ class SubareaPolygon extends Polygon{
 
     public castleHashValue(seed: number): number {
         const hash = Md5.hashStr(seed + "SubareaPolygonCastle" + this.centroid.x + ", " + this.centroid.y +" area:" + this.getArea()).substring(0,4);
+        return parseInt(hash, 16)/65535;
+    }
+
+    public marketBuildingHashValue(seed: number): number {
+        const hash = Md5.hashStr(seed + "SubareaPolygonMarket" + this.centroid.x + ", " + this.centroid.y +" area:" + this.getArea()).substring(0,4);
         return parseInt(hash, 16)/65535;
     }
 
