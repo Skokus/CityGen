@@ -18,7 +18,7 @@ class RoadRenderer implements Renderer{
             ctx.strokeStyle = "#000000";
             ctx.lineWidth = 1;
             if(this.road.type === MainRoadType.Wall){
-                ctx.strokeStyle = "#8a6f00";
+                ctx.strokeStyle = "#ff612d";
                 ctx.lineWidth = scale*4;
             }
         } else if(this.road instanceof SideRoad){

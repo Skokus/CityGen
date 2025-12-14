@@ -67,9 +67,13 @@ class DistrictPolygon extends Polygon {
             return;
         var areas = this.subAreas.subPolygons;
         if(areas !== undefined && areas.length > 0) {
-            var freeAreas = areas.filter((a) => !a.isOccupied()).slice(1, areas.length);
+            var freeAreas = areas.slice(1, areas.length).filter((a) => !a.isOccupied());
             if(freeAreas.length <= 0)
                 return;
+            if(freeAreas.length === 1) {
+                freeAreas[0].buildBuilding(MarketBoothPBuilding.createMarketBoothPBuilding(freeAreas[0], 0.80));
+                return;
+            }
             if(areas.length/2 > freeAreas.length && areas[0].accessory === undefined){
                 areas[0].accessory = new FountainBuilding(areas[0].centroid.x, areas[0].centroid.y, areas[0].getAccessoryRadius(0.6));
             } else {

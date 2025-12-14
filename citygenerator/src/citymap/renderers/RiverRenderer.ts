@@ -20,7 +20,7 @@ class RiverRenderer implements Renderer{
         for(let i = 1; i < points.length; i++){
             ctx.lineTo(scale*(points[i].x + xOffSet), scale*(points[i].y + yOffSet));
         }
-        ctx.lineWidth = scale * 3;
+        ctx.lineWidth = scale * 4;
         ctx.strokeStyle = "#0056ae";
         ctx.stroke();
         ctx.closePath();

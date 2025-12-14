@@ -58,6 +58,7 @@ class PolygonRenderer implements Renderer{
         }
         return "#ffffff";
     }
+
 }
 
 export default PolygonRenderer;

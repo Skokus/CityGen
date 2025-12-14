@@ -25,18 +25,24 @@ class City {
     center: Point;
     iteration: number = 0;
 
-    static riverStartAngle = 0*Math.PI/2;
-    static riverStartX = 200;
-    static riverStartY = 200;
-    static riverMaxAngleChange = Math.PI/9;
-    static riverAngleRange = Math.PI/6;
+    static lakeStartX = 200;
+    static lakeStartY = 200;
+    static lakePointNumber = 20;
+    static lakeMaxDistance = 200;
+    static lakeMinDistance = 190;
+
+    static riverStartAngle = Math.PI/2;
+    static riverStartX = 800;
+    static riverStartY = -1500;
+    static riverMaxAngleChange = Math.PI/18;
+    static riverAngleRange = Math.PI/9;
     static riverSteps = 100;
 
     districtBorderMaxCount = 5;
     defaultCompletion = 1.0;
     wallRank = 1;
     farmRankPercentage = 0.5;
-    minimalFarmLayer = 2;
+    minimalFarmLayer = 4;
 
     expendRange = 2;
     sideRange = 1;
@@ -45,24 +51,24 @@ class City {
     popRadius = 25;
     mainRoadAngleDeviation = Math.PI/10;
 
-    buildingToPolygonRatio = 0.8;
+    buildingToPolygonRatio = 0.75;
     seed = 0;
-    globalRoadOccupationGoal = 0.2;
-    globalPolygonOccupationGoal = 0.2;
+    globalRoadOccupationGoal = 0.4;
+    globalPolygonOccupationGoal = 0.7;
 
     roadRandomWage = 0.2;
     roadCenterWage = 1.0;
     roadWaterWage = 1.0;
     roadExtendWage = 3.0;
 
-    idealRoadOccupationRate = 0.5;
+    idealRoadOccupationRate = 0.3;
     pointBuildingRadius = 12;
     houseRandomWage = 0.2;
     houseCenterWage = 1.0;
-    houseWaterWage = 50.0;
-    houseOccupiedWage = 10;
+    houseWaterWage = 1.0;
+    houseOccupiedWage = 1.0;
 
-    idealPolygonOccupationRate = 0.1;
+    idealPolygonOccupationRate = 0.8;
     polygonBuildingMaxSize = 700;
     pHouseRandomWage = 0.2;
     pHouseCenterWage = 1.0;
@@ -71,11 +77,12 @@ class City {
 
     churchBuildingMinSize = 3000;
     churchRandomWage = 0.2;
-    churchCenterWage = 5.0;
+    churchCenterWage = 2.0;
     churchWaterWage = 0.0;
     churchOccupiedWage = 0.0;
-    churchDistanceFromChurchesWage = 0.0;
-    districtsPerChurch = 30;
+    churchSpotOccupiedWage = 2.0;
+    churchDistanceFromChurchesWage = 5.0;
+    districtsPerChurch = 40;
 
     castleRandomWage = 0.2;
     castleCenterWage = 1.0;
@@ -87,8 +94,8 @@ class City {
     churchCounter = 0;
     hasBridges = false;
     hasMarket = false;
-    newMarketBoothIteration = 20;
-    riverBridgeIterationUnlock = 100;
+    newMarketBoothIteration = 100;
+    riverBridgeIterationUnlock = 2000;
 
     constructor(roads: MainRoad[], seed: number) {
         this.seed = seed;
@@ -327,7 +334,7 @@ class City {
                 if(minDistanceFromWater !== maxDistanceFromWater)
                     spotValue += this.houseWaterWage * (maxDistanceFromWater-spot.distanceFromWater(waterRoads))/(maxDistanceFromWater-minDistanceFromWater);
                 spotValue += this.houseRandomWage * spot.hashValue(this.seed, this.iteration);
-                spotValue += this.houseOccupiedWage * this.roads[i].occupiedPercentage() > this.idealRoadOccupationRate ? 0 : 1;
+                spotValue += this.houseOccupiedWage * (this.roads[i].occupiedPercentage() > this.idealRoadOccupationRate ? 0 : 1);
                 if(spotValue > maxFitValue){
                     maxFitValue = spotValue;
                     maxSpot = spot;
@@ -407,7 +414,8 @@ class City {
                 if(minDistanceFromChurch !== maxDistanceFromChurch)
                     spotValue += (this.churchDistanceFromChurchesWage * (spot.distanceFromChurches(churchPolygons) - minDistanceFromChurch)/(maxDistanceFromChurch-minDistanceFromChurch));
                 spotValue += (this.churchRandomWage * spot.hashValue(this.seed));
-                spotValue += (this.churchOccupiedWage * (1 - spot.getOccupationRate()));
+                spotValue += this.churchOccupiedWage * (this.polygons[i].occupiedPercentage() > this.idealRoadOccupationRate ? 0 : 1);
+                spotValue += (this.churchSpotOccupiedWage * (1 - spot.getOccupationRate()));
                 if(spotValue > maxFitValue){
                     maxFitValue = spotValue;
                     maxSpot = spot;
@@ -768,7 +776,6 @@ class City {
     public checkUnlockBridges(): void{
         if(this.iteration >= this.riverBridgeIterationUnlock){
             this.hasBridges = true;
-            console.log("odblokowane");
         }
     }
 
@@ -784,8 +791,8 @@ class City {
         c.minRoadLength = minRoadLength;
         c.maxRoadLength = maxRoadLength;
         c.pointBuildingRadius = pointBuildingRadius;
-        c.lakes.push(LakePolygon.createNewLakePolygon(new Point(200, 200), 200, 190, 24, Math.PI/10, seed));
-        let rc = new RiverPoint(-500, 100, this.riverStartAngle);
+        //c.lakes.push(LakePolygon.createNewLakePolygon(new Point(this.lakeStartX, this.lakeStartY), this.lakeMaxDistance, this.lakeMinDistance, this.lakePointNumber, Math.PI/10, seed));
+        let rc = new RiverPoint(this.riverStartX, this.riverStartY, this.riverStartAngle);
         if(c.lakes.length > 0){
             rc = c.lakes[0].getClosestPointToAngle(City.riverStartAngle);
         }
@@ -803,7 +810,6 @@ class City {
         pointArray = pointArray.filter((p) => !(p instanceof LakePoint));
 
         if(!this.hasBridges){
-            console.log(pointArray.length);
             return pointArray.filter((p) => !(p instanceof RiverPoint));
         }
         return pointArray;
@@ -969,9 +975,8 @@ class City {
         if(minRuralLayer <= 0)
             return;
         const ratioFarmLayer = Math.ceil(maxRank * this.farmRankPercentage);
-        if(ratioFarmLayer < this.minimalFarmLayer)
-            return;
-        const ruralMaxRank = maxRank - ratioFarmLayer;
+        const ruralMinRank = maxRank - ratioFarmLayer;
+        const ruralMaxRank = minRuralLayer > ruralMinRank ? ruralMinRank : minRuralLayer;
         this.polygons.filter((p) => p.rank > 0).forEach((p) => p.type = DistrictPolygonType.Farm);
         this.polygons.filter((p) => p.rank > 0 && p.rank <= ruralMaxRank).forEach((p) => p.type = DistrictPolygonType.Rural);
     }

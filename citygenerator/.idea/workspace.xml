@@ -6,9 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="02862144-be81-4070-941b-e10102004da7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/components/CityPanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/citymap/models/City.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/City.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/River.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/River.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/citymap/models/point/LakePoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/point/LakePoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/models/area/DistrictPolygon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/PolygonRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/RiverRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/RiverRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/citymap/renderers/RoadRenderer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -230,7 +233,10 @@
       <workItem from="1765573930240" duration="1718000" />
       <workItem from="1765578454345" duration="4354000" />
       <workItem from="1765613411248" duration="14102000" />
-      <workItem from="1765637692925" duration="1149000" />
+      <workItem from="1765637692925" duration="1217000" />
+      <workItem from="1765641964051" duration="3000" />
+      <workItem from="1765643557750" duration="7315000" />
+      <workItem from="1765700991085" duration="22527000" />
     </task>
     <servers />
   </component>

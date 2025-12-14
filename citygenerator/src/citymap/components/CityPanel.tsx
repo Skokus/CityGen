@@ -21,14 +21,15 @@ function CityPanel() {
     const [city, setCity] = useState(City.getExampleCity(x1, y1, x2, y2, seed, pointBuildingRadius, minRoadLength, maxRoadLength));
     const [counter, setCounter] = useState(0);
     const [zoomScale, setZoomScale] = useState(1.4);
-    const [xOffset, setXOffset] = useState(10);
-    const [yOffset, setYOffset] = useState(10);
-    const [moveDistance, setMoveDistance] = useState(30);
+    const [xOffset, setXOffset] = useState(0);
+    const [yOffset, setYOffset] = useState(0);
+    const [moveDistance, setMoveDistance] = useState(300);
     const [ticking, setTicking] = useState(false);
     const [timePeriod, setTimePeriod] = useState(1000);
 
     useEffect(() => {
-        const timer = setTimeout(() => ticking, timePeriod)
+        const timer = setTimeout(() => ticking, timePeriod);
+        //nextOneIteration();
         return () => clearTimeout(timer)
     }, [counter, ticking]);
 
@@ -55,7 +56,7 @@ function CityPanel() {
     }
 
     function addRoad() {
-        for(let i = 0; i < 50; i++)
+        for(let i = 0; i < 300; i++)
             city.addRoad(minRoadLength, maxRoadLength);
         setCity(city);
         setCounter(counter + 1);
@@ -111,11 +112,11 @@ function CityPanel() {
     }
 
     function zoomInMap() {
-        setZoomScale(zoomScale + 0.2);
+        setZoomScale(zoomScale + 0.1);
     }
 
     function zoomOutMap() {
-        setZoomScale(zoomScale - 0.2);
+        setZoomScale(zoomScale - 0.1);
     }
 
     function moveX(d: number) {
@@ -134,7 +135,7 @@ function CityPanel() {
             <div className="sidepanel">
                 <button onClick={() => {
                     nextIteration()
-                }}>Next 10 Iteration
+                }}>Next 100 Iterations
                 </button>
                 <button onClick={() => {
                     nextOneIteration()
@@ -156,14 +157,6 @@ function CityPanel() {
                 <button onClick={() => {
                     addChurchPBuilding()
                 }}>Add church
-                </button>
-                <button onClick={() => {
-                    splitPolygon()
-                }}>Split
-                </button>
-                <button onClick={() => {
-                    splitPolygonWithSmallerPolygon()
-                }}>Split with marketplace
                 </button>
                 <button onClick={() => {
                     createCastle()
@@ -198,6 +191,7 @@ function CityPanel() {
                     moveY(-moveDistance * zoomScale)
                 }}>Move down
                 </button>
+                <br/>
                 <input id={"timePeriod"} name="timePeriod" type="number" defaultValue={timePeriod} onChange={e => {
                     setTimePeriod(e.target.valueAsNumber)
                 }}/>
